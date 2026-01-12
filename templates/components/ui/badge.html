@@ -1,0 +1,5 @@
+{% set icon_size = icon_size|default('20') %}
+<span class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-[{{ icon_size }}px]">{{ icon }}</span>
+    {{ text }}
+</span>

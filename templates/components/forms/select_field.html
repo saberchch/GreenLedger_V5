@@ -1,0 +1,23 @@
+{% macro select_field(field_id, label, options, placeholder='Select...', required=False) %}
+<div class="flex flex-col w-full">
+    {% if label %}
+    <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal pb-2">{{ label }}</p>
+    {% endif %}
+    <div class="relative">
+        <select class="form-select w-full appearance-none rounded-lg border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] text-[#111714] dark:text-white px-4 py-3 text-sm focus:border-primary focus:ring-0 transition-colors cursor-pointer" 
+                id="{{ field_id }}" 
+                name="{{ field_id }}"
+                {% if required %}required{% endif %}>
+            {% if placeholder %}
+            <option disabled selected value="">{{ placeholder }}</option>
+            {% endif %}
+            {% for option in options %}
+            <option value="{{ option.value }}">{{ option.text }}</option>
+            {% endfor %}
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#648775]">
+            <span class="material-symbols-outlined text-[20px]">expand_more</span>
+        </div>
+    </div>
+</div>
+{% endmacro %}

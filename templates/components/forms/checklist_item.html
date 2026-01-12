@@ -1,0 +1,9 @@
+{% macro checklist_item(title, description, checked=False) %}
+<label class="flex items-start gap-4 p-4 rounded-lg bg-white dark:bg-[#1a3326] border border-[#dbe6e0] dark:border-[#2a4536] cursor-pointer hover:border-primary/50 transition-colors">
+    <input class="mt-1 rounded border-gray-300 text-primary focus:ring-primary" type="checkbox" {% if checked %}checked{% endif %}/>
+    <div>
+        <span class="font-bold block">{{ title }}</span>
+        <span class="text-xs text-[#4e5f55] dark:text-gray-400">{{ description }}</span>
+    </div>
+</label>
+{% endmacro %}

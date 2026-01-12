@@ -1,0 +1,11 @@
+{% macro feature_item(icon, title, description) %}
+<div class="flex gap-4 items-start">
+    <div class="flex-shrink-0 size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1">
+        <span class="material-symbols-outlined text-[24px]">{{ icon }}</span>
+    </div>
+    <div>
+        <h3 class="text-lg font-bold text-[#111714] dark:text-white">{{ title }}</h3>
+        <p class="text-sm text-[#648775] dark:text-gray-400 mt-1">{{ description }}</p>
+    </div>
+</div>
+{% endmacro %}

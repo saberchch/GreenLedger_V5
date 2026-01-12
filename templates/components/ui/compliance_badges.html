@@ -1,0 +1,10 @@
+{% macro compliance_badges(badges) %}
+<div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+    {% for badge in badges %}
+    <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-3xl">{{ badge.icon }}</span>
+        <span class="text-lg font-bold">{{ badge.text }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endmacro %}

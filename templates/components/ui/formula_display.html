@@ -1,0 +1,27 @@
+{% macro formula_display() %}
+<div class="bg-white dark:bg-[#152a20] rounded-2xl border-2 border-primary/20 p-8 md:p-12 shadow-sm relative overflow-hidden">
+    <div class="absolute top-0 right-0 p-4 opacity-10">
+        <span class="material-symbols-outlined text-[120px]">calculate</span>
+    </div>
+    <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 relative z-10">
+        <div class="text-center">
+            <div class="text-3xl md:text-4xl font-black text-[#111814] dark:text-white mb-2">Activity Data</div>
+            <div class="text-sm text-[#4e5f55] dark:text-gray-400 font-medium">kWh, Liters, Tons, km</div>
+        </div>
+        <div class="text-primary">
+            <span class="material-symbols-outlined text-4xl">close</span>
+        </div>
+        <div class="text-center">
+            <div class="text-3xl md:text-4xl font-black text-[#111814] dark:text-white mb-2">Emission Factor</div>
+            <div class="text-sm text-[#4e5f55] dark:text-gray-400 font-medium">kg CO2e per unit</div>
+        </div>
+        <div class="text-primary">
+            <span class="material-symbols-outlined text-4xl">drag_handle</span>
+        </div>
+        <div class="text-center bg-primary/10 px-8 py-4 rounded-xl border border-primary/30">
+            <div class="text-3xl md:text-4xl font-black text-primary mb-2">Total Emissions</div>
+            <div class="text-sm text-[#111814] dark:text-white font-bold">Tons of CO2e</div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

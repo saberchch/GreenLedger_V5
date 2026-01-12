@@ -1,0 +1,7 @@
+{% macro scope_card(scope_number, title, description) %}
+<div class="p-6 rounded-xl bg-background-light dark:bg-[#102219] border border-[#dbe6e0] dark:border-[#2a4536]">
+    <div class="text-xs font-bold text-primary uppercase mb-2">Scope {{ scope_number }}</div>
+    <h4 class="font-bold mb-2">{{ title }}</h4>
+    <p class="text-sm text-[#4e5f55] dark:text-gray-400">{{ description }}</p>
+</div>
+{% endmacro %}

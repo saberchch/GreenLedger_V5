@@ -1,0 +1,125 @@
+{% extends "layouts/auth.html" %}
+{% from 'components/forms/input_field.html' import input_field %}
+{% from 'components/ui/sso_button.html' import sso_button %}
+{% from 'components/macros.html' import auth_button %}
+
+{% block content %}
+<!-- Main Container -->
+<div class="relative min-h-screen flex flex-col md:flex-row w-full">
+    <!-- Left Column: Visual & Brand (Desktop Only) -->
+    <div class="hidden md:flex md:w-1/2 lg:w-5/12 relative bg-background-dark flex-col justify-between overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-cover bg-center opacity-60 mix-blend-overlay" data-alt="Abstract green data visualization resembling a forest canopy from above" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAY8q01vxYZ5sf3P6JlGgDOwHXcdn4Ucpz3oP6zNJR_74h0TpeH9zuZH79vW42HiQHhAn_0fAyYGmHY1CoUSUhpeGJaYdXP-rYINLHqelfgmbxZb5Rc3Bs5D5VOnXn9iWgSMexbw1TWT7KV1r2jttNbmnymR_7DhwAavazcw0HTDeU0nHM0k1oo1y7-UjfI0dVfzNMSUJkSUUB8eUw_aYfDCoqfVqmw7olVPaGS4hTl3cRbjCJNYiO69Bs-DtuZd25yUlAfOBdRSN-A");'>
+            </div>
+            <!-- Gradient Overlay for readability -->
+            <div class="absolute inset-0 bg-gradient-to-b from-background-dark/40 via-background-dark/20 to-background-dark/90"></div>
+        </div>
+        <!-- Content Overlay -->
+        <div class="relative z-10 p-12 flex flex-col h-full justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 text-white">
+                <span class="material-symbols-outlined text-primary text-4xl">eco</span>
+                <h1 class="text-2xl font-bold tracking-tight">GreenLedger</h1>
+            </div>
+            <!-- Testimonial / Value Prop -->
+            <div class="flex flex-col gap-6 max-w-md">
+                <div class="space-y-2">
+                    <p class="text-primary font-bold text-sm uppercase tracking-wider">Carbon Accounting Platform</p>
+                    <h2 class="text-3xl font-bold leading-tight text-white">
+                        Accurate reporting for a sustainable future.
+                    </h2>
+                </div>
+                <p class="text-gray-300 text-lg font-medium leading-relaxed">
+                    Access your organization's carbon footprint modules and ensure CBAM compliance with our audited ledger system.
+                </p>
+                <!-- Compliance Badge -->
+                <div class="mt-4 flex items-center gap-3 py-3 px-4 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 w-fit">
+                    <span class="material-symbols-outlined text-primary">verified_user</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-300 font-medium">Verified Compliance</span>
+                        <span class="text-sm font-bold text-white">ISO 14064 Ready</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Legal on Image Side -->
+            <div class="text-xs text-gray-400">
+                © 2024 GreenLedger Inc. All rights reserved.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Column: Login Form -->
+    <div class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-24 relative bg-background-light dark:bg-background-dark">
+        <!-- Back to Home Link -->
+        <div class="absolute top-6 left-6 md:top-12 md:left-12">
+            <a href="{{ url_for('main.landing') }}" class="flex items-center gap-2 text-[#618975] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                <span>Back to Home</span>
+            </a>
+        </div>
+        
+        <!-- Mobile Header (Visible only on small screens) -->
+        <div class="md:hidden w-full flex items-center gap-2 mb-8 text-[#111814] dark:text-white">
+            <span class="material-symbols-outlined text-primary text-3xl">eco</span>
+            <span class="font-bold text-xl">GreenLedger</span>
+        </div>
+        
+        <div class="w-full max-w-[440px] flex flex-col gap-8">
+            <!-- Form Header -->
+            <div class="flex flex-col gap-2">
+                <h2 class="text-[#111814] dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]">
+                    Sign In
+                </h2>
+                <p class="text-[#618975] dark:text-gray-400 text-base font-normal leading-normal">
+                    Please enter your credentials to access the dashboard.
+                </p>
+            </div>
+            
+            <!-- Authentication Form -->
+            <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.login') }}">
+                <!-- Organization ID Field -->
+                {{ input_field('org_id', 'Organization ID', 'text', 'e.g. acme-global-eu', 'domain') }}
+                
+                <!-- Email Field -->
+                {{ input_field('email', 'Email Address', 'email', 'name@company.com', 'mail') }}
+                
+                <!-- Password Field -->
+                {{ input_field('password', 'Password', 'password', 'Enter your password', 'lock', True, True, '#') }}
+                
+                <!-- Primary Action Button -->
+                {{ auth_button('Secure Login', 'primary') }}
+            </form>
+            
+            <!-- Divider / SSO -->
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <span class="w-full border-t border-[#dbe6e0] dark:border-gray-700"></span>
+                </div>
+                <div class="relative flex justify-center text-xs uppercase">
+                    <span class="bg-background-light dark:bg-background-dark px-3 text-[#618975]">Or continue with</span>
+                </div>
+            </div>
+            
+            <!-- SSO Buttons Grid -->
+            <div class="grid grid-cols-2 gap-4">
+                {{ sso_button('google') }}
+                {{ sso_button('microsoft') }}
+            </div>
+            
+            <!-- Regulatory Footer -->
+            <div class="mt-auto pt-6 border-t border-[#f0f4f2] dark:border-gray-800">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-[#618975] shrink-0" style="font-size: 18px;">shield</span>
+                    <p class="text-xs text-[#618975] dark:text-gray-500 leading-relaxed">
+                        This site is protected by enterprise-grade security. By logging in, you agree to the 
+                        <a class="text-primary hover:underline font-medium" href="#">Privacy Policy</a> and 
+                        <a class="text-primary hover:underline font-medium" href="#">Terms of Service</a>. 
+                        GreenLedger is a registered CBAM reporting entity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

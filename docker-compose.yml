@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=1
+    volumes:
+      - .:/app
+    # Database service (commented out for now - will be enabled soon)
+    # depends_on:
+    #   - db
+
+  # Database service (commented out for now - will be enabled soon)
+  # db:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     - POSTGRES_USER=greenledger
+  #     - POSTGRES_PASSWORD=greenledger
+  #     - POSTGRES_DB=greenledger
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data:

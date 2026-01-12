@@ -1,0 +1,243 @@
+{% extends "layouts/base.html" %}
+{% from 'components/macros.html' import button, logo %}
+{% from 'components/cards/governance_card.html' import governance_card %}
+{% from 'components/ui/compliance_badges.html' import compliance_badges %}
+{% from 'components/ui/badge_pill.html' import badge_pill %}
+{% from 'components/ui/pipeline_step.html' import pipeline_step %}
+
+{% block title %}GreenLedger Security & Trust{% endblock %}
+
+
+
+{% block content %}
+<!-- Sticky Header -->
+{% set nav_links = [
+    {'url': url_for('main.landing'), 'text': 'Home'},
+    {'url': url_for('main.modules'), 'text': 'Modules'},
+    {'url': url_for('main.how_it_works'), 'text': 'How It Works'},
+    {'url': url_for('main.security'), 'text': 'Security & Trust'}
+] %}
+{% set show_login = True %}
+{% set cta_text = 'Request Access' %}
+{% include 'components/navigation/topbar.html' %}
+
+<!-- HeroSection -->
+<div class="relative flex h-auto w-full flex-col">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                <div class="@container">
+                    <div class="flex flex-col gap-6 py-10 @[480px]:gap-8 @[864px]:flex-row-reverse items-center">
+                        <div class="w-full @[864px]:w-1/2 flex justify-center">
+                            <div class="w-full aspect-video bg-center bg-no-repeat bg-cover rounded-xl shadow-lg border border-gray-100 dark:border-gray-800" data-alt="Abstract secure digital network visualization with green data nodes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAk0MKfAwrpkVWw1Cp28SZKh6r-rGoyuK8n_vxO-CJXw145MESSaEPIfInAceDys8i609ZI3ZS5wq2za4I1iDg2Y23GI0gEuIcrycx3Vt2FTAtVxZELWBjcMXrlrguQW1MhW8a4tD-P37Mp7oI4p59TrEkYXXzW3VLt-RfjA-bZdWHKdGQ9q-Fj3HX6AAEhmKniFre5HtHBqeVBoXB3PzaAgXUOCXIaiBmKz-cRvXOc1BYaYMWemU6eEUZi-DKen2Tr73GlGJw_DUvb");'></div>
+                        </div>
+                        <div class="flex flex-col gap-6 @[480px]:min-w-[400px] @[480px]:gap-8 @[864px]:w-1/2">
+                            <div class="flex flex-col gap-4 text-left">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 w-fit border border-primary/20">
+                                    <span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+                                    <span class="text-primary text-xs font-bold uppercase tracking-wider">Enterprise Security</span>
+                                </div>
+                                <h1 class="text-text-main dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl">
+                                    Trust Built on Protocol, Verified by Blockchain
+                                </h1>
+                                <h2 class="text-gray-600 dark:text-gray-300 text-base font-normal leading-relaxed">
+                                    GreenLedger provides compliance, confidentiality, and integrity built into every carbon calculation. Protect your entity's data with institutional-grade governance.
+                                </h2>
+                            </div>
+                            <div class="flex flex-wrap gap-3">
+                                <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-primary/90 text-black text-base font-bold leading-normal tracking-[0.015em] transition-all">
+                                    <span class="truncate">View Security Whitepaper</span>
+                                </button>
+                                <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 text-text-main dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 text-base font-bold leading-normal tracking-[0.015em] transition-all">
+                                    <span class="truncate">Contact Security Team</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Compliance Badges -->
+<div class="w-full border-y border-gray-200 dark:border-gray-800 bg-white dark:bg-background-dark/50">
+    <div class="px-4 md:px-10 lg:px-40 flex justify-center py-8">
+        <div class="layout-content-container flex flex-wrap justify-center gap-8 md:gap-16 max-w-[1200px]">
+            {% set badges = [
+                {'icon': 'policy', 'text': 'GDPR Compliant'},
+                {'icon': 'gavel', 'text': 'CBAM Ready'},
+                {'icon': 'security', 'text': 'ISO 27001'},
+                {'icon': 'encrypted', 'text': 'SOC 2 Type II'}
+            ] %}
+            {{ compliance_badges(badges) }}
+        </div>
+    </div>
+</div>
+
+<!-- Governance Section Header -->
+<div class="relative flex w-full flex-col">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center pt-16 pb-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 text-center items-center">
+                <h2 class="text-text-main dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em] mb-4">Governance & Control Structure</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl text-center">Rigorous controls ensure that your environmental financial data is handled with the same precision as your monetary assets.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Governance Feature Grid -->
+<div class="relative flex h-auto w-full flex-col">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-4">
+                    {{ governance_card('admin_panel_settings', 'Role-Based Access', 'Granular permissions ensure employees only access data relevant to their specific role and entity scope.') }}
+                    {{ governance_card('group_add', 'Separation of Duties', 'Critical actions such as report finalization require multi-person approval workflows to prevent fraud.') }}
+                    {{ governance_card('history_edu', 'Immutable Audit Trails', 'Every calculation, edit, and export is timestamped and logged. Complete historical visibility for auditors.') }}
+                    {{ governance_card('lock', 'Data Confidentiality', 'Zero-knowledge architecture principles where possible. Your proprietary data remains encrypted at rest.') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blockchain Verification Section -->
+<div class="relative flex h-auto w-full flex-col mt-10">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 bg-background-dark text-white rounded-2xl overflow-hidden shadow-2xl">
+                <div class="flex flex-col lg:flex-row">
+                    <div class="p-8 lg:p-16 flex flex-col justify-center gap-6 lg:w-1/2">
+                        <div class="flex items-center gap-2 text-primary">
+                            <span class="material-symbols-outlined">link</span>
+                            <span class="uppercase tracking-widest text-xs font-bold">Final-State Verification</span>
+                        </div>
+                        <h2 class="text-3xl lg:text-4xl font-bold leading-tight">Anchored on-chain for unalterable proof.</h2>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            Once your carbon reports are finalized, GreenLedger generates a cryptographic hash of the document and anchors it to a public permissioned blockchain. This provides third-party verifiers absolute mathematical proof that the data has not been tampered with since publication.
+                        </p>
+                        <div class="flex flex-col gap-4 mt-4">
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                                <div>
+                                    <h4 class="font-bold">Publicly Verifiable</h4>
+                                    <p class="text-sm text-gray-400">Auditors can verify integrity without accessing the raw private data.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <span class="material-symbols-outlined text-primary mt-1">check_circle</span>
+                                <div>
+                                    <h4 class="font-bold">Timestamp Proof</h4>
+                                    <p class="text-sm text-gray-400">Irrefutable proof of existence for CBAM declaration deadlines.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 lg:w-1/2 min-h-[400px] relative">
+                        <!-- Abstract Blockchain Visualization -->
+                        <div class="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" data-alt="Dark abstract blockchain node connections pattern" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDX0RKWWXN2ZndPMrk3qH9auBXZ15394Byq1k9Z_FPVLcdKWTfxgGm1A3qesuYD2MtW3zvUSz3RqQngvvoJu_GtYLzq1pWD4QnX6l_AudlXuD7nJ7AIGh9bRI8113nEAlHqWbnI11RKty59cD9JzcxVUaHjsCHy3g6T59GOhrXZeqvrHxwQLFLzqgh0_DUeVzNGdSTzhp32_K48VUNBDXAOSS_IGrMeWElci9bIo0p5aCNbmmfrSAbQi_iWAZ1xmnoboh63vTef18EU");'></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="bg-background-dark/90 p-6 rounded-xl border border-gray-700 backdrop-blur-sm max-w-sm m-4 shadow-xl">
+                                <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                                    <span class="text-xs text-gray-400 uppercase">Latest Block Hash</span>
+                                    <span class="text-primary text-xs">Verified</span>
+                                </div>
+                                <div class="font-mono text-xs text-gray-300 break-all">
+                                    0x7f938ba0...c4b2e8f1<br/>
+                                    <span class="text-gray-500">Timestamp: 2023-10-24 14:02:41 UTC</span>
+                                </div>
+                                <div class="mt-4 flex gap-2">
+                                    <div class="h-1.5 w-full bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-primary w-full animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works / Data Flow -->
+<div class="relative flex w-full flex-col py-20">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                <h2 class="text-text-main dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] mb-10 text-center">Secure Data Pipeline</h2>
+                <div class="flex flex-col md:flex-row gap-4 justify-between relative">
+                    <!-- Connecting Line (Desktop) -->
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-800 -z-10 -translate-y-1/2"></div>
+                    {{ pipeline_step('upload_file', 'Ingestion', 'Secure upload via encrypted TLS 1.3 tunnels.') }}
+                    {{ pipeline_step('enhanced_encryption', 'Encryption', 'AES-256 encryption at rest in isolated DBs.') }}
+                    {{ pipeline_step('calculate', 'Calculation', 'ISO-compliant carbon footprint engines.') }}
+                    {{ pipeline_step('verified', 'Verification', 'Hash anchoring for final state immutability.', True) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Footer -->
+<div class="relative flex w-full flex-col bg-white dark:bg-white/5 border-t border-gray-200 dark:border-gray-800">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-16">
+            <div class="layout-content-container flex flex-col max-w-[800px] flex-1 text-center items-center gap-6">
+                <h2 class="text-text-main dark:text-white text-3xl font-bold">Ready to secure your carbon reporting?</h2>
+                <p class="text-gray-600 dark:text-gray-300">Join the leading enterprises trusting GreenLedger with their CBAM compliance and carbon accounting. Download our full security architecture documentation.</p>
+                <div class="flex gap-4 mt-4">
+                    <a href="{{ url_for('main.request_access') }}">
+                        <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary hover:bg-primary/90 text-black text-base font-bold leading-normal tracking-[0.015em] transition-colors shadow-lg shadow-primary/20">
+                            <span class="truncate">Get Started</span>
+                        </button>
+                    </a>
+                    <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-transparent hover:bg-gray-50 dark:hover:bg-white/5 border border-gray-300 dark:border-gray-600 text-text-main dark:text-white text-base font-bold leading-normal tracking-[0.015em] transition-colors">
+                        <span class="truncate">Contact Sales</span>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+{% set footer_links = [
+    {
+        'title': 'Product',
+        'links': [
+            {'url': '#', 'text': 'Platform'},
+            {'url': '#', 'text': 'Modules'},
+            {'url': '#', 'text': 'API'}
+        ]
+    },
+    {
+        'title': 'Company',
+        'links': [
+            {'url': '#', 'text': 'About'},
+            {'url': '#', 'text': 'Careers'},
+            {'url': '#', 'text': 'Contact'}
+        ]
+    },
+    {
+        'title': 'Resources',
+        'links': [
+            {'url': '#', 'text': 'Blog'},
+            {'url': '#', 'text': 'Documentation'},
+            {'url': '#', 'text': 'Support'}
+        ]
+    },
+    {
+        'title': 'Legal',
+        'links': [
+            {'url': '#', 'text': 'Privacy'},
+            {'url': '#', 'text': 'Terms'},
+            {'url': '#', 'text': 'Security'}
+        ]
+    }
+] %}
+{% include 'components/navigation/footer.html' %}
+{% endblock %}

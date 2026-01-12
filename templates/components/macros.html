@@ -1,0 +1,71 @@
+{% macro logo(size='8') %}
+<div class="size-{{ size }} text-primary">
+    <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+    </svg>
+</div>
+{% endmacro %}
+
+{% macro button(text, variant='primary', height='12', px='8', text_size='base', extra_classes='', as_link=False, href='#') %}
+{% if as_link %}
+<a href="{{ href }}" class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg {% if variant == 'primary' %}bg-primary text-[#111814] hover:bg-primary/90 shadow-md{% elif variant == 'secondary' %}bg-[#e8edeb] dark:bg-white/10 text-[#111814] dark:text-white hover:bg-[#dde4e0] dark:hover:bg-white/20{% elif variant == 'ghost' %}bg-background-light dark:bg-white/5 border border-transparent dark:border-white/10 text-[#111814] dark:text-white hover:bg-[#e0e6e3] dark:hover:bg-white/10{% endif %} text-{{ text_size }} font-bold tracking-[0.015em] transition-all w-full sm:w-auto {{ extra_classes }}">
+    {{ text }}
+</a>
+{% elif variant == 'primary' %}
+<button class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg bg-primary text-[#111814] text-{{ text_size }} font-bold tracking-[0.015em] hover:bg-primary/90 transition-all shadow-md w-full sm:w-auto {{ extra_classes }}">
+    {{ text }}
+</button>
+{% elif variant == 'secondary' %}
+<button class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg bg-[#e8edeb] dark:bg-white/10 text-[#111814] dark:text-white text-{{ text_size }} font-bold tracking-[0.015em] hover:bg-[#dde4e0] dark:hover:bg-white/20 transition-all w-full sm:w-auto {{ extra_classes }}">
+    {{ text }}
+</button>
+{% elif variant == 'ghost' %}
+<button class="hidden sm:flex h-{{ height }} px-{{ px }} items-center justify-center rounded-lg bg-background-light dark:bg-white/5 border border-transparent dark:border-white/10 text-[#111814] dark:text-white text-{{ text_size }} font-bold hover:bg-[#e0e6e3] dark:hover:bg-white/10 transition-colors {{ extra_classes }}">
+    {{ text }}
+</button>
+{% else %}
+<button class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg {{ extra_classes }}">
+    {{ text }}
+</button>
+{% endif %}
+{% endmacro %}
+
+{% macro badge(icon, text, icon_size='20') %}
+<span class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-[{{ icon_size }}px]">{{ icon }}</span>
+    {{ text }}
+</span>
+{% endmacro %}
+
+{% macro stat_card(icon, title, description) %}
+<div class="group flex flex-col gap-4 p-8 rounded-xl bg-background-light dark:bg-[#1a3326] border border-[#dbe6e0] dark:border-[#2a4536] hover:border-primary/50 transition-all hover:shadow-lg">
+    <div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-[#111814] transition-colors">
+        <span class="material-symbols-outlined text-[28px]">{{ icon }}</span>
+    </div>
+    <div class="flex flex-col gap-2">
+        <h3 class="text-[#111814] dark:text-white text-xl font-bold">{{ title }}</h3>
+        <p class="text-[#4e5f55] dark:text-gray-400 leading-relaxed">{{ description }}</p>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro auth_button(text, variant='primary', extra_classes='') %}
+{% if variant == 'primary' %}
+<button class="mt-2 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-[#13ec80] hover:bg-[#10d673] transition-colors text-[#111814] text-base font-bold leading-normal tracking-[0.015em] shadow-md shadow-primary/20 {{ extra_classes }}" type="submit">
+    <span class="truncate">{{ text }}</span>
+</button>
+{% else %}
+<button class="mt-2 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 {{ extra_classes }}" type="submit">
+    <span class="truncate">{{ text }}</span>
+</button>
+{% endif %}
+{% endmacro %}
+
+{% macro submit_button(text, show_icon=True, extra_classes='') %}
+<button class="w-full cursor-pointer flex items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-[#17b063] text-[#111714] text-base font-bold leading-normal tracking-[0.015em] transition-all duration-200 shadow-sm hover:shadow-md transform active:scale-[0.99] {{ extra_classes }}" type="submit">
+    <span>{{ text }}</span>
+    {% if show_icon %}
+    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+    {% endif %}
+</button>
+{% endmacro %}

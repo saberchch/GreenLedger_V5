@@ -1,0 +1,40 @@
+{% macro module_card(module_type, title, description, badge_text, icon, features, icon_color='primary') %}
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#dbe6e0] dark:border-[#2a3831] overflow-hidden hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-primary/5">
+    <!-- Decorative Top Bar -->
+    <div class="h-2 w-full {% if module_type == 'cbam' %}bg-gradient-to-r from-primary/40 to-primary{% else %}bg-gradient-to-r from-blue-400 to-blue-600{% endif %}"></div>
+    <div class="p-8 md:p-10 flex flex-col h-full">
+        <!-- Header -->
+        <div class="flex items-start justify-between mb-6">
+            <div class="flex flex-col gap-2">
+                <div class="size-12 rounded-xl {% if module_type == 'cbam' %}bg-primary/10{% else %}bg-blue-50 dark:bg-blue-900/20{% endif %} flex items-center justify-center {% if module_type == 'cbam' %}text-primary{% else %}text-blue-500{% endif %} mb-2">
+                    <span class="material-symbols-outlined text-3xl">{{ icon }}</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-bold text-text-main-light dark:text-text-main-dark">{{ title }}</h2>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-[#f0f4f2] dark:bg-[#23332a] text-xs font-bold text-text-sub-light dark:text-text-sub-dark uppercase tracking-wide">{{ badge_text }}</span>
+        </div>
+        <p class="text-text-sub-light dark:text-text-sub-dark mb-8 text-base leading-relaxed">
+            {{ description }}
+        </p>
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+            {% for feature in features %}
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-background-light dark:bg-background-dark/50 {% if feature.span_full %}md:col-span-2{% endif %}">
+                <span class="material-symbols-outlined {% if module_type == 'cbam' %}text-primary{% else %}text-blue-500{% endif %} mt-0.5">{{ feature.icon }}</span>
+                <div>
+                    <h3 class="text-sm font-bold text-text-main-light dark:text-text-main-dark">{{ feature.title }}</h3>
+                    <p class="text-sm text-text-sub-light dark:text-text-sub-dark">{{ feature.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Action -->
+        <div class="mt-auto pt-6 border-t border-[#f0f4f2] dark:border-[#2a3831]">
+            <button class="w-full flex items-center justify-between px-6 py-4 bg-text-main-light dark:bg-white text-white dark:text-black rounded-xl font-bold hover:bg-opacity-90 transition-all group-hover:translate-x-1 duration-300">
+                <span>Explore {{ title }} Module</span>
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endmacro %}

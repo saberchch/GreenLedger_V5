@@ -1,0 +1,24 @@
+{% set height = height|default('12') %}
+{% set px = px|default('8') %}
+{% set text_size = text_size|default('base') %}
+{% set extra_classes = extra_classes|default('') %}
+{% if variant == 'primary' %}
+<button class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg bg-primary text-[#111814] text-{{ text_size }} font-bold tracking-[0.015em] hover:bg-primary/90 transition-all shadow-md w-full sm:w-auto {{ extra_classes }}">
+    {{ text }}
+</button>
+{% elif variant == 'secondary' %}
+<button class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg bg-[#e8edeb] dark:bg-white/10 text-[#111814] dark:text-white text-{{ text_size }} font-bold tracking-[0.015em] hover:bg-[#dde4e0] dark:hover:bg-white/20 transition-all w-full sm:w-auto {{ extra_classes }}">
+    {{ text }}
+</button>
+{% elif variant == 'ghost' %}
+{% set height = height|default('10') %}
+{% set px = px|default('4') %}
+{% set text_size = text_size|default('sm') %}
+<button class="hidden sm:flex h-{{ height }} px-{{ px }} items-center justify-center rounded-lg bg-background-light dark:bg-white/5 border border-transparent dark:border-white/10 text-[#111814] dark:text-white text-{{ text_size }} font-bold hover:bg-[#e0e6e3] dark:hover:bg-white/10 transition-colors {{ extra_classes }}">
+    {{ text }}
+</button>
+{% else %}
+<button class="flex items-center justify-center h-{{ height }} px-{{ px }} rounded-lg {{ extra_classes }}">
+    {{ text }}
+</button>
+{% endif %}

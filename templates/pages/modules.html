@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+{% from 'components/macros.html' import button, badge %}
+{% from 'components/cards/module_card.html' import module_card %}
+{% from 'components/tables/comparison_table.html' import comparison_table %}
+{% from 'components/ui/trusted_by.html' import trusted_by %}
+{% from 'components/ui/badge_pill.html' import badge_pill %}
+
+{% block title %}GreenLedger - Carbon Accounting Modules{% endblock %}
+
+{% block content %}
+<!-- Sticky Header -->
+{% set nav_links = [
+    {'url': url_for('main.landing'), 'text': 'Home'},
+    {'url': url_for('main.modules'), 'text': 'Modules'},
+    {'url': url_for('main.how_it_works'), 'text': 'How It Works'},
+    {'url': url_for('main.security'), 'text': 'Security & Trust'}
+] %}
+{% set show_login = True %}
+{% set cta_text = 'Request Access' %}
+{% include 'components/navigation/topbar.html' %}
+
+<!-- Main Content -->
+<main class="flex flex-col items-center w-full min-h-screen pb-20">
+    <!-- Hero Section -->
+    <div class="w-full max-w-[1200px] px-4 md:px-10 py-12 md:py-20 flex flex-col items-center text-center gap-6">
+        {{ badge_pill('New Compliance Standards 2024', True) }}
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-text-main-light dark:text-text-main-dark max-w-[900px]">
+            Comprehensive Carbon Accounting <br class="hidden md:block"/> for Modern Enterprises
+        </h1>
+        <p class="text-lg md:text-xl text-text-sub-light dark:text-text-sub-dark max-w-[700px] leading-relaxed">
+            Streamline your environmental reporting. Manage your regulatory obligations and corporate sustainability goals with our specialized modules.
+        </p>
+    </div>
+    
+    <!-- Modules Grid -->
+    <div class="w-full max-w-[1200px] px-4 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <!-- CBAM Module Card -->
+        {% set cbam_features = [
+            {'icon': 'gavel', 'title': 'Regulation', 'description': 'EU Reg 2023/956', 'span_full': False},
+            {'icon': 'calendar_month', 'title': 'Frequency', 'description': 'Quarterly Declarations', 'span_full': False},
+            {'icon': 'groups', 'title': 'Target Audience', 'description': 'Importers of steel, cement, aluminum, fertilizer', 'span_full': True}
+        ] %}
+        {{ module_card('cbam', 'CBAM Compliance', 'Designed specifically for importers needing to navigate the EU Carbon Border Adjustment Mechanism (CBAM). Calculate tax liabilities and manage quarterly declarations with precision.', 'Import Tax', 'verified_user', cbam_features) }}
+        
+        <!-- Footprint Module Card -->
+        {% set footprint_features = [
+            {'icon': 'policy', 'title': 'Standard', 'description': 'CSRD / ISO 14064', 'span_full': False},
+            {'icon': 'event_repeat', 'title': 'Frequency', 'description': 'Annual Reporting', 'span_full': False},
+            {'icon': 'badge', 'title': 'Target Audience', 'description': 'Sustainability Officers, ESG Managers', 'span_full': True}
+        ] %}
+        {{ module_card('footprint', 'Entity Footprint', 'Comprehensive tools for corporate sustainability reporting across Scope 1, 2, and 3 emissions. Ensure compliance with global reporting standards and track progress.', 'ESG Reporting', 'public', footprint_features, 'blue') }}
+    </div>
+    
+    <!-- Comparison Table -->
+    <div class="w-full max-w-[1000px] px-4 md:px-10 mt-20">
+        <h3 class="text-xl font-bold mb-6 text-center text-text-main-light dark:text-text-main-dark">Quick Comparison</h3>
+        {% set comparison_rows = [
+            {'feature': 'Primary Goal', 'cbam': 'Tax Calculation & Declaration', 'footprint': 'Sustainability Reporting'},
+            {'feature': 'Key Standard', 'cbam': 'EU Reg 2023/956', 'footprint': 'CSRD / ISO 14064'},
+            {'feature': 'Data Scope', 'cbam': 'Specific Imported Goods', 'footprint': 'Full Organization (Scope 1, 2, 3)'},
+            {'feature': 'Output', 'cbam': 'XML Declaration File', 'footprint': 'ESG Report / PDF'}
+        ] %}
+        {{ comparison_table(comparison_rows) }}
+    </div>
+    
+    <!-- Trusted By Section -->
+    <div class="w-full max-w-[1200px] px-4 md:px-10 mt-20 mb-10">
+        <p class="text-center text-sm font-medium text-text-sub-light dark:text-text-sub-dark mb-8 uppercase tracking-widest">Compliant with standards from</p>
+        {% set organizations = [
+            {'icon': 'euro_symbol', 'name': 'EU Commission'},
+            {'icon': 'language', 'name': 'ISO'},
+            {'icon': 'forest', 'name': 'GHG Protocol'},
+            {'icon': 'corporate_fare', 'name': 'CDP'}
+        ] %}
+        {{ trusted_by(organizations) }}
+    </div>
+</main>
+
+<!-- Footer -->
+{% set footer_links = [
+    {
+        'title': 'Platform',
+        'links': [
+            {'url': '#', 'text': 'CBAM Module'},
+            {'url': '#', 'text': 'Footprint Module'},
+            {'url': '#', 'text': 'Pricing'},
+            {'url': '#', 'text': 'API Access'}
+        ]
+    },
+    {
+        'title': 'Company',
+        'links': [
+            {'url': '#', 'text': 'About Us'},
+            {'url': '#', 'text': 'Careers'},
+            {'url': '#', 'text': 'Contact'},
+            {'url': '#', 'text': 'Privacy Policy'}
+        ]
+    },
+    {
+        'title': 'Connect',
+        'links': []
+    }
+] %}
+{% set footer_description = 'Empowering enterprises to meet global carbon accounting standards with precision and ease.' %}
+{% set footer_style = 'modules' %}
+{% include 'components/navigation/footer.html' %}
+{% endblock %}

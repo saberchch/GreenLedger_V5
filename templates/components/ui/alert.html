@@ -1,0 +1,17 @@
+{% macro alert(type='info', icon='info', title='', message='') %}
+{% if type == 'info' or type == 'verification' %}
+<div class="flex gap-4 p-4 mb-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg">
+    <div class="flex-shrink-0 text-blue-600 dark:text-blue-400">
+        <span class="material-symbols-outlined">{{ icon }}</span>
+    </div>
+    <div>
+        {% if title %}
+        <h4 class="text-sm font-bold text-blue-900 dark:text-blue-100 mb-1">{{ title }}</h4>
+        {% endif %}
+        {% if message %}
+        <p class="text-xs text-blue-700 dark:text-blue-300 leading-normal">{{ message }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endmacro %}

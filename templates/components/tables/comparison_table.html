@@ -1,0 +1,22 @@
+{% macro comparison_table(rows) %}
+<div class="overflow-x-auto rounded-xl border border-[#dbe6e0] dark:border-[#2a3831] bg-surface-light dark:bg-surface-dark">
+    <table class="w-full text-sm text-left">
+        <thead class="text-xs uppercase bg-background-light dark:bg-background-dark/50 text-text-sub-light dark:text-text-sub-dark border-b border-[#dbe6e0] dark:border-[#2a3831]">
+            <tr>
+                <th class="px-6 py-4 font-bold">Feature</th>
+                <th class="px-6 py-4 font-bold">CBAM Compliance</th>
+                <th class="px-6 py-4 font-bold">Entity Footprint</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-[#dbe6e0] dark:divide-[#2a3831]">
+            {% for row in rows %}
+            <tr class="hover:bg-background-light dark:hover:bg-background-dark/30 transition-colors">
+                <td class="px-6 py-4 font-bold text-text-main-light dark:text-text-main-dark">{{ row.feature }}</td>
+                <td class="px-6 py-4 text-text-sub-light dark:text-text-sub-dark">{{ row.cbam }}</td>
+                <td class="px-6 py-4 text-text-sub-light dark:text-text-sub-dark">{{ row.footprint }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endmacro %}

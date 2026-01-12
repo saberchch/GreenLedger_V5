@@ -1,0 +1,19 @@
+{% macro step_item(number, icon, title, description, items=None) %}
+<div class="flex gap-6 group">
+    <div class="flex-shrink-0 size-12 rounded-full bg-[#111814] text-white dark:bg-primary dark:text-[#111814] flex items-center justify-center font-bold text-xl">{{ number }}</div>
+    <div>
+        <div class="flex items-center gap-3 mb-2">
+            <span class="material-symbols-outlined text-primary">{{ icon }}</span>
+            <h3 class="text-xl font-bold">{{ title }}</h3>
+        </div>
+        <p class="text-[#4e5f55] dark:text-gray-400 mb-3">{{ description }}</p>
+        {% if items %}
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-[#4e5f55] dark:text-gray-400">
+            {% for item in items %}
+            <li class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-primary"></span>{{ item }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

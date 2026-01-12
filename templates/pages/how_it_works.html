@@ -1,0 +1,136 @@
+{% extends "layouts/base.html" %}
+{% from 'components/macros.html' import logo, button %}
+{% from 'components/ui/step_item.html' import step_item %}
+{% from 'components/cards/scope_card.html' import scope_card %}
+{% from 'components/forms/checklist_item.html' import checklist_item %}
+{% from 'components/ui/formula_display.html' import formula_display %}
+
+{% block title %}GreenLedger - How It Works Guide{% endblock %}
+
+{% block content %}
+<!-- Sticky Header -->
+{% set nav_links = [
+    {'url': url_for('main.landing'), 'text': 'Home'},
+    {'url': url_for('main.modules'), 'text': 'Modules'},
+    {'url': url_for('main.how_it_works'), 'text': 'How It Works'},
+    {'url': url_for('main.security'), 'text': 'Security & Trust'}
+] %}
+{% set show_login = True %}
+{% set cta_text = 'Request Access' %}
+{% include 'components/navigation/topbar.html' %}
+
+<main class="max-w-[1000px] mx-auto py-16 px-4 md:px-10">
+    <header class="mb-16 text-center">
+        <h1 class="text-[#111814] dark:text-white text-4xl md:text-5xl font-black leading-tight mb-4">How Carbon Accounting Works</h1>
+        <p class="text-[#4e5f55] dark:text-gray-300 text-lg md:text-xl max-w-2xl mx-auto">
+            Understanding the math behind your footprint is the first step toward effective carbon management and CBAM compliance.
+        </p>
+    </header>
+
+    <section class="mb-20">
+        <h2 class="text-sm font-bold text-primary uppercase tracking-[0.2em] mb-6 text-center">The Core Formula</h2>
+        {{ formula_display() }}
+    </section>
+
+    <section class="mb-20">
+        <h2 class="text-2xl font-bold mb-10 border-b border-[#dbe6e0] dark:border-[#2a4536] pb-4">Step-by-Step Breakdown</h2>
+        <div class="grid grid-cols-1 gap-8">
+            {{ step_item(1, 'analytics', 'Identify Activities', 'Identify every action in your business that generates emissions.', ['Energy & fuel consumption', 'Raw material procurement', 'Logistics and transport', 'Waste and water usage']) }}
+            {{ step_item(2, 'science', 'Select Emission Factors', 'GreenLedger maps your activities to verified global databases (IPCC, DEFRA, IEA).', ['Region-specific power grids', 'Standardized transport coefficients']) }}
+            {{ step_item(3, 'co2', 'CO2e Conversion', 'We convert different greenhouse gases (Methane, Nitrous Oxide) into a single "CO2 equivalent" value for unified reporting.') }}
+            {{ step_item(4, 'account_tree', 'Categorize by Scopes', 'Emissions are grouped into Scopes 1, 2, and 3 to meet international GHGP standards.') }}
+            {{ step_item(5, 'insights', 'Analysis & Reporting', 'Generate audit-ready dashboards and PDF reports for CBAM or corporate sustainability filings.') }}
+        </div>
+    </section>
+
+    <section class="mb-20 bg-white dark:bg-[#1a3326] p-8 md:p-12 rounded-2xl border border-[#dbe6e0] dark:border-[#2a4536]">
+        <h2 class="text-2xl font-bold mb-8">Understanding Scopes</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {{ scope_card(1, 'Direct Emissions', 'Emissions from sources your company owns or controls (e.g., company vehicles, onsite boilers).') }}
+            {{ scope_card(2, 'Indirect (Energy)', 'Emissions from the generation of purchased electricity, steam, heating, or cooling consumed by your company.') }}
+            {{ scope_card(3, 'Value Chain', 'All other indirect emissions in your value chain, including purchased goods, transport, and waste disposal.') }}
+        </div>
+    </section>
+
+    <section class="mb-20">
+        <div class="flex flex-col md:flex-row gap-12">
+            <div class="flex-1">
+                <h2 class="text-2xl font-bold mb-6">What to Prepare</h2>
+                <p class="text-[#4e5f55] dark:text-gray-400 mb-6">To get the most accurate results, start gathering these documents now:</p>
+                <div class="space-y-4">
+                    {{ checklist_item('Energy Bills', 'Electricity, gas, and water bills for the last 12 months.') }}
+                    {{ checklist_item('Travel Logs', 'Flight distances, hotel stays, and fuel receipts for company cars.') }}
+                    {{ checklist_item('Procurement Data', 'Inventory lists of raw materials and goods purchased from suppliers.') }}
+                </div>
+            </div>
+            <div class="flex-1 bg-primary/5 p-8 rounded-2xl border border-primary/20">
+                <div class="flex items-center gap-3 mb-4 text-primary">
+                    <span class="material-symbols-outlined">help_outline</span>
+                    <h3 class="font-bold">Not sure about a data point?</h3>
+                </div>
+                <p class="text-sm text-[#4e5f55] dark:text-gray-400 leading-relaxed">
+                    Don't worry if you don't have everything perfectly documented. GreenLedger allows you to use industry averages and benchmarks while you work on collecting primary data from your supply chain.
+                </p>
+                <div class="mt-6">
+                    <a class="text-sm font-bold text-[#111814] dark:text-white flex items-center gap-2 hover:underline" href="#">
+                        View Sample Data Template <span class="material-symbols-outlined text-sm">download</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="mt-24 pt-12 border-t border-[#dbe6e0] dark:border-[#2a4536]">
+        <div class="max-w-xl mx-auto flex flex-col items-center gap-8">
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <input class="size-5 rounded border-gray-300 text-primary focus:ring-primary" type="checkbox"/>
+                <span class="text-[#111814] dark:text-white font-medium group-hover:text-primary transition-colors">I understand how carbon calculation works</span>
+            </label>
+            <button class="w-full h-14 bg-primary text-[#111814] font-black text-lg rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-3">
+                Continue to Data Collection
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+            <p class="text-xs text-[#618975] dark:text-gray-500 text-center">
+                Need more help? <a class="underline hover:text-primary" href="#">Contact our sustainability specialists</a> or <a class="underline hover:text-primary" href="#">explore the help center</a>.
+            </p>
+        </div>
+    </footer>
+</main>
+
+<!-- Footer -->
+{% set footer_links = [
+    {
+        'title': 'Product',
+        'links': [
+            {'url': '#', 'text': 'Platform'},
+            {'url': '#', 'text': 'Modules'},
+            {'url': '#', 'text': 'API'}
+        ]
+    },
+    {
+        'title': 'Company',
+        'links': [
+            {'url': '#', 'text': 'About'},
+            {'url': '#', 'text': 'Careers'},
+            {'url': '#', 'text': 'Contact'}
+        ]
+    },
+    {
+        'title': 'Resources',
+        'links': [
+            {'url': '#', 'text': 'Blog'},
+            {'url': '#', 'text': 'Documentation'},
+            {'url': '#', 'text': 'Support'}
+        ]
+    },
+    {
+        'title': 'Legal',
+        'links': [
+            {'url': '#', 'text': 'Privacy'},
+            {'url': '#', 'text': 'Terms'},
+            {'url': '#', 'text': 'Security'}
+        ]
+    }
+] %}
+{% include 'components/navigation/footer.html' %}
+{% endblock %}

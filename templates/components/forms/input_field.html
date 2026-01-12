@@ -1,0 +1,27 @@
+{% macro input_field(field_id, label, field_type='text', placeholder='', icon='', required=True, show_forgot=False, forgot_link='#') %}
+<div class="flex flex-col gap-2">
+    {% if label %}
+    <div class="flex justify-between items-center">
+        <label class="text-[#111814] dark:text-white text-sm font-bold leading-normal" for="{{ field_id }}">
+            {{ label }}
+        </label>
+        {% if show_forgot %}
+        <a class="text-sm font-medium text-primary hover:text-primary/80 transition-colors" href="{{ forgot_link }}">Forgot Password?</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="relative">
+        {% if icon %}
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-[#618975]" style="font-size: 20px;">{{ icon }}</span>
+        </div>
+        {% endif %}
+        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111814] dark:text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-[#dbe6e0] dark:border-gray-700 bg-white dark:bg-[#1a2e24] h-14 placeholder:text-[#618975] dark:placeholder:text-gray-500 {{ 'pl-11' if icon else 'pl-4' }} pr-4 text-base font-normal leading-normal shadow-sm" 
+               id="{{ field_id }}" 
+               name="{{ field_id }}"
+               placeholder="{{ placeholder }}" 
+               type="{{ field_type }}"
+               {% if required %}required{% endif %}/>
+    </div>
+</div>
+{% endmacro %}

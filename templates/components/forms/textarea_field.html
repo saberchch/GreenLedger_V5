@@ -1,0 +1,18 @@
+{% macro textarea_field(field_id, label, placeholder='', rows=4, required=False, optional_label=False) %}
+<label class="flex flex-col w-full">
+    {% if label %}
+    <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal pb-2">
+        {{ label }}
+        {% if optional_label %}
+        <span class="text-[#648775] font-normal">(Optional)</span>
+        {% endif %}
+    </p>
+    {% endif %}
+    <textarea class="form-textarea flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111714] dark:text-white focus:outline-0 focus:ring-0 border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] focus:border-primary {% if rows == 4 %}h-24{% elif rows == 6 %}h-36{% else %}h-20{% endif %} placeholder:text-[#648775] dark:placeholder:text-gray-500 px-4 py-3 text-sm font-normal leading-normal transition-colors" 
+              id="{{ field_id }}" 
+              name="{{ field_id }}"
+              placeholder="{{ placeholder }}"
+              rows="{{ rows }}"
+              {% if required %}required{% endif %}></textarea>
+</label>
+{% endmacro %}
