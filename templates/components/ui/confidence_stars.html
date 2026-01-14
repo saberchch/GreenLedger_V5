@@ -1,0 +1,38 @@
+{#
+    Props expected:
+    - confidence (int 1–5)
+  
+    Example:
+    {% include "components/ui/confidence_stars.html" with confidence=4 %}
+  #}
+  
+  {% set confidence = confidence or 3 %}
+  
+  <div class="flex gap-1 items-center">
+  
+    {% for i in range(1, 6) %}
+      {% if i <= confidence %}
+        <span class="material-symbols-outlined text-yellow-400 text-base">
+          star
+        </span>
+      {% else %}
+        <span class="material-symbols-outlined text-[#dbe6e0] text-base">
+          star
+        </span>
+      {% endif %}
+    {% endfor %}
+  
+    <span class="text-xs text-[#618975] ml-2">
+      {{ confidence }}/5
+    </span>
+  
+  </div>
+  
+  <!--
+    TODO:
+    - Map confidence score from:
+      * data source
+      * publication year
+      * peer review
+  -->
+  

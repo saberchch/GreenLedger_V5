@@ -1,0 +1,60 @@
+{% from 'components/macros.html' import stat_card %}
+
+<section class="mt-14">
+  <h3 class="text-xl font-bold mb-8 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">menu_book</span>
+    Understanding the Data
+  </h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Emission Factors -->
+    {{ stat_card(
+      'science',
+      'Emission Factors',
+      'Emission factors represent the amount of greenhouse gas emissions associated with a specific activity, fuel, material, or process. They are used to convert operational data (such as fuel consumption or electricity use) into carbon dioxide equivalent emissions (CO₂e).'
+    ) }}
+
+    <!-- Emission Scopes -->
+    {{ stat_card(
+      'layers',
+      'Emission Scopes',
+      'Scope 1: Direct emissions from sources owned or controlled by the organization (e.g. fuel combustion, company vehicles). Scope 2: Indirect emissions from purchased energy (electricity, steam, heating, cooling). Scope 3: All other indirect emissions across the value chain, including suppliers, transport, and product use.'
+    ) }}
+
+    <!-- Confidence Score -->
+    {{ stat_card(
+      'star',
+      'Confidence Score',
+      'The confidence score indicates the reliability and quality of an emission factor. ⭐ 1–2: Estimated or generic data. ⭐ 3: Standard industry reference. ⭐ 4–5: High-quality, peer-reviewed or official source. Based on data source, publication date, methodological transparency, and review process.'
+    ) }}
+
+    <!-- Blockchain Records -->
+    {{ stat_card(
+      'verified_user',
+      'Blockchain Records',
+      'Some emission reports are notarized on a public blockchain. This ensures data integrity, traceability, and transparency. Once recorded, these entries cannot be altered or deleted.'
+    ) }}
+
+    <!-- Verification Status -->
+    {{ stat_card(
+      'verified',
+      'Verification Status',
+      'Verified records have been reviewed by an independent third party or validated through automated consistency checks. Public records can be accessed by regulators, partners, and the public.'
+    ) }}
+
+    <!-- CBAM Compliance -->
+    {{ stat_card(
+      'gavel',
+      'CBAM Compliance',
+      'Certain emission factors and reports are mapped to EU Carbon Border Adjustment Mechanism (CBAM) requirements. These datasets support regulatory reporting for imported goods subject to CBAM obligations.'
+    ) }}
+  </div>
+
+  <!--
+    TODO (Future):
+    - Internationalization (EN / FR)
+    - Contextual tooltips linking to this legend
+    - Regulatory references (GHG Protocol, ISO 14064, CBAM)
+  -->
+</section>
+  

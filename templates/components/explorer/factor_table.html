@@ -1,0 +1,50 @@
+<section class="bg-white dark:bg-[#1a2e24] rounded-xl border shadow-sm overflow-hidden">
+
+    <div class="p-6 border-b">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <h2 class="text-xl font-bold">Emission Factor Database</h2>
+        <div class="flex-1 lg:flex-none lg:max-w-2xl">
+          {% include "components/explorer/factor_search.html" %}
+        </div>
+      </div>
+    </div>
+  
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-[#f6f8f7] dark:bg-[#23332a]">
+            <th class="px-6 py-4 text-left font-bold">Activity</th>
+            <th class="px-6 py-4 text-left font-bold">Value</th>
+            <th class="px-6 py-4 text-left font-bold">Unit</th>
+            <th class="px-6 py-4 text-center font-bold">Scope</th>
+            <th class="px-6 py-4 text-left font-bold">Source</th>
+            <th class="px-6 py-4 text-left font-bold">Confidence</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <!-- TODO: loop over emission_factors -->
+          <!-- {% for factor in factors %} -->
+          {% from 'components/ui/badge_pill.html' import badge_pill %}
+          <tr class="hover:bg-[#f6f8f7] dark:hover:bg-[#23332a] border-b border-[#dbe6e0] dark:border-[#2a3e34]">
+            <td class="px-6 py-4 font-medium">Diesel Fuel</td>
+            <td class="px-6 py-4 font-bold">2.51</td>
+            <td class="px-6 py-4">kg CO2e / L</td>
+            <td class="px-6 py-4 text-center">
+              {{ badge_pill('Scope 1') }}
+            </td>
+            <td class="px-6 py-4">DEFRA</td>
+            <td class="px-6 py-4">
+              {% set confidence = 4 %}
+              {% include "components/ui/confidence_stars.html" %}
+            </td>
+          </tr>
+          <!-- {% endfor %} -->
+        </tbody>
+      </table>
+    </div>
+  
+    {% include "components/ui/pagination.html" %}
+  
+  </section>
+  

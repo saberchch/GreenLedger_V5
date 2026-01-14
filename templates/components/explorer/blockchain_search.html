@@ -1,0 +1,81 @@
+<form
+  method="get"
+  action=""
+  class="flex flex-col sm:flex-row gap-3 w-full max-w-3xl"
+>
+
+  <!-- Search by Hash / Company / Report ID -->
+  <div class="relative flex-1">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#618975]">
+      search
+    </span>
+    <input
+      type="text"
+      name="q"
+      value="{{ request.args.get('q', '') }}"
+      placeholder="Search by transaction hash, company name, report ID..."
+      class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[#dbe6e0]
+             bg-[#f6f8f7] text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+    />
+
+    <!--
+      TODO (Backend):
+      - Detect search intent:
+          * tx_hash (0x...)
+          * company_name
+          * report_uuid
+      - Query blockchain indexer or read-only DB mirror
+    -->
+  </div>
+
+  <!-- Scope Filter -->
+  <select
+    name="scope"
+    class="rounded-lg border border-[#dbe6e0] bg-[#f6f8f7]
+           text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary"
+  >
+    <option value="">All Scopes</option>
+    <option value="1">Scope 1</option>
+    <option value="2">Scope 2</option>
+    <option value="3">Scope 3</option>
+
+    <!--
+      TODO:
+      - Map on-chain data to scopes
+      - Some transactions may include aggregated scopes
+    -->
+  </select>
+
+  <!-- Reporting Year -->
+  <select
+    name="year"
+    class="rounded-lg border border-[#dbe6e0] bg-[#f6f8f7]
+           text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary"
+  >
+    <option value="">All Years</option>
+
+    <!-- TODO: dynamic year range -->
+    <option>2025</option>
+    <option>2024</option>
+    <option>2023</option>
+  </select>
+
+  <!-- Submit -->
+  <button
+    type="submit"
+    class="bg-primary text-[#102219] font-bold px-5 py-2.5
+           rounded-lg text-sm hover:opacity-90 transition"
+  >
+    Search
+  </button>
+
+  <!-- Reset -->
+  <a
+    href="{{ request.path }}"
+    class="px-4 py-2.5 text-sm font-medium rounded-lg
+           border border-[#dbe6e0] bg-white hover:bg-[#f6f8f7] text-center"
+  >
+    Reset
+  </a>
+
+</form>

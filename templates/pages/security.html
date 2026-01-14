@@ -11,12 +11,7 @@
 
 {% block content %}
 <!-- Sticky Header -->
-{% set nav_links = [
-    {'url': url_for('main.landing'), 'text': 'Home'},
-    {'url': url_for('main.modules'), 'text': 'Modules'},
-    {'url': url_for('main.how_it_works'), 'text': 'How It Works'},
-    {'url': url_for('main.security'), 'text': 'Security & Trust'}
-] %}
+
 {% set show_login = True %}
 {% set cta_text = 'Request Access' %}
 {% include 'components/navigation/topbar.html' %}
@@ -45,9 +40,12 @@
                                 </h2>
                             </div>
                             <div class="flex flex-wrap gap-3">
-                                <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-primary/90 text-black text-base font-bold leading-normal tracking-[0.015em] transition-all">
-                                    <span class="truncate">View Security Whitepaper</span>
-                                </button>
+                                <!-- Button that opens the PDF in a new tab -->
+                                <a href="{{ url_for('main.security_whitepaper') }}" target="_blank">
+                                    <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-primary/90 text-black text-base font-bold leading-normal tracking-[0.015em] transition-all">
+                                        <span class="truncate">View Security Whitepaper</span>
+                                    </button>
+                                </a>
                                 <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 text-text-main dark:text-white hover:bg-gray-50 dark:hover:bg-white/5 text-base font-bold leading-normal tracking-[0.015em] transition-all">
                                     <span class="truncate">Contact Security Team</span>
                                 </button>

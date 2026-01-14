@@ -1,0 +1,83 @@
+{% extends "layouts/base.html" %}
+
+
+
+{% block title %}Explorer – GreenLedger{% endblock %}
+
+{% block content %}
+<!-- Sticky Header -->
+
+{% set show_login = True %}
+{% set cta_text = 'Request Access' %}
+{% include 'components/navigation/topbar.html' %}
+
+<!-- Main Content -->
+<main class="w-full max-w-[1400px] mx-auto px-4 md:px-6 lg:px-8 py-8">
+  <!-- Page Heading -->
+  <div class="mb-8">
+    <h1 class="text-4xl font-black mb-2">Emissions & Transparency Explorer</h1>
+    <p class="text-[#618975] max-w-3xl">
+      Access verified emission factors and immutable blockchain records.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+  <aside class="lg:col-span-3">
+    {% include "components/explorer/filters_sidebar.html" %}
+  </aside>
+
+  <div class="lg:col-span-9 flex flex-col gap-8">
+
+    <!-- Emission Factors -->
+    {% include "components/explorer/factor_table.html" %}
+
+    <!-- Blockchain Explorer -->
+    {% include "components/explorer/blockchain_table.html" %}
+
+  </div>
+  </div>
+
+  <!-- Legend Section -->
+  <div class="w-full max-w-[1200px] mx-auto mt-20 mb-10">
+    {% include "components/info/legend.html" %}
+  </div>
+</main>
+<!-- Footer -->
+{% set footer_links = [
+    {
+        'title': 'Product',
+        'links': [
+            {'url': '#', 'text': 'Platform'},
+            {'url': '#', 'text': 'Modules'},
+            {'url': '#', 'text': 'API'}
+        ]
+    },
+    {
+        'title': 'Company',
+        'links': [
+            {'url': '#', 'text': 'About'},
+            {'url': '#', 'text': 'Careers'},
+            {'url': '#', 'text': 'Contact'}
+        ]
+    },
+    {
+        'title': 'Resources',
+        'links': [
+            {'url': '#', 'text': 'Blog'},
+            {'url': '#', 'text': 'Documentation'},
+            {'url': '#', 'text': 'Support'}
+        ]
+    },
+    {
+        'title': 'Legal',
+        'links': [
+            {'url': '#', 'text': 'Privacy'},
+            {'url': '#', 'text': 'Terms'},
+            {'url': '#', 'text': 'Security'}
+        ]
+    }
+] %}
+{% include 'components/navigation/footer.html' %}
+{% endblock %}
+

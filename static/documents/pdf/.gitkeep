@@ -1,0 +1,8 @@
+# PDF Documents Directory
+
+This directory contains generated PDF versions of documentation.
+
+To generate PDFs from Markdown sources, run:
+```bash
+python scripts/generate_pdfs.py
+```

@@ -2,6 +2,8 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
+from flask import send_file
+
 bp = Blueprint('main', __name__)
 
 
@@ -39,3 +41,19 @@ def security():
 def how_it_works():
     """How it works page route."""
     return render_template('pages/how_it_works.html')
+
+
+@bp.route('/explorer')
+def explorer():
+    """Explorer page route."""
+    return render_template('pages/explorer.html')
+
+
+
+@bp.route("/whitepapers/security")
+def security_whitepaper():
+    return send_file(
+        "docs/whitepapers/security/GreenLedger_Whitepaper_V1.pdf",
+        mimetype="application/pdf",
+        as_attachment=False  # opens in browser
+    )

@@ -1,0 +1,34 @@
+{% if total_pages is defined and total_pages > 1 %}
+<div class="flex items-center justify-between px-4 py-3 text-xs text-[#618975]">
+
+  <!-- Info -->
+  <span>
+    Page {{ page }} of {{ total_pages }}
+  </span>
+
+  <!-- Controls -->
+  <div class="flex gap-2">
+
+    <!-- Previous -->
+    <a
+      href="?page={{ page - 1 }}"
+      class="p-1.5 rounded bg-[#f6f8f7] dark:bg-[#102219] border
+             border-[#dbe6e0] dark:border-[#2a3e34]
+             {% if not has_prev %}opacity-50 pointer-events-none{% endif %}"
+    >
+      <span class="material-symbols-outlined text-sm">chevron_left</span>
+    </a>
+
+    <!-- Next -->
+    <a
+      href="?page={{ page + 1 }}"
+      class="p-1.5 rounded bg-white dark:bg-[#102219] border
+             border-[#dbe6e0] dark:border-[#2a3e34]
+             {% if not has_next %}opacity-50 pointer-events-none{% endif %}"
+    >
+      <span class="material-symbols-outlined text-sm">chevron_right</span>
+    </a>
+
+  </div>
+</div>
+{% endif %}

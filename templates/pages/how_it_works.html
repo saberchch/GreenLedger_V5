@@ -9,12 +9,7 @@
 
 {% block content %}
 <!-- Sticky Header -->
-{% set nav_links = [
-    {'url': url_for('main.landing'), 'text': 'Home'},
-    {'url': url_for('main.modules'), 'text': 'Modules'},
-    {'url': url_for('main.how_it_works'), 'text': 'How It Works'},
-    {'url': url_for('main.security'), 'text': 'Security & Trust'}
-] %}
+
 {% set show_login = True %}
 {% set cta_text = 'Request Access' %}
 {% include 'components/navigation/topbar.html' %}
