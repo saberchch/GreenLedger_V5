@@ -1,0 +1,134 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Profile Settings{% endblock %}
+{% block page_title %}Profile Settings{% endblock %}
+
+{% block dashboard_content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="mb-6">
+    {% for category, message in messages %}
+    <div class="p-4 mb-4 text-sm rounded-lg {% if category == 'error' %}bg-red-50 text-red-800{% else %}bg-green-50 text-green-800{% endif %}"
+        role="alert">
+        <span class="font-medium">{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="max-w-4xl mx-auto">
+    <!-- Settings Navigation Tabs -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden mb-6">
+        <div class="flex border-b border-[#f0f4f2] dark:border-[#2a4035]">
+            <a href="{{ url_for('settings.index') }}"
+                class="flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 border-transparent text-[#618975] dark:text-[#8baaa0] hover:text-[#111814] dark:hover:text-white transition-colors">
+                <span class="material-symbols-outlined" style="font-size: 20px;">tune</span>
+                <span>General</span>
+            </a>
+            <a href="{{ url_for('settings.profile') }}"
+                class="flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 border-primary text-primary transition-colors">
+                <span class="material-symbols-outlined" style="font-size: 20px;">person</span>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <div
+        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035]">
+            <h3 class="text-lg font-bold text-[#111814] dark:text-white">Personal Information</h3>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Update your profile details and password</p>
+        </div>
+
+        <form method="POST" class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Profile Picture -->
+                <div class="md:col-span-2 flex items-center gap-6">
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-24 ring-4 ring-white dark:ring-[#2a4035] shadow-lg"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA8DHu0VD3hA5Ke2d2VR5HTcvWu3lPOtuP3ZhrXAC0HTp9qS-qDjBrvcRBKcyNrzfh9Awlq_2F-_qq3xctzj1LXWQszdKXgNI2FYEwpDNlodp-4nkqRweeNws-EnCtFuNXsLarn_J8X5m3TGm-gN0qfwSuswZ1gTIIGPObDcrxtK8HlPLoHpjUHaybVqkOgfbrIPAXNHEpFJ126Utu9WKOCTj_HdGOI3hg1c9Hc0MuenQADUWgxVVjq2c0Dp2JiLFglTFCnIsHeIrU5");'>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-[#111814] dark:text-white mb-1">Profile Picture</h4>
+                        <p class="text-xs text-[#618975] dark:text-[#8baaa0] mb-3">JPG, PNG or GIF. Max size 2MB</p>
+                        <button type="button"
+                            class="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/10 transition-colors">
+                            Change Picture
+                        </button>
+                    </div>
+                </div>
+
+                <!-- First Name -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">First Name</label>
+                    <input type="text" name="first_name" value="{{ user.first_name }}"
+                        class="w-full px-4 py-2.5 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">Last Name</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}"
+                        class="w-full px-4 py-2.5 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+
+                <!-- Email -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">Email Address</label>
+                    <input type="email" name="email" value="{{ user.email }}"
+                        class="w-full px-4 py-2.5 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+
+                <!-- Role (Read-only) -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">Role</label>
+                    <input type="text" value="{{ user.role.value|title }}" disabled
+                        class="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-[#1a2c24] border border-[#dbe6e0] dark:border-[#3d5348] text-[#618975] dark:text-[#8baaa0] text-sm">
+                </div>
+
+                <!-- Organization (Read-only) -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">Organization</label>
+                    <input type="text" value="{{ user.organization.name if user.organization else 'N/A' }}" disabled
+                        class="w-full px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-[#1a2c24] border border-[#dbe6e0] dark:border-[#3d5348] text-[#618975] dark:text-[#8baaa0] text-sm">
+                </div>
+            </div>
+
+            <div class="border-t border-[#f0f4f2] dark:border-[#2a4035] my-6"></div>
+
+            <h4 class="text-md font-bold text-[#111814] dark:text-white mb-4">Change Password</h4>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- New Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">New Password</label>
+                    <input type="password" name="new_password" placeholder="Leave blank to keep current"
+                        class="w-full px-4 py-2.5 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-2">Confirm
+                        Password</label>
+                    <input type="password" name="confirm_password" placeholder="Confirm new password"
+                        class="w-full px-4 py-2.5 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-6">
+                <a href="javascript:history.back()"
+                    class="px-6 py-2.5 text-sm font-medium text-[#618975] dark:text-[#8baaa0] border border-[#dbe6e0] dark:border-[#3d5348] rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors">
+                    Cancel
+                </a>
+                <button type="submit"
+                    class="px-6 py-2.5 text-sm font-bold text-[#111814] bg-primary hover:bg-primary/90 rounded-lg transition-colors shadow-sm shadow-primary/20">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

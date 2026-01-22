@@ -1,69 +1,52 @@
-{#
-    Dashboard Header Component
-    
-    Parameters:
-    - page_title: Title displayed in header (default: 'Dashboard')
-    - show_new_report_button: Boolean to show/hide "New Report" button (default: True)
-    - new_report_url: URL/route for new report button (default: '#')
-    - new_report_text: Text for new report button (default: 'New Report')
-    - show_notifications: Boolean to show/hide notifications (default: True)
-    - notification_count: Number of notifications (default: 0)
-    - user_info: Dictionary with user information:
-        {
-            'name': 'User Name',
-            'role': 'User Role',
-            'avatar_url': 'URL to avatar image'
-        }
-#}
-
-{% set page_title = page_title|default('Dashboard') %}
-{% set show_new_report_button = show_new_report_button|default(True) %}
-{% set new_report_url = new_report_url|default('#') %}
-{% set new_report_text = new_report_text|default('New Report') %}
-{% set show_notifications = show_notifications|default(True) %}
-{% set notification_count = notification_count|default(0) %}
-{% set user_info = user_info|default({
-    'name': 'Sarah Jenkins',
-    'role': 'Compliance Lead',
-    'avatar_url': 'https://lh3.googleusercontent.com/aida-public/AB6AXuA8DHu0VD3hA5Ke2d2VR5HTcvWu3lPOtuP3ZhrXAC0HTp9qS-qDjBrvcRBKcyNrzfh9Awlq_2F-_qq3xctzj1LXWQszdKXgNI2FYEwpDNlodp-4nkqRweeNws-EnCtFuNXsLarn_J8X5m3TGm-gN0qfwSuswZ1gTIIGPObDcrxtK8HlPLoHpjUHaybVqkOgfbrIPAXNHEpFJ126Utu9WKOCTj_HdGOI3hg1c9Hc0MuenQADUWgxVVjq2c0Dp2JiLFglTFCnIsHeIrU5'
-}) %}
-
-<header class="flex items-center justify-between bg-white dark:bg-[#1a2c24] border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-4 z-10">
-    <!-- Left: Page Title -->
+<header
+    class="flex items-center justify-between bg-white dark:bg-[#1a2c24] border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-4 z-10">
     <div class="flex items-center gap-4">
-        <h2 class="text-[#111814] dark:text-white text-xl font-bold leading-tight tracking-tight">{{ page_title }}</h2>
+        <h2 class="text-[#111814] dark:text-white text-xl font-bold leading-tight tracking-tight">
+            {% block page_title %}Executive Overview{% endblock %}
+        </h2>
     </div>
-    
-    <!-- Right: Actions & User Info -->
     <div class="flex items-center gap-6">
-        {% if show_new_report_button %}
-        <button class="hidden md:flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-[#111814] text-sm font-bold rounded-lg transition-colors shadow-sm shadow-primary/20">
+        {% block header_actions %}
+        <a href="{{ url_for('dashboard_worker.new_emission') if current_user.role.value == 'worker' else '#' }}"
+            class="hidden md:flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-[#111814] text-sm font-bold rounded-lg transition-colors shadow-sm shadow-primary/20">
             <span class="material-symbols-outlined" style="font-size: 20px;">add</span>
-            <span>{{ new_report_text }}</span>
-        </button>
-        {% endif %}
-        
-        {% if show_new_report_button and show_notifications %}
-        <div class="h-8 w-px bg-[#f0f4f2] dark:bg-[#2a4035]"></div>
-        {% endif %}
-        
-        {% if show_notifications %}
-        <button class="relative text-[#618975] dark:text-[#8baaa0] hover:text-[#111814] dark:hover:text-white transition-colors">
+            <span>New Record</span>
+        </a>
+        {% endblock %}
+        <div class="h-8 w-px bg-[#f0f4f2] dark:border-[#2a4035]"></div>
+        <button
+            class="relative text-[#618975] dark:text-[#8baaa0] hover:text-[#111814] dark:hover:text-white transition-colors">
             <span class="material-symbols-outlined" style="font-size: 24px;">notifications</span>
-            {% if notification_count > 0 %}
-            <span class="absolute top-0 right-0 size-2.5 bg-red-500 rounded-full border-2 border-white dark:border-[#1a2c24]"></span>
-            {% endif %}
+            <span
+                class="absolute top-0 right-0 size-2.5 bg-red-500 rounded-full border-2 border-white dark:border-[#1a2c24]"></span>
         </button>
-        {% endif %}
-        
-        <!-- User Profile -->
-        <div class="flex items-center gap-3">
-            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-white dark:ring-[#2a4035] shadow-sm" 
-                 data-alt="User profile picture" 
-                 style='background-image: url("{{ user_info.avatar_url }}");'></div>
-            <div class="hidden md:flex flex-col">
-                <span class="text-sm font-semibold text-[#111814] dark:text-white">{{ user_info.name }}</span>
-                <span class="text-xs text-[#618975] dark:text-[#8baaa0]">{{ user_info.role }}</span>
+        <div class="relative group">
+            <div class="flex items-center gap-3 cursor-pointer">
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-white dark:ring-[#2a4035] shadow-sm"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA8DHu0VD3hA5Ke2d2VR5HTcvWu3lPOtuP3ZhrXAC0HTp9qS-qDjBrvcRBKcyNrzfh9Awlq_2F-_qq3xctzj1LXWQszdKXgNI2FYEwpDNlodp-4nkqRweeNws-EnCtFuNXsLarn_J8X5m3TGm-gN0qfwSuswZ1gTIIGPObDcrxtK8HlPLoHpjUHaybVqkOgfbrIPAXNHEpFJ126Utu9WKOCTj_HdGOI3hg1c9Hc0MuenQADUWgxVVjq2c0Dp2JiLFglTFCnIsHeIrU5");'>
+                </div>
+                <div class="hidden md:flex flex-col">
+                    <span class="text-sm font-semibold text-[#111814] dark:text-white">{{ current_user.first_name }} {{
+                        current_user.last_name }}</span>
+                    <span class="text-xs text-[#618975] dark:text-[#8baaa0]">{{ current_user.role.value|title }}</span>
+                </div>
+                <span class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0]"
+                    style="font-size: 20px;">expand_more</span>
+            </div>
+            <!-- Dropdown Menu -->
+            <div
+                class="hidden group-hover:block absolute right-0 top-full mt-2 w-48 bg-white dark:bg-[#1a2c24] rounded-lg shadow-lg border border-[#e5e7eb] dark:border-[#2a4035] py-2 z-50">
+                <a href="{{ url_for('settings.profile') }}"
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-[#618975] dark:text-[#8baaa0] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">person</span>
+                    <span>Profile</span>
+                </a>
+                <div class="border-t border-[#f0f4f2] dark:border-[#2a4035] my-1"></div>
+                <a href="{{ url_for('auth.logout') }}"
+                    class="flex items-center gap-3 px-4 py-2 text-sm text-[#618975] dark:text-[#8baaa0] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">logout</span>
+                    <span>Logout</span>
+                </a>
             </div>
         </div>
     </div>

@@ -1,0 +1,111 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Auditor Dashboard{% endblock %}
+{% block breadcrumb %}Audit Overview{% endblock %}
+
+{% block dashboard_content %}
+<!-- KPIs -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex items-center justify-between">
+        <div>
+            <p class="text-[#618975] text-sm font-medium">Pending Review</p>
+            <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ kpis.pending_review }}</p>
+        </div>
+        <div class="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-full text-amber-600">
+            <span class="material-symbols-outlined">rate_review</span>
+        </div>
+    </div>
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex items-center justify-between">
+        <div>
+            <p class="text-[#618975] text-sm font-medium">Approved (Month)</p>
+            <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ kpis.approved_this_month }}</p>
+        </div>
+        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-full text-green-600">
+            <span class="material-symbols-outlined">check_circle</span>
+        </div>
+    </div>
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex items-center justify-between">
+        <div>
+            <p class="text-[#618975] text-sm font-medium">Compliance Score</p>
+            <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ kpis.compliance_score }}</p>
+        </div>
+        <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full text-blue-600">
+            <span class="material-symbols-outlined">shield</span>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Reports Table -->
+<div
+    class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden flex flex-col">
+    <div
+        class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035] flex justify-between items-center bg-gray-50/50 dark:bg-[#23352c]/50">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-500">pending</span>
+            Reports Pending Audit
+        </h3>
+    </div>
+
+    <div class="overflow-x-auto flex-1">
+        {% if pending_activities %}
+        <table class="w-full text-left">
+            <thead class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#e5e7eb] dark:border-[#3d5348]">
+                <tr>
+                    <th
+                        class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                        Report ID</th>
+                    <th
+                        class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                        Submitted By</th>
+                    <th
+                        class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                        Date</th>
+                    <th
+                        class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                        Summary</th>
+                    <th
+                        class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider text-right">
+                        Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                {% for activity in pending_activities %}
+                <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
+                    <td class="px-6 py-4 text-sm font-bold text-[#111814] dark:text-white">#{{ activity.id }}</td>
+                    <td class="px-6 py-4 text-sm text-[#618975]">{{ activity.created_by.email }}</td>
+                    <td class="px-6 py-4 text-sm text-[#618975]">{{ activity.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td class="px-6 py-4 text-sm text-[#111814] dark:text-white max-w-xs truncate">
+                        {{ activity.scope.value }} - {{ activity.category }} <br>
+                        <span class="text-xs text-gray-500">{{ activity.co2e_result }} kg CO2e</span>
+                    </td>
+                    <td class="px-6 py-4 text-right flex justify-end gap-2">
+                        <form method="POST"
+                            action="{{ url_for('dashboard_auditor.approve_emission', id=activity.id) }}">
+                            <button type="submit"
+                                class="px-3 py-1 bg-[#13ec80] hover:bg-[#0fd673] text-[#0a1f14] text-xs font-bold rounded-lg transition-colors shadow-sm">
+                                Approve
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('dashboard_auditor.reject_emission', id=activity.id) }}">
+                            <button type="submit"
+                                class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-800 text-xs font-bold rounded-lg transition-colors shadow-sm">
+                                Reject
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="p-12 text-center text-[#618975] dark:text-[#8baaa0] flex flex-col items-center gap-2">
+            <span class="material-symbols-outlined text-4xl opacity-50">task_alt</span>
+            <p>No reports pending audit. Good job!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

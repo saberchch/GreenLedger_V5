@@ -3,21 +3,48 @@
 GreenLedger is a Flask-based carbon accounting and compliance app scaffold. It includes landing, modules, security, login, request access, and how-it-works pages with reusable Jinja components.
 
 ## Getting Started
-1. **Install Python 3.12+** and `python3-venv`.
-2. **Create a virtual environment**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. **Run the app**
-   ```bash
-   python run.py
-   ```
-   App runs at `http://localhost:5000`.
+
+### 1. Install Python 3.12+ and Dependencies
+```bash
+# Install python3-venv (if not already installed)
+sudo apt install python3.12-venv
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Setup Database
+```bash
+# Reset database and seed with mock data
+python scripts/reset_db_and_seed.py
+```
+
+### 3. Run the App
+```bash
+source venv/bin/activate
+python run.py
+```
+
+App runs at `http://localhost:5000`.
+
+### 4. Login with Mock Users
+
+**Acme Global Industries:**
+- Admin: `admin@acme.com` / `admin123`
+- Auditor: `auditor@acme.com` / `auditor123`
+- Worker: `worker@acme.com` / `worker123`
+- Viewer: `viewer@acme.com` / `viewer123`
+
+**EuroSteel Corp:**
+- Admin: `admin@eurosteel.com` / `admin123`
+- Worker: `worker@eurosteel.com` / `worker123`
+
+**GreenTech Solutions:**
+- Admin: `admin@greentech.com` / `admin123`
 
 ## Environment Variables
 Copy `.env` from the template and adjust as needed:
@@ -66,9 +93,8 @@ FLASK_DEBUG=True
 - `legal/` – Legal documents (terms, privacy policy)
 
 ### Scripts (`scripts/`)
+- `reset_db_and_seed.py` – Script to reset database and seed mock data
 - `generate_pdfs.py` – Script to generate PDFs from Markdown documentation
-
-For detailed structure information, see [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md).
 
 ## Documentation
 
@@ -126,4 +152,4 @@ See [docs/README.md](docs/README.md) for more information.
 - Database integration is stubbed for future use.
 - Header/footer are shared via components; page-specific content lives in `templates/pages/`.
 - Tailwind is loaded via CDN in templates.
-- Project structure has been reorganized for better scalability (see `PROJECT_STRUCTURE.md`).
+

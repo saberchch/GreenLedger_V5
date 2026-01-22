@@ -1,0 +1,112 @@
+{% extends "layouts/auth.html" %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark p-6">
+    <div class="w-full max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-[#111814] dark:text-white mb-2">Welcome to GreenLedger</h1>
+            <p class="text-[#618975] dark:text-gray-400">Temporary Dashboard - Role Display</p>
+        </div>
+        
+        <!-- User Info Card -->
+        <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-8 mb-6">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="size-16 rounded-full bg-primary/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-4xl">account_circle</span>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-[#111814] dark:text-white">
+                        {{ user.first_name or '' }} {{ user.last_name or '' }}
+                    </h2>
+                    <p class="text-[#618975] dark:text-gray-400">{{ user.email }}</p>
+                    {% if user.organization %}
+                    <p class="text-sm text-[#618975] dark:text-gray-400 mt-1">
+                        {{ user.organization.name }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="border-t border-[#f0f4f2] dark:border-[#2a4035] pt-6">
+                <div class="mb-4">
+                    <label class="text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider mb-2 block">
+                        Account Status
+                    </label>
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium {% if user.status == 'active' %}bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400{% else %}bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400{% endif %}">
+                        <div class="size-2 rounded-full {% if user.status == 'active' %}bg-green-500{% else %}bg-red-500{% endif %}"></div>
+                        {{ user.status|title }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Role Display Card -->
+        <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-8">
+            <h3 class="text-xl font-bold text-[#111814] dark:text-white mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">badge</span>
+                Your Roles
+            </h3>
+            
+            {% if roles %}
+            <div class="space-y-4">
+                {% for role in roles %}
+                <div class="flex items-center justify-between p-4 rounded-lg bg-[#f0f4f2] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348]">
+                    <div class="flex items-center gap-3">
+                        {% if role == 'admin' %}
+                        <span class="material-symbols-outlined text-red-500">admin_panel_settings</span>
+                        {% elif role == 'auditor' %}
+                        <span class="material-symbols-outlined text-blue-500">verified_user</span>
+                        {% elif role == 'worker' %}
+                        <span class="material-symbols-outlined text-amber-500">work</span>
+                        {% elif role == 'viewer' %}
+                        <span class="material-symbols-outlined text-green-500">visibility</span>
+                        {% else %}
+                        <span class="material-symbols-outlined text-[#618975]">badge</span>
+                        {% endif %}
+                        <span class="text-lg font-semibold text-[#111814] dark:text-white">{{ role|title }}</span>
+                    </div>
+                    {% if role == primary_role %}
+                    <span class="px-2 py-1 rounded text-xs font-bold bg-primary/20 text-primary">Primary</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <span class="material-symbols-outlined text-[#618975] text-5xl mb-4 block">info</span>
+                <p class="text-[#618975] dark:text-gray-400">No roles assigned. Please contact your administrator.</p>
+            </div>
+            {% endif %}
+            
+            <!-- Primary Role Highlight -->
+            {% if primary_role %}
+            <div class="mt-6 p-4 rounded-lg bg-primary/10 border border-primary/20">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-primary">star</span>
+                    <span class="text-sm font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Primary Role</span>
+                </div>
+                <p class="text-2xl font-bold text-[#111814] dark:text-white">{{ primary_role|title }}</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Actions -->
+        <div class="mt-6 flex flex-col sm:flex-row gap-4">
+            <a href="{{ url_for('auth.logout') }}" class="flex-1 px-6 py-3 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] bg-white dark:bg-[#1a2c24] text-[#111814] dark:text-white font-medium hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors text-center">
+                Logout
+            </a>
+            <a href="{{ url_for('main.landing') }}" class="flex-1 px-6 py-3 rounded-lg bg-primary hover:bg-primary/90 text-[#111814] font-bold transition-colors text-center">
+                Back to Home
+            </a>
+        </div>
+        
+        <!-- Notice -->
+        <div class="mt-6 text-center">
+            <p class="text-xs text-[#618975] dark:text-gray-500">
+                This is a temporary dashboard. Full dashboards will be available soon.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -14,17 +14,23 @@
     ::-webkit-scrollbar {
         width: 8px;
     }
+
     ::-webkit-scrollbar-track {
-        background: transparent; 
+        background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
-        background: #dce5e0; 
+        background: #dce5e0;
         border-radius: 4px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
-        background: #1dc973; 
+        background: #1dc973;
     }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
         box-shadow: 0 0 0 2px rgba(29, 201, 115, 0.2);
         border-color: #1dc973;
     }
@@ -33,7 +39,8 @@
 
 {% block content %}
 <!-- Header -->
-<header class="w-full border-b border-[#f0f4f2] dark:border-[#1a2e24] bg-white dark:bg-background-dark sticky top-0 z-50">
+<header
+    class="w-full border-b border-[#f0f4f2] dark:border-[#1a2e24] bg-white dark:bg-background-dark sticky top-0 z-50">
     <div class="px-4 md:px-10 py-4 flex items-center justify-between max-w-7xl mx-auto w-full">
         <div class="flex items-center gap-3 text-[#111714] dark:text-white">
             <a href="{{ url_for('main.landing') }}" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -42,8 +49,10 @@
             </a>
         </div>
         <div class="flex items-center gap-6">
-            <span class="hidden md:inline text-sm text-[#648775] dark:text-gray-400 font-medium">Already have an account?</span>
-            <a class="text-sm font-bold text-[#111714] dark:text-white hover:text-primary dark:hover:text-primary transition-colors" href="{{ url_for('auth.login') }}">Log In</a>
+            <span class="hidden md:inline text-sm text-[#648775] dark:text-gray-400 font-medium">Already have an
+                account?</span>
+            <a class="text-sm font-bold text-[#111714] dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
+                href="{{ url_for('auth.login') }}">Log In</a>
         </div>
     </div>
 </header>
@@ -52,102 +61,96 @@
 <div class="flex-1 flex justify-center items-start pt-8 pb-16 px-4 md:px-10 relative">
     <!-- Back to Home Link -->
     <div class="absolute top-8 left-4 md:left-10 z-10">
-        <a href="{{ url_for('main.landing') }}" class="flex items-center gap-2 text-[#648775] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
+        <a href="{{ url_for('main.landing') }}"
+            class="flex items-center gap-2 text-[#648775] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
             <span>Back to Home</span>
         </a>
     </div>
-    
+
     <div class="layout-content-container flex flex-col lg:flex-row gap-12 max-w-6xl w-full">
         <!-- Left Column: Value Prop -->
         <div class="flex-1 flex flex-col justify-center py-6 lg:py-12 lg:pr-8">
             <div class="mb-8">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6 border border-primary/20">
+                <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6 border border-primary/20">
                     Enterprise Solutions
                 </span>
-                <h1 class="text-[#111714] dark:text-white tracking-tight text-4xl md:text-5xl font-bold leading-[1.15] mb-6">
+                <h1
+                    class="text-[#111714] dark:text-white tracking-tight text-4xl md:text-5xl font-bold leading-[1.15] mb-6">
                     Request Access to <span class="text-primary">GreenLedger</span>
                 </h1>
                 <p class="text-[#648775] dark:text-gray-300 text-lg leading-relaxed max-w-lg">
-                    Secure, compliant carbon accounting for your enterprise. Manage CBAM obligations and calculate GHG footprints with precision-engineered tools.
+                    Secure, compliant carbon accounting for your enterprise. Manage CBAM obligations and calculate GHG
+                    footprints with precision-engineered tools.
                 </p>
             </div>
-            <div class="space-y-6">
-                {{ feature_item('public', 'CBAM Compliance', 'Automated reporting for the Carbon Border Adjustment Mechanism.') }}
-                {{ feature_item('co2', 'Entity Carbon Footprint', 'Comprehensive Scope 1, 2, and 3 calculations and tracking.') }}
-                {{ feature_item('shield', 'Verified Data Integrity', 'Audit-ready reports and verified access control.') }}
-            </div>
-            <!-- Abstract Visual -->
-            <div class="mt-12 w-full h-48 rounded-2xl overflow-hidden relative hidden md:block" data-alt="Abstract gradient wave pattern representing green data flow" role="img">
-                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/20 to-transparent"></div>
-                <div class="absolute bottom-0 left-0 w-full h-1/2 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-            </div>
-        </div>
-        
-        <!-- Right Column: Form -->
-        <div class="flex-1 w-full max-w-[560px] mx-auto lg:mx-0">
-            <div class="bg-white dark:bg-[#15261d] border border-[#dce5e0] dark:border-[#2f4b3a] rounded-xl shadow-sm p-6 md:p-8">
-                <!-- Verification Badge -->
-                {{ alert('verification', 'verified_user', 'Verification Required', 'To ensure platform security and data integrity, all access requests are manually reviewed. You will receive an email within 24 hours.') }}
-                
-                <form class="flex flex-col gap-5" method="POST" action="{{ url_for('main.request_access') }}">
-                    <div class="flex flex-col md:flex-row gap-5">
-                        <label class="flex flex-col flex-1">
-                            <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal pb-2">Full Name</p>
-                            <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111714] dark:text-white focus:outline-0 focus:ring-0 border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] focus:border-primary h-12 placeholder:text-[#648775] dark:placeholder:text-gray-500 px-4 text-sm font-normal leading-normal transition-colors" 
-                                   name="full_name" 
-                                   placeholder="Jane Doe" 
-                                   required type="text"/>
-                        </label>
-                        <label class="flex flex-col flex-1">
-                            <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal pb-2">Work Email</p>
-                            <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111714] dark:text-white focus:outline-0 focus:ring-0 border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] focus:border-primary h-12 placeholder:text-[#648775] dark:placeholder:text-gray-500 px-4 text-sm font-normal leading-normal transition-colors" 
-                                   name="email" 
-                                   placeholder="jane@company.com" 
-                                   required type="email"/>
-                        </label>
-                    </div>
-                    
-                    <label class="flex flex-col w-full">
-                        <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal pb-2">Organization Name</p>
-                        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111714] dark:text-white focus:outline-0 focus:ring-0 border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] focus:border-primary h-12 placeholder:text-[#648775] dark:placeholder:text-gray-500 px-4 text-sm font-normal leading-normal transition-colors" 
-                               name="organization" 
-                               placeholder="Acme Enterprise Ltd." 
-                               required type="text"/>
-                    </label>
-                    
-                    <label class="flex flex-col w-full">
-                        <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal pb-2">Job Role / Title</p>
-                        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111714] dark:text-white focus:outline-0 focus:ring-0 border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] focus:border-primary h-12 placeholder:text-[#648775] dark:placeholder:text-gray-500 px-4 text-sm font-normal leading-normal transition-colors" 
-                               name="job_title" 
-                               placeholder="e.g. Sustainability Manager" 
-                               type="text"/>
-                    </label>
-                    
-                    {% set use_options = [
-                        {'value': 'cbam', 'text': 'CBAM Compliance'},
-                        {'value': 'ghg', 'text': 'Entity GHG Footprint'},
-                        {'value': 'both', 'text': 'Both'}
-                    ] %}
-                    {{ select_field('intended_use', 'Intended Use', use_options, 'Select primary module...', False) }}
-                    
-                    {{ textarea_field('notes', 'Additional Notes', 'Tell us about your specific compliance needs...', 4, False, True) }}
-                    
-                    <div class="pt-2">
-                        {{ submit_button('Request Access') }}
-                    </div>
-                    
-                    <p class="text-xs text-[#648775] dark:text-gray-500 text-center mt-2">
-                        By requesting access, you agree to our <a class="underline hover:text-primary" href="#">Terms of Service</a> and <a class="underline hover:text-primary" href="#">Privacy Policy</a>.
-                    </p>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Footer Simple -->
-<footer class="py-6 text-center text-sm text-[#648775] dark:text-gray-500 border-t border-[#f0f4f2] dark:border-[#1a2e24]">
-    <p>© 2024 GreenLedger Technologies. All rights reserved.</p>
-</footer>
-{% endblock %}
+            <!-- Abstract Visual -->
+            <div class="mt-12 w-full h-48 rounded-2xl overflow-hidden relative hidden md:block"
+                data-alt="Abstract gradient wave pattern representing green data flow" role="img">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/20 to-transparent"></div>
+                <div
+                    class="absolute bottom-0 left-0 w-full h-1/2 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Options -->
+        <div class="flex-1 w-full max-w-[560px] mx-auto lg:mx-0 flex flex-col gap-6">
+
+            <!-- Option 1: Existing Organization -->
+            <a href="{{ url_for('auth.register') }}"
+                class="group relative bg-white dark:bg-[#15261d] border border-[#dce5e0] dark:border-[#2f4b3a] rounded-xl p-6 shadow-sm hover:shadow-md hover:border-primary/50 transition-all cursor-pointer flex items-start gap-5">
+                <div
+                    class="size-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
+                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-2xl">group_add</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <h3
+                        class="text-[#111714] dark:text-white text-lg font-bold group-hover:text-primary transition-colors">
+                        Join a Team</h3>
+                    <p class="text-[#648775] dark:text-gray-400 text-sm leading-relaxed">
+                        Join an existing organization on GreenLedger. Perfect for employees and team members.
+                    </p>
+                </div>
+                <div
+                    class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0">
+                    <span class="material-symbols-outlined text-primary">arrow_forward</span>
+                </div>
+            </a>
+
+            <!-- Option 2: New Organization -->
+            <a href="{{ url_for('auth.register_company') }}"
+                class="group relative bg-white dark:bg-[#15261d] border border-[#dce5e0] dark:border-[#2f4b3a] rounded-xl p-6 shadow-sm hover:shadow-md hover:border-primary/50 transition-all cursor-pointer flex items-start gap-5">
+                <div
+                    class="size-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-outlined text-primary text-2xl">domain_add</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <h3
+                        class="text-[#111714] dark:text-white text-lg font-bold group-hover:text-primary transition-colors">
+                        Register Organization</h3>
+                    <p class="text-[#648775] dark:text-gray-400 text-sm leading-relaxed">
+                        Onboard a new company. Set up your entity profile, admin account, and compliance settings.
+                    </p>
+                </div>
+                <div
+                    class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0">
+                    <span class="material-symbols-outlined text-primary">arrow_forward</span>
+                </div>
+            </a>
+
+            <!-- Login Link -->
+            <div class="text-center pt-4">
+                <p class="text-sm text-[#618975] dark:text-gray-400">
+                    Already have an account?
+                    <a href="{{ url_for('auth.login') }}" class="text-primary font-medium hover:underline">Log In</a>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Footer Simple -->
+
+        {% endblock %}

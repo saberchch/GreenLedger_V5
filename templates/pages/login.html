@@ -76,10 +76,23 @@
                 </p>
             </div>
             
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="w-full">
+                        {% for category, message in messages %}
+                            <div class="p-4 rounded-lg mb-4 {% if category == 'error' %}bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800{% elif category == 'success' %}bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800{% else %}bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
             <!-- Authentication Form -->
             <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.login') }}">
-                <!-- Organization ID Field -->
-                {{ input_field('org_id', 'Organization ID', 'text', 'e.g. acme-global-eu', 'domain') }}
+                <!-- Organization ID Field (Optional) -->
+                {{ input_field('org_id', 'Organization ID (Optional)', 'text', 'e.g. acme-global-eu', 'domain') }}
                 
                 <!-- Email Field -->
                 {{ input_field('email', 'Email Address', 'email', 'name@company.com', 'mail') }}
@@ -90,6 +103,14 @@
                 <!-- Primary Action Button -->
                 {{ auth_button('Secure Login', 'primary') }}
             </form>
+            
+            <!-- Register Link -->
+            <div class="text-center">
+                <p class="text-sm text-[#618975] dark:text-gray-400">
+                    Don't have an account? 
+                    <a href="{{ url_for('auth.register') }}" class="text-primary font-medium hover:underline">Create account</a>
+                </p>
+            </div>
             
             <!-- Divider / SSO -->
             <div class="relative">

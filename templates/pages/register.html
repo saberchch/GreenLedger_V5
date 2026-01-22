@@ -1,0 +1,137 @@
+{% extends "layouts/auth.html" %}
+{% from 'components/forms/input_field.html' import input_field %}
+{% from 'components/macros.html' import auth_button %}
+
+{% block content %}
+<!-- Main Container -->
+<div class="relative min-h-screen flex flex-col md:flex-row w-full">
+    <!-- Left Column: Visual & Brand (Desktop Only) -->
+    <div class="hidden md:flex md:w-1/2 lg:w-5/12 relative bg-background-dark flex-col justify-between overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-cover bg-center opacity-60 mix-blend-overlay" data-alt="Abstract green data visualization resembling a forest canopy from above" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAY8q01vxYZ5sf3P6JlGgDOwHXcdn4Ucpz3oP6zNJR_74h0TpeH9zuZH79vW42HiQHhAn_0fAyYGmHY1CoUSUhpeGJaYdXP-rYINLHqelfgmbxZb5Rc3Bs5D5VOnXn9iWgSMexbw1TWT7KV1r2jttNbmnymR_7DhwAavazcw0HTDeU0nHM0k1oo1y7-UjfI0dVfzNMSUJkSUUB8eUw_aYfDCoqfVqmw7olVPaGS4hTl3cRbjCJNYiO69Bs-DtuZd25yUlAfOBdRSN-A");'>
+            </div>
+            <!-- Gradient Overlay for readability -->
+            <div class="absolute inset-0 bg-gradient-to-b from-background-dark/40 via-background-dark/20 to-background-dark/90"></div>
+        </div>
+        <!-- Content Overlay -->
+        <div class="relative z-10 p-12 flex flex-col h-full justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 text-white">
+                <span class="material-symbols-outlined text-primary text-4xl">eco</span>
+                <h1 class="text-2xl font-bold tracking-tight">GreenLedger</h1>
+            </div>
+            <!-- Testimonial / Value Prop -->
+            <div class="flex flex-col gap-6 max-w-md">
+                <div class="space-y-2">
+                    <p class="text-primary font-bold text-sm uppercase tracking-wider">Get Started</p>
+                    <h2 class="text-3xl font-bold leading-tight text-white">
+                        Join the future of carbon accounting.
+                    </h2>
+                </div>
+                <p class="text-gray-300 text-lg font-medium leading-relaxed">
+                    Create your account and start managing your organization's carbon footprint with precision and compliance.
+                </p>
+                <!-- Compliance Badge -->
+                <div class="mt-4 flex items-center gap-3 py-3 px-4 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 w-fit">
+                    <span class="material-symbols-outlined text-primary">verified_user</span>
+                    <div class="flex flex-col">
+                        <span class="text-xs text-gray-300 font-medium">Secure Registration</span>
+                        <span class="text-sm font-bold text-white">Enterprise Ready</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Legal on Image Side -->
+            <div class="text-xs text-gray-400">
+                © 2024 GreenLedger Inc. All rights reserved.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Right Column: Registration Form -->
+    <div class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-24 relative bg-background-light dark:bg-background-dark">
+        <!-- Back to Home Link -->
+        <div class="absolute top-6 left-6 md:top-12 md:left-12">
+            <a href="{{ url_for('main.landing') }}" class="flex items-center gap-2 text-[#618975] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
+                <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                <span>Back to Home</span>
+            </a>
+        </div>
+        
+        <!-- Mobile Header (Visible only on small screens) -->
+        <div class="md:hidden w-full flex items-center gap-2 mb-8 text-[#111814] dark:text-white">
+            <span class="material-symbols-outlined text-primary text-3xl">eco</span>
+            <span class="font-bold text-xl">GreenLedger</span>
+        </div>
+        
+        <div class="w-full max-w-[440px] flex flex-col gap-8">
+            <!-- Form Header -->
+            <div class="flex flex-col gap-2">
+                <h2 class="text-[#111814] dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]">
+                    Create Account
+                </h2>
+                <p class="text-[#618975] dark:text-gray-400 text-base font-normal leading-normal">
+                    Sign up to start managing your carbon accounting.
+                </p>
+            </div>
+            
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="w-full">
+                        {% for category, message in messages %}
+                            <div class="p-4 rounded-lg mb-4 {% if category == 'error' %}bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800{% elif category == 'success' %}bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800{% else %}bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <!-- Registration Form -->
+            <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.register') }}">
+                <!-- First Name -->
+                {{ input_field('first_name', 'First Name', 'text', 'John', 'person') }}
+                
+                <!-- Last Name -->
+                {{ input_field('last_name', 'Last Name', 'text', 'Doe', 'person') }}
+                
+                <!-- Email Field -->
+                {{ input_field('email', 'Email Address', 'email', 'name@company.com', 'mail') }}
+                
+                <!-- Organization Name -->
+                {{ input_field('organization_name', 'Organization Name (Optional)', 'text', 'Acme Corp', 'business') }}
+                
+                <!-- Password Field -->
+                {{ input_field('password', 'Password', 'password', 'Minimum 8 characters', 'lock') }}
+                
+                <!-- Confirm Password Field -->
+                {{ input_field('password_confirm', 'Confirm Password', 'password', 'Re-enter your password', 'lock') }}
+                
+                <!-- Primary Action Button -->
+                {{ auth_button('Create Account', 'primary') }}
+            </form>
+            
+            <!-- Login Link -->
+            <div class="text-center">
+                <p class="text-sm text-[#618975] dark:text-gray-400">
+                    Already have an account? 
+                    <a href="{{ url_for('auth.login') }}" class="text-primary font-medium hover:underline">Sign in</a>
+                </p>
+            </div>
+            
+            <!-- Regulatory Footer -->
+            <div class="mt-auto pt-6 border-t border-[#f0f4f2] dark:border-gray-800">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-[#618975] shrink-0" style="font-size: 18px;">shield</span>
+                    <p class="text-xs text-[#618975] dark:text-gray-500 leading-relaxed">
+                        By creating an account, you agree to the 
+                        <a class="text-primary hover:underline font-medium" href="#">Privacy Policy</a> and 
+                        <a class="text-primary hover:underline font-medium" href="#">Terms of Service</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

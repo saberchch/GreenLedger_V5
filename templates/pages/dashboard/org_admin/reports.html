@@ -1,0 +1,131 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Reports - Organization Admin{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-bold text-[#111814] dark:text-white">Carbon Reports</h1>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Generate and export carbon accounting reports</p>
+        </div>
+    </div>
+
+    <!-- Report Generation Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Carbon Summary Report -->
+        <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+            <div class="flex items-start gap-4">
+                <div
+                    class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                    <span class="material-symbols-outlined text-2xl">summarize</span>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-2">Carbon Summary Report</h3>
+                    <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Comprehensive overview of your
+                        organization's carbon footprint with scope breakdown and trends</p>
+                    <div class="flex gap-2">
+                        <form method="POST" action="{{ url_for('dashboard_org_admin.generate_report') }}">
+                            <button
+                                class="h-9 px-4 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors flex items-center gap-2">
+                                <span class="material-symbols-outlined" style="font-size: 16px;">picture_as_pdf</span>
+                                <span>Generate PDF</span>
+                            </button>
+                        </form>
+                        <button onclick="alert('Excel export coming soon!')"
+                            class="h-9 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">table_chart</span>
+                            <span>Export Excel</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit Preparation Report -->
+        <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+            <div class="flex items-start gap-4">
+                <div
+                    class="size-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-700 dark:text-green-400 flex-shrink-0">
+                    <span class="material-symbols-outlined text-2xl">verified</span>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-2">Audit Preparation Report</h3>
+                    <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Detailed report with all evidence and
+                        documentation for external auditors</p>
+                    <div class="flex gap-2">
+                        <button onclick="alert('Audit report generation coming soon!')"
+                            class="h-9 px-4 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-700 dark:text-green-400 font-medium text-sm transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">task_alt</span>
+                            <span>Prepare Audit</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scope Breakdown Report -->
+        <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+            <div class="flex items-start gap-4">
+                <div
+                    class="size-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-700 dark:text-blue-400 flex-shrink-0">
+                    <span class="material-symbols-outlined text-2xl">pie_chart</span>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-2">Scope Breakdown Report</h3>
+                    <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Detailed analysis of emissions by scope
+                        with category-level breakdown</p>
+                    <div class="flex gap-2">
+                        <button onclick="alert('Scope breakdown report coming soon!')"
+                            class="h-9 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
+                            <span>Download Report</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CBAM Compliance Report -->
+        <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+            <div class="flex items-start gap-4">
+                <div
+                    class="size-12 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-700 dark:text-amber-400 flex-shrink-0">
+                    <span class="material-symbols-outlined text-2xl">gavel</span>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-2">CBAM Compliance Report</h3>
+                    <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">EU Carbon Border Adjustment Mechanism
+                        compliance documentation</p>
+                    <div class="flex gap-2">
+                        <button onclick="alert('CBAM report generation coming soon!')"
+                            class="h-9 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
+                            <span>Download Report</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Reports -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035]">
+            <h3 class="text-lg font-bold text-[#111814] dark:text-white">Recent Reports</h3>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Previously generated reports</p>
+        </div>
+        <div class="p-6">
+            <div class="text-center py-8 text-[#618975] dark:text-[#8baaa0]">
+                <span class="material-symbols-outlined text-4xl mb-2">description</span>
+                <p class="font-medium">No reports generated yet</p>
+                <p class="text-sm mt-1">Generate your first carbon report to get started</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

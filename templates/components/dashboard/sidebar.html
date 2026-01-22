@@ -1,84 +1,226 @@
-{#
-    Dashboard Sidebar Component
-    
-    Parameters:
-    - nav_items: List of navigation items with structure:
-        {
-            'icon': 'material_symbol_name',
-            'text': 'Display Text',
-            'url': 'route_name',
-            'active': True/False (optional)
-        }
-    - plan_info: Dictionary with plan usage info (optional):
-        {
-            'plan_name': 'Pro',
-            'usage_percent': 75,
-            'usage_text': '75% of monthly tokens used'
-        }
-    - logo_url: URL for logo image (optional)
-#}
-
-{% set nav_items = nav_items|default([]) %}
-{% set plan_info = plan_info|default({
-    'plan_name': 'Pro',
-    'usage_percent': 75,
-    'usage_text': '75% of monthly tokens used'
-}) %}
-{% set logo_url = logo_url|default('https://lh3.googleusercontent.com/aida-public/AB6AXuC24C8wt9544Ea5vC1Tr3sTOrTYXHwf5yghvXIb3-YR6zZ9__x5p7DLu5CGX0CwqJpfeICes90MHEq46o8HPJKqbNVSH314JOgvghJS2vBklAllLBAKDU5XTG7Py1DRxtPSRaHZ4MVdaPSKpl8Qn3ZhXt5S2tWJA0SjW-RssbpGnmdv9qOPkt29w4jbf1q0OCSYQDeY16tFTsEQBHZA9jKd5hh_T8lcn7fIFV6LCkO3j36YusGm-_J7kDeDYQRZs887_ResNrJZG9t3') %}
-
-<aside class="w-64 flex-shrink-0 flex flex-col bg-white dark:bg-[#1a2c24] border-r border-[#f0f4f2] dark:border-[#2a4035] h-full overflow-y-auto z-20">
-    <!-- Logo Section -->
+<aside
+    class="w-64 flex-shrink-0 flex flex-col bg-white dark:bg-[#1a2c24] border-r border-[#f0f4f2] dark:border-[#2a4035] h-full overflow-y-auto z-20">
     <div class="p-6">
-        <div class="flex items-center gap-3">
-            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 shadow-sm" 
-                 data-alt="Abstract green leaf logo on white background" 
-                 style='background-image: url("{{ logo_url }}");'></div>
+        <a href="{{ url_for('main.landing') }}" class="flex items-center gap-3">
+            {% include "components/ui/logo.html" %}
             <div class="flex flex-col">
                 <h1 class="text-[#111814] dark:text-white text-base font-bold leading-normal">GreenLedger</h1>
                 <p class="text-[#618975] dark:text-[#8baaa0] text-xs font-normal leading-normal">Carbon Accounting</p>
             </div>
-        </div>
+        </a>
     </div>
-    
-    <!-- Navigation -->
+
     <nav class="flex flex-col gap-2 px-4 flex-1">
-        {% for item in nav_items %}
-            {% if item.get('divider') %}
-                <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
-            {% else %}
-                {% set is_active = item.get('active', False) %}
-                {% if item.get('url') %}
-                    {% set nav_url = url_for(item.url) if item.url else '#' %}
-                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg {% if is_active %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5{% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %} transition-colors group" 
-                       href="{{ nav_url }}">
-                        <span class="material-symbols-outlined {% if is_active %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}" 
-                              style="font-size: 24px;">{{ item.icon }}</span>
-                        <p class="{% if is_active %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">{{ item.text }}</p>
-                    </a>
-                {% else %}
-                    <div class="flex items-center gap-3 px-3 py-2 rounded-lg {% if is_active %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5{% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %} transition-colors group cursor-pointer">
-                        <span class="material-symbols-outlined {% if is_active %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}" 
-                              style="font-size: 24px;">{{ item.icon }}</span>
-                        <p class="{% if is_active %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">{{ item.text }}</p>
-                    </div>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
+        {% set current_page = request.path %}
+
+        {# Dashboard Link - All Roles #}
+        {% if current_user.has_role('admin') %}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.admin_index') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">dashboard</span>
+            <p
+                class="{% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Dashboard</p>
+        </a>
+        {% elif current_user.has_role('auditor') %}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/auditor' in current_page and current_page == url_for('dashboard_auditor.auditor_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_auditor.auditor_index') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/auditor' in current_page and current_page == url_for('dashboard_auditor.auditor_index') %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">dashboard</span>
+            <p
+                class="{% if 'dashboard/auditor' in current_page and current_page == url_for('dashboard_auditor.auditor_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Dashboard</p>
+        </a>
+        {% elif current_user.has_role('worker') %}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if current_page == url_for('dashboard_worker.worker_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_worker.worker_index') }}">
+            <span
+                class="material-symbols-outlined {% if current_page == url_for('dashboard_worker.worker_index') %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">dashboard</span>
+            <p
+                class="{% if current_page == url_for('dashboard_worker.worker_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Dashboard</p>
+        </a>
+
+        {# Worker-specific sections #}
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">My Tasks</p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.drafts') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">draft</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                My Drafts</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.rejected') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">error</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Fix Rejected Data</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.new_emission') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">add_circle</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                New Emission Entry</p>
+        </a>
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Emissions by
+            Scope</p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.new_emission') }}?scope=1">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">factory</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Add Scope 1</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.new_emission') }}?scope=2">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">bolt</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Add Scope 2</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.new_emission') }}?scope=3">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">public</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Add Scope 3</p>
+        </a>
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">My
+            Submissions</p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.submissions') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">send</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                View Submissions</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.submission_status') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">pending_actions</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Submission Status</p>
+        </a>
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Documents</p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.upload_document') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">upload_file</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Upload Evidence</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.documents') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">folder</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                My Documents</p>
+        </a>
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Guidance</p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.ghg_guide') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">menu_book</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                GHG Guide</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_worker.calculation_help') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">calculate</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Calculation Help</p>
+        </a>
+
+        {% elif current_user.has_role('viewer') %}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/viewer' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_viewer.viewer_index') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/viewer' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">dashboard</span>
+            <p
+                class="{% if 'dashboard/viewer' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Dashboard</p>
+        </a>
+        {% endif %}
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
     </nav>
-    
-    <!-- Plan Usage Section -->
-    {% if plan_info %}
-    <div class="p-4">
-        <div class="rounded-lg bg-[#f0f4f2] dark:bg-[#23352c] p-4 flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-semibold text-[#111814] dark:text-white">Plan Usage</span>
-                <span class="text-xs text-[#618975] dark:text-[#8baaa0]">{{ plan_info.plan_name }}</span>
-            </div>
-            <div class="h-1.5 w-full bg-[#dbe6e0] dark:bg-[#3d5348] rounded-full overflow-hidden">
-                <div class="h-full bg-primary rounded-full" style="width: {{ plan_info.usage_percent }}%"></div>
-            </div>
-            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">{{ plan_info.usage_text }}</p>
-        </div>
+
+    {# Settings at bottom #}
+    <div class="px-4 pb-4">
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('settings.index') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">settings</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Settings</p>
+        </a>
     </div>
-    {% endif %}
 </aside>

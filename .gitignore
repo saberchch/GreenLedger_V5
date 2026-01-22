@@ -75,3 +75,4 @@ migrations/versions/*.py
 *.tmp
 *.bak
 *.cache
+*:Zone.Identifier

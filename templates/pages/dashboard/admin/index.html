@@ -1,0 +1,227 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+{% block breadcrumb %}Admin Overview{% endblock %}
+
+{% block dashboard_content %}
+<!-- Top Section: Wallet & KPIs -->
+<div class="flex flex-col gap-6 mb-8">
+    <!-- Wallet Connect Bar -->
+    <div
+        class="flex flex-col sm:flex-row justify-between items-center bg-gradient-to-r from-[#1a2c24] to-[#2a4035] p-6 rounded-xl shadow-lg border border-[#3d5348] text-white">
+        <div>
+            <h2 class="text-xl font-bold">Blockchain Administration</h2>
+            <p class="text-sm text-gray-300 opacity-90">Connect your wallet to notarize audited reports.</p>
+        </div>
+        <button onclick="connectWallet()" id="walletBtn"
+            class="mt-4 sm:mt-0 px-6 py-2.5 bg-[#13ec80] hover:bg-[#0fd673] text-[#0a1f14] font-bold rounded-lg transition-all flex items-center gap-2 shadow-lg shadow-green-900/20">
+            <span class="material-symbols-outlined">account_balance_wallet</span>
+            <span id="walletText">Connect Wallet</span>
+        </button>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1: Active Orgs -->
+        <div
+            class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Active Organizations</span>
+                <span class="p-1.5 rounded-md bg-[#f0f4f2] dark:bg-[#23352c] text-[#111814] dark:text-white">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">domain</span>
+                </span>
+            </div>
+            <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ kpis.active_orgs }} <span
+                    class="text-sm font-normal text-[#618975]">/ {{ kpis.total_orgs }}</span></span>
+        </div>
+        <!-- KPI 2: Total Reports -->
+        <div
+            class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Reports Processed</span>
+                <span class="p-1.5 rounded-md bg-[#f0f4f2] dark:bg-[#23352c] text-[#111814] dark:text-white">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">description</span>
+                </span>
+            </div>
+            <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ kpis.total_reports }}</span>
+        </div>
+        <!-- KPI 3: Pending Approvals -->
+        <div
+            class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Pending Approvals</span>
+                <span class="p-1.5 rounded-md bg-amber-50 dark:bg-amber-900/20 text-amber-600">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">pending_actions</span>
+                </span>
+            </div>
+            <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ pending_organizations|length
+                }}</span>
+        </div>
+        <!-- KPI 4: Pending Notarization -->
+        <div
+            class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+                <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">To Notarize</span>
+                <span class="p-1.5 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-600">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">gavel</span>
+                </span>
+            </div>
+            <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ audited_reports|length }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Organization Requests Section -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden flex flex-col">
+        <div
+            class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035] flex justify-between items-center bg-gray-50/50 dark:bg-[#23352c]/50">
+            <h3 class="text-lg font-bold text-[#111814] dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500">business</span>
+                Organization Requests
+            </h3>
+            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-full">{{
+                pending_organizations|length }} New</span>
+        </div>
+
+        <div class="overflow-x-auto flex-1">
+            {% if pending_organizations %}
+            <table class="w-full text-left">
+                <thead class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#e5e7eb] dark:border-[#3d5348]">
+                    <tr>
+                        <th
+                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                            Company</th>
+                        <th
+                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                            Industry</th>
+                        <th
+                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider text-right">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                    {% for org in pending_organizations %}
+                    <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-bold text-[#111814] dark:text-white">{{ org.name }}</p>
+                            <p class="text-xs text-[#618975]">{{ org.users.first().email }}</p>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-[#618975] dark:text-[#8baaa0]">{{ org.industry }}</td>
+                        <td class="px-6 py-4 text-right flex justify-end gap-2">
+                            <form method="POST"
+                                action="{{ url_for('dashboard_admin.approve_organization', org_id=org.id) }}">
+                                <button type="submit"
+                                    class="p-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-lg transition-colors"
+                                    title="Approve">
+                                    <span class="material-symbols-outlined text-lg">check</span>
+                                </button>
+                            </form>
+                            <form method="POST"
+                                action="{{ url_for('dashboard_admin.reject_organization', org_id=org.id) }}">
+                                <button type="submit"
+                                    class="p-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors"
+                                    title="Reject">
+                                    <span class="material-symbols-outlined text-lg">close</span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="p-12 text-center text-[#618975] dark:text-[#8baaa0] flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-4xl opacity-50">inbox</span>
+                <p>No pending organization requests.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Web3 Notarization Section -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden flex flex-col">
+        <div
+            class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035] flex justify-between items-center bg-gray-50/50 dark:bg-[#23352c]/50">
+            <h3 class="text-lg font-bold text-[#111814] dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-blue-500">verified</span>
+                Ready for Notarization
+            </h3>
+            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded-full">{{
+                audited_reports|length }} Reports</span>
+        </div>
+
+        <div class="overflow-x-auto flex-1">
+            {% if audited_reports %}
+            <table class="w-full text-left">
+                <thead class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#e5e7eb] dark:border-[#3d5348]">
+                    <tr>
+                        <th
+                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                            Report</th>
+                        <th
+                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
+                            Auditor</th>
+                        <th
+                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider text-right">
+                            Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                    {% for report in audited_reports %}
+                    <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-bold text-[#111814] dark:text-white">Report #{{ report.id }}</p>
+                            <p class="text-xs text-[#618975] truncate max-w-[150px]">{{ report.summary|truncate(30) }}
+                            </p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <div
+                                    class="size-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 text-xs font-bold">
+                                    {{ report.auditor.email[0] | upper }}
+                                </div>
+                                <span class="text-sm text-[#111814] dark:text-white">{{ report.auditor.email }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <form method="POST"
+                                action="{{ url_for('dashboard_admin.notarize_report', report_id=report.id) }}">
+                                <button type="submit"
+                                    class="px-3 py-1.5 bg-[#13ec80]/10 hover:bg-[#13ec80]/20 text-[#0a1f14] dark:text-[#13ec80] text-xs font-bold rounded-lg transition-colors border border-[#13ec80]/50">
+                                    Notarize
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="p-12 text-center text-[#618975] dark:text-[#8baaa0] flex flex-col items-center gap-2">
+                <span class="material-symbols-outlined text-4xl opacity-50">fact_check</span>
+                <p>No audited reports to notarize.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function connectWallet() {
+        const btn = document.getElementById('walletBtn');
+        const text = document.getElementById('walletText');
+        text.innerText = 'Connecting...';
+
+        setTimeout(() => {
+            text.innerText = '0x71C...93F2';
+            btn.classList.remove('bg-[#13ec80]', 'hover:bg-[#0fd673]', 'text-[#0a1f14]');
+            btn.classList.add('bg-[#1a2c24]', 'text-white', 'border', 'border-[#13ec80]');
+            alert('Wallet Connected Successfully!');
+        }, 1500);
+    }
+</script>
+
+{% endblock %}

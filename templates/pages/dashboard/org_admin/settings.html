@@ -1,0 +1,188 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Organization Settings{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="max-w-[1000px] mx-auto flex flex-col gap-6">
+    <!-- Header -->
+    <div>
+        <h1 class="text-2xl font-bold text-[#111814] dark:text-white">Organization Settings</h1>
+        <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Manage company details and preferences</p>
+    </div>
+
+    <!-- Company Details -->
+    <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-6">Company Details</h3>
+        <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Organization Name
+                    </label>
+                    <input type="text" value="{{ organization.name if organization else '' }}"
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Industry
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>Manufacturing</option>
+                        <option>Technology</option>
+                        <option>Retail</option>
+                        <option>Energy</option>
+                        <option>Transportation</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Country
+                    </label>
+                    <input type="text" value="{{ organization.country if organization else '' }}"
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Tax ID / Registration Number
+                    </label>
+                    <input type="text" placeholder="Enter tax ID"
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                    Address
+                </label>
+                <textarea rows="3"
+                    class="w-full px-4 py-3 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary resize-none">{{ organization.address if organization else '' }}</textarea>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="alert('Settings update feature coming soon!')"
+                    class="h-10 px-6 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Reporting Period -->
+    <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-6">Reporting Period</h3>
+        <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Fiscal Year Start
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Reporting Frequency
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>Quarterly</option>
+                        <option>Monthly</option>
+                        <option>Annually</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="alert('Settings update feature coming soon!')"
+                    class="h-10 px-6 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Preferences -->
+    <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white mb-6">Preferences</h3>
+        <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Language
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>English</option>
+                        <option>French</option>
+                        <option>German</option>
+                        <option>Spanish</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Timezone
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>UTC</option>
+                        <option>Europe/Paris</option>
+                        <option>America/New_York</option>
+                        <option>Asia/Tokyo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Currency
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>EUR (€)</option>
+                        <option>USD ($)</option>
+                        <option>GBP (£)</option>
+                        <option>JPY (¥)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#111814] dark:text-white mb-2">
+                        Units
+                    </label>
+                    <select
+                        class="w-full h-11 px-4 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none">
+                        <option>Metric (kg, km)</option>
+                        <option>Imperial (lb, mi)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="alert('Settings update feature coming soon!')"
+                    class="h-10 px-6 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

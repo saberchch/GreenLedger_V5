@@ -1,0 +1,16 @@
+{% if current_user.has_role('admin') %}
+<a href="{{ url_for('dashboard_admin.admin_index') }}" class="nav-link">Dashboard</a>
+
+{% endif %}
+
+{% if current_user.has_role('auditor') %}
+<a href="{{ url_for('dashboard_auditor.auditor_index') }}" class="nav-link">Audit Overview</a>
+<a href="{{ url_for('dashboard_auditor.reports') }}" class="nav-link">Reports</a>
+<a href="{{ url_for('dashboard_auditor.blockchain') }}" class="nav-link">Blockchain</a>
+{% endif %}
+
+{% if current_user.has_role('worker') %}
+<a href="{{ url_for('dashboard_worker.worker_index') }}" class="nav-link">My Dashboard</a>
+<a href="{{ url_for('dashboard_worker.data_entry') }}" class="nav-link">Data Entry</a>
+<a href="{{ url_for('dashboard_worker.calculations') }}" class="nav-link">Calculations</a>
+{% endif %}
