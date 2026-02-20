@@ -1,6 +1,9 @@
 {% extends "layouts/dashboard_base.html" %}
 {% from "components/dashboard/kpi_card_v2.html" import kpi_card %}
-{% from "components/dashboard/alert_item.html" import alert_item %}
+{% from "components/dashboard/widgets/worker_workflow_bar.html" import worker_workflow_bar with context %}
+{% from "components/dashboard/widgets/emissions_breakdown_chart.html" import emissions_breakdown_chart %}
+{% from "components/dashboard/widgets/worker_action_center.html" import worker_action_center %}
+{% from "components/dashboard/widgets/recent_uploads_table.html" import recent_uploads_table %}
 
 {% block title %}Worker Dashboard{% endblock %}
 
@@ -21,66 +24,7 @@
 
 <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
     <!-- Filters & Workflow Bar -->
-    <div
-        class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm">
-        <!-- Left: Context Selectors -->
-        <div class="lg:col-span-7 flex flex-wrap gap-4 items-end">
-            <label class="flex flex-col gap-1.5 flex-1 min-w-[200px]">
-                <span
-                    class="text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Organization
-                    Entity</span>
-                <div class="relative">
-                    <select
-                        class="w-full h-11 pl-4 pr-10 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm font-medium focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none cursor-pointer">
-                        <option>{{ user.organization.name if user.organization else 'No Organization' }}</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#618975]">
-                        <span class="material-symbols-outlined">expand_more</span>
-                    </div>
-                </div>
-            </label>
-            <label class="flex flex-col gap-1.5 flex-1 min-w-[160px]">
-                <span
-                    class="text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Reporting
-                    Period</span>
-                <div class="relative">
-                    <select
-                        class="w-full h-11 pl-4 pr-10 rounded-lg bg-[#f9fafb] dark:bg-[#23352c] border border-[#dbe6e0] dark:border-[#3d5348] text-[#111814] dark:text-white text-sm font-medium focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none cursor-pointer">
-                        <option>Q3 2023</option>
-                        <option>Q2 2023</option>
-                        <option>FY 2022</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#618975]">
-                        <span class="material-symbols-outlined">date_range</span>
-                    </div>
-                </div>
-            </label>
-            <button
-                class="h-11 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
-                <span class="material-symbols-outlined" style="font-size: 20px;">filter_list</span>
-                <span>More Filters</span>
-            </button>
-        </div>
-        <!-- Right: Workflow Status -->
-        <div
-            class="lg:col-span-5 flex flex-col gap-2 pl-0 lg:pl-6 border-l-0 lg:border-l border-[#f0f4f2] dark:border-[#2a4035]">
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-bold text-[#111814] dark:text-white">Data Collection Phase</span>
-                <span
-                    class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">In
-                    Progress</span>
-            </div>
-            <div class="w-full bg-[#f0f4f2] dark:bg-[#23352c] rounded-full h-2.5 overflow-hidden">
-                <div class="bg-primary h-2.5 rounded-full relative" style="width: 65%">
-                    <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
-                </div>
-            </div>
-            <div class="flex justify-between text-xs text-[#618975] dark:text-[#8baaa0]">
-                <span>Step 3 of 5</span>
-                <span>Due in 4 days</span>
-            </div>
-        </div>
-    </div>
+    {{ worker_workflow_bar() }}
 
     <!-- KPI Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -93,175 +37,12 @@
 
     <!-- Charts & Actions Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto min-h-[400px]">
-        <!-- Main Chart: Emissions Breakdown -->
-        <div
-            class="lg:col-span-2 bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h3 class="text-lg font-bold text-[#111814] dark:text-white">Emissions Breakdown</h3>
-                    <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Scope 1, 2, and 3 distribution</p>
-                </div>
-                <button
-                    class="p-2 hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] rounded-lg text-[#618975] dark:text-[#8baaa0] transition-colors">
-                    <span class="material-symbols-outlined">more_horiz</span>
-                </button>
-            </div>
-            <!-- CSS Chart Visualization -->
-            <div class="flex-1 flex flex-col justify-end gap-4">
-                <div class="flex gap-4 h-48 sm:h-64 items-end w-full px-4">
-                    <!-- Scope 1 -->
-                    <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                        <div
-                            class="text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-[#111814] dark:text-white mb-1">
-                            2,450t</div>
-                        <div class="w-full bg-[#13ec80] rounded-t-lg transition-all hover:bg-[#0fd673]"
-                            style="height: 35%"></div>
-                        <p class="text-center text-xs font-medium text-[#618975] dark:text-[#8baaa0]">Scope 1</p>
-                    </div>
-                    <!-- Scope 2 -->
-                    <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                        <div
-                            class="text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-[#111814] dark:text-white mb-1">
-                            1,200t</div>
-                        <div class="w-full bg-[#102219] dark:bg-[#618975] rounded-t-lg transition-all hover:opacity-80"
-                            style="height: 20%"></div>
-                        <p class="text-center text-xs font-medium text-[#618975] dark:text-[#8baaa0]">Scope 2</p>
-                    </div>
-                    <!-- Scope 3 -->
-                    <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                        <div
-                            class="text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-[#111814] dark:text-white mb-1">
-                            8,800t</div>
-                        <div class="w-full bg-[#82f6ba] rounded-t-lg transition-all hover:bg-[#6ef0ae]"
-                            style="height: 75%"></div>
-                        <p class="text-center text-xs font-medium text-[#618975] dark:text-[#8baaa0]">Scope 3</p>
-                    </div>
-                </div>
-                <div class="border-t border-[#f0f4f2] dark:border-[#2a4035] pt-4 flex justify-center gap-6">
-                    <div class="flex items-center gap-2">
-                        <div class="size-3 rounded-full bg-[#13ec80]"></div>
-                        <span class="text-xs text-[#618975] dark:text-[#8baaa0]">Direct Emissions</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="size-3 rounded-full bg-[#102219] dark:bg-[#618975]"></div>
-                        <span class="text-xs text-[#618975] dark:text-[#8baaa0]">Purchased Energy</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="size-3 rounded-full bg-[#82f6ba]"></div>
-                        <span class="text-xs text-[#618975] dark:text-[#8baaa0]">Value Chain</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Action Center / Alerts -->
-        <div
-            class="bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-bold text-[#111814] dark:text-white">Action Center</h3>
-                <div
-                    class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-bold px-2 py-1 rounded-md">
-                    {{ alerts|length }} Urgent</div>
-            </div>
-            <div class="flex flex-col gap-4 overflow-y-auto pr-1">
-                {% for alert in alerts %}
-                {{ alert_item(alert.type, alert.color, alert.title, alert.subtitle) }}
-                {% endfor %}
-            </div>
-            <button
-                class="mt-auto pt-4 text-center text-sm font-medium text-primary hover:text-primary/80 transition-colors w-full">
-                View all notifications
-            </button>
-        </div>
+        {{ emissions_breakdown_chart() }}
+        {{ worker_action_center(alerts) }}
     </div>
 
     <!-- Recent Activity Table -->
-    <div
-        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
-        <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035] flex justify-between items-center">
-            <h3 class="text-lg font-bold text-[#111814] dark:text-white">Recent Data Uploads</h3>
-            <button
-                class="text-sm font-medium text-[#618975] dark:text-[#8baaa0] hover:text-[#111814] dark:hover:text-white transition-colors">View
-                All</button>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
-                <thead class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#e5e7eb] dark:border-[#3d5348]">
-                    <tr>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Source</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Date</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Type</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Status</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider text-right">
-                            Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
-                    {% for activity in my_activities %}
-                    <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
-                        <td class="px-6 py-4 text-sm font-medium text-[#111814] dark:text-white">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="size-8 rounded bg-[#f0f4f2] dark:bg-[#3d5348] flex items-center justify-center text-[#618975] dark:text-[#8baaa0]">
-                                    <span class="material-symbols-outlined" style="font-size: 18px;">
-                                        {% if activity.documents %}description{% else %}edit{% endif %}
-                                    </span>
-                                </div>
-                                {{ activity.documents[0].filename if activity.documents else 'Manual Entry #' ~
-                                activity.id }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-[#618975] dark:text-[#8baaa0]">{{
-                            activity.created_at.strftime('%b %d, %Y') }}</td>
-                        <td class="px-6 py-4 text-sm text-[#111814] dark:text-white">{{ activity.scope.value }}</td>
-                        <td class="px-6 py-4">
-                            {% if activity.status.value == 'validated' %}
-                            <span
-                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                                <div class="size-1.5 rounded-full bg-green-500"></div>Processed
-                            </span>
-                            {% elif activity.status.value == 'submitted' %}
-                            <span
-                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
-                                <div class="size-1.5 rounded-full bg-blue-500"></div>Review
-                            </span>
-                            {% elif activity.status.value == 'draft' %}
-                            <span
-                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                                <div class="size-1.5 rounded-full bg-gray-500"></div>Draft
-                            </span>
-                            {% elif activity.status.value == 'rejected' %}
-                            <span
-                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
-                                <div class="size-1.5 rounded-full bg-red-500"></div>Rejected
-                            </span>
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button
-                                class="text-[#618975] dark:text-[#8baaa0] hover:text-[#111814] dark:hover:text-white transition-colors">
-                                <span class="material-symbols-outlined" style="font-size: 20px;">more_vert</span>
-                            </button>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-[#618975]">No recent uploads.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+    {{ recent_uploads_table(my_activities) }}
 </div>
 
 {% endblock %}

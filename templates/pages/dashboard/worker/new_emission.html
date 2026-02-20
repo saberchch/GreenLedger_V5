@@ -1,98 +1,620 @@
-{% extends "pages/dashboard/worker/index.html" %}
+{% if is_admin | default(false) %}
+  {% extends "pages/dashboard/org_admin/index.html" %}
+{% else %}
+  {% extends "pages/dashboard/worker/index.html" %}
+{% endif %}
 
 {% block dashboard_content %}
-<div class="bg-white rounded-xl shadow-sm border border-neutral-200/60 overflow-hidden">
-    <div class="p-6 border-b border-neutral-200/60 flex justify-between items-center">
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <div class="flex items-center gap-4">
+        <a href="{{ url_for('dashboard_org_admin.emissions') if is_admin | default(false) else url_for('dashboard_worker.worker_index') }}"
+            class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors">
+            <span class="material-icons text-xl">arrow_back</span>
+        </a>
         <div>
-            <h2 class="text-lg font-semibold text-neutral-900">New Emission Activity</h2>
-            <p class="text-sm text-neutral-500 mt-1">Record a new GHG emission activity.</p>
+            <h1 class="text-xl font-bold text-neutral-900">New Emission Activity</h1>
+            <p class="text-sm text-neutral-500">
+                {% if is_admin | default(false) %}
+                    Direct admin entry — activity will be auto-validated
+                {% else %}
+                    Record a GHG emission using official ADEME Base Carbone factors
+                {% endif %}
+            </p>
         </div>
     </div>
 
-    <div class="p-6">
-        <form method="POST" action="{{ url_for('dashboard_worker.new_emission') }}" class="space-y-6"
-            enctype="multipart/form-data">
+    <!-- Step Progress Bar -->
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-4">
+        <div class="flex items-center justify-between">
+            {% set steps = [("1", "Activity Details", "info"), ("2", "ADEME Factor", "search"), ("3", "Quantity &
+            Preview", "calculate")] %}
+            {% for num, label, icon in steps %}
+            <div class="flex items-center gap-2 step-indicator" data-step="{{ num }}">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300
+                    {% if loop.first %}bg-emerald-600 text-white step-active{% else %}bg-neutral-100 text-neutral-400 step-inactive{% endif %}"
+                    id="step-circle-{{ num }}">
+                    {% if not loop.first %}
+                    <span class="material-icons text-sm">{{ icon }}</span>
+                    {% else %}
+                    {{ num }}
+                    {% endif %}
+                </div>
+                <span class="text-sm font-medium hidden sm:block
+                     {% if loop.first %}text-emerald-700{% else %}text-neutral-400{% endif %}"
+                    id="step-label-{{ num }}">{{ label }}</span>
+            </div>
+            {% if not loop.last %}
+            <div class="flex-1 h-px bg-neutral-200 mx-2" id="step-connector-{{ loop.index }}"></div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Scope Selection -->
-                <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Scope</label>
-                    <select name="scope"
-                        class="w-full rounded-lg border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
-                        required>
-                        {% for scope in scopes %}
-                        <option value="{{ scope }}">{{ scope }}</option>
+    <!-- Form -->
+    <form id="emission-form" method="POST"
+        action="{{ url_for('dashboard_org_admin.new_emission') if is_admin | default(false) else url_for('dashboard_worker.new_emission') }}"
+        enctype="multipart/form-data" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <!-- Hidden fields populated by JS -->
+        <input type="hidden" name="ademe_factor_id" id="f-ademe-id" />
+        <input type="hidden" name="ademe_factor_name" id="f-ademe-name" />
+        <input type="hidden" name="ademe_factor_value" id="f-ademe-value" />
+        <input type="hidden" name="ademe_factor_unit" id="f-ademe-unit" />
+        <input type="hidden" name="ademe_factor_source" id="f-ademe-source" />
+        <input type="hidden" name="ademe_factor_category" id="f-ademe-category" />
+
+        <!-- ===================== STEP 1 ===================== -->
+        <div id="step-panel-1" class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-icons text-emerald-600 text-lg">info</span>
+                    Step 1 — Activity Details
+                </h2>
+            </div>
+            <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- Scope Cards -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">GHG Scope <span
+                            class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-3 gap-3" id="scope-cards">
+                        {% for scope_val, scope_label, scope_desc, scope_color in [
+                        ("Scope 1", "Scope 1", "Direct emissions from owned sources", "emerald"),
+                        ("Scope 2", "Scope 2", "Indirect — purchased energy", "blue"),
+                        ("Scope 3", "Scope 3", "All other indirect emissions", "violet")
+                        ] %}
+                        <label
+                            class="scope-card cursor-pointer rounded-xl border-2 border-neutral-200 p-4 hover:border-{{ scope_color }}-400 transition-all duration-200"
+                            data-scope="{{ scope_val }}">
+                            <input type="radio" name="scope" value="{{ scope_val }}" class="sr-only" required />
+                            <div
+                                class="w-8 h-8 rounded-lg bg-{{ scope_color }}-100 flex items-center justify-center mb-2">
+                                <span class="text-{{ scope_color }}-600 font-bold text-sm">S{{ loop.index }}</span>
+                            </div>
+                            <div class="font-semibold text-sm text-neutral-800">{{ scope_label }}</div>
+                            <div class="text-xs text-neutral-500 mt-0.5">{{ scope_desc }}</div>
+                        </label>
                         {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Activity Type -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Activity Type <span
+                            class="text-red-500">*</span></label>
+                    <select name="activity_type" id="activity-type-select"
+                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm"
+                        required>
+                        <option value="simple">Simple (quantity × factor)</option>
+                        <option value="transport">Transport (tonnage × distance × factor)</option>
+                        <option value="process">Process (industrial process)</option>
+                        <option value="fugitive">Fugitive (leaks / releases)</option>
                     </select>
                 </div>
 
                 <!-- Category -->
                 <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Category</label>
-                    <input type="text" name="category" placeholder="e.g. Stationary Combustion"
-                        class="w-full rounded-lg border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
-                        required>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Category <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" name="category" id="category-input" required
+                        placeholder="e.g. Purchased Electricity, Road Transport…"
+                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
                 </div>
 
                 <!-- Period Start -->
                 <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Period Start</label>
-                    <input type="date" name="period_start"
-                        class="w-full rounded-lg border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
-                        required>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Period Start <span
+                            class="text-red-500">*</span></label>
+                    <input type="date" name="period_start" required
+                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
                 </div>
 
                 <!-- Period End -->
                 <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Period End</label>
-                    <input type="date" name="period_end"
-                        class="w-full rounded-lg border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
-                        required>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Period End <span
+                            class="text-red-500">*</span></label>
+                    <input type="date" name="period_end" required
+                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Description</label>
+                    <textarea name="description" rows="2" placeholder="Optional notes about this activity…"
+                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm resize-none"></textarea>
+                </div>
+            </div>
+            <div class="p-5 border-t border-neutral-100 flex justify-end">
+                <button type="button" onclick="goToStep(2)"
+                    class="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                    Next: Choose Factor <span class="material-icons text-sm">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===================== STEP 2 ===================== -->
+        <div id="step-panel-2" class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-icons text-emerald-600 text-lg">search</span>
+                    Step 2 — Select ADEME Emission Factor
+                </h2>
+                <p class="text-sm text-neutral-500 mt-1">Search 12,000+ official factors from ADEME Base Carbone V23.6
+                </p>
+            </div>
+            <div class="p-5 space-y-4">
+
+                <!-- Search input -->
+                <div class="relative">
+                    <span
+                        class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl pointer-events-none">search</span>
+                    <input type="text" id="factor-search-input"
+                        placeholder="Search in French or English: électricité, camion, gaz naturel…"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                    <div id="search-spinner" class="absolute right-3 top-1/2 -translate-y-1/2 hidden">
+                        <svg class="animate-spin h-4 w-4 text-emerald-600" viewBox="0 0 24 24" fill="none">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Results list -->
+                <div id="factor-results" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+
+                <!-- No results state -->
+                <div id="factor-no-results" class="hidden text-center py-8 text-neutral-400">
+                    <span class="material-icons text-4xl mb-2 block">search_off</span>
+                    No factors found. Try a different keyword.
+                </div>
+
+                <!-- Selected factor card -->
+                <div id="selected-factor-card" class="hidden rounded-xl border-2 border-emerald-400 bg-emerald-50 p-4">
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span
+                                    class="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">Selected</span>
+                                <span id="sf-source" class="text-xs text-neutral-500"></span>
+                            </div>
+                            <div id="sf-name" class="font-semibold text-neutral-800 text-sm"></div>
+                            <div id="sf-category" class="text-xs text-neutral-500 mt-0.5 line-clamp-2"></div>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div id="sf-factor" class="text-lg font-bold text-emerald-700"></div>
+                            <div id="sf-unit" class="text-xs text-neutral-500"></div>
+                        </div>
+                    </div>
+                    <div class="mt-3 grid grid-cols-3 gap-2 text-xs" id="sf-ghg-breakdown"></div>
+                    <button type="button" onclick="clearFactor()"
+                        class="mt-3 text-xs text-neutral-500 hover:text-red-600 transition-colors flex items-center gap-1">
+                        <span class="material-icons text-xs">close</span> Clear selection
+                    </button>
+                </div>
+            </div>
+            <div class="p-5 border-t border-neutral-100 flex justify-between">
+                <button type="button" onclick="goToStep(1)"
+                    class="px-5 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
+                    <span class="material-icons text-sm">arrow_back</span> Back
+                </button>
+                <button type="button" onclick="goToStep(3)" id="btn-step2-next" disabled
+                    class="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-2">
+                    Next: Quantity <span class="material-icons text-sm">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===================== STEP 3 ===================== -->
+        <div id="step-panel-3" class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-icons text-emerald-600 text-lg">calculate</span>
+                    Step 3 — Quantity & Preview
+                </h2>
+            </div>
+            <div class="p-5 space-y-5">
+
+                <!-- Simple quantity (shown by default) -->
+                <div id="quantity-simple">
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">
+                        Quantity <span class="text-xs text-neutral-500" id="unit-hint">(unit)</span>
+                    </label>
+                    <input type="number" name="quantity" id="quantity-input" min="0" step="any" placeholder="e.g. 1000"
+                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                    <input type="hidden" name="quantity_unit" id="quantity-unit-hidden" />
+                </div>
+
+                <!-- Transport quantity -->
+                <div id="quantity-transport" class="hidden grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">Tonnage (tonnes)</label>
+                        <input type="number" name="tonnage" id="tonnage-input" min="0" step="any" placeholder="e.g. 25"
+                            class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">Distance (km)</label>
+                        <input type="number" name="distance" id="distance-input" min="0" step="any"
+                            placeholder="e.g. 500"
+                            class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">Transport Mode</label>
+                        <select name="transport_mode"
+                            class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm">
+                            <option value="">— Select —</option>
+                            <option value="truck">Truck / Road</option>
+                            <option value="rail">Rail / Train</option>
+                            <option value="ship">Ship / Maritime</option>
+                            <option value="air">Air / Plane</option>
+                            <option value="van">Van / Light vehicle</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Live CO2e Preview -->
+                <div class="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 p-5">
+                    <div class="text-sm text-neutral-600 mb-3 font-medium flex items-center gap-2">
+                        <span class="material-icons text-base text-emerald-600">bolt</span>
+                        Live CO₂e Preview
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div>
+                            <div id="preview-quantity" class="text-xl font-bold text-neutral-800">—</div>
+                            <div class="text-xs text-neutral-500 mt-0.5">Quantity</div>
+                        </div>
+                        <div>
+                            <div id="preview-factor" class="text-xl font-bold text-neutral-800">—</div>
+                            <div class="text-xs text-neutral-500 mt-0.5">kgCO₂e/unit</div>
+                        </div>
+                        <div class="bg-white rounded-lg border border-emerald-200 p-2">
+                            <div id="preview-result-kg" class="text-xl font-bold text-emerald-700">0</div>
+                            <div class="text-xs text-neutral-500 mt-0.5">kgCO₂e</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-emerald-200 flex justify-between items-center">
+                        <div class="text-xs text-neutral-500">
+                            <span id="preview-formula"
+                                class="font-mono bg-white px-2 py-0.5 rounded text-neutral-700">—</span>
+                        </div>
+                        <div>
+                            <span id="preview-result-t" class="text-2xl font-extrabold text-emerald-800">0</span>
+                            <span class="text-sm text-emerald-700 ml-1">tCO₂e</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evidence document -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">
+                        Evidence Document <span class="text-neutral-400 font-normal">(optional, encrypted)</span>
+                    </label>
+                    <input type="file" name="evidence_file" accept=".pdf,.jpg,.jpeg,.png,.csv,.xlsx"
+                        class="w-full text-sm text-neutral-500
+                        file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
+                    <p class="text-xs text-neutral-400 mt-1">PDF, images, CSV, Excel — encrypted at rest</p>
+                </div>
+
+                <!-- Activity Summary (before submit) -->
+                <div id="activity-summary"
+                    class="hidden rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm space-y-2">
+                    <div class="font-semibold text-neutral-700 mb-2">Activity Summary</div>
+                    <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-xs">
+                        <span class="text-neutral-500">Scope</span> <span id="sum-scope"
+                            class="font-medium text-neutral-800"></span>
+                        <span class="text-neutral-500">Category</span> <span id="sum-category"
+                            class="font-medium text-neutral-800"></span>
+                        <span class="text-neutral-500">Type</span> <span id="sum-type"
+                            class="font-medium text-neutral-800"></span>
+                        <span class="text-neutral-500">Period</span> <span id="sum-period"
+                            class="font-medium text-neutral-800"></span>
+                        <span class="text-neutral-500">ADEME Factor</span><span id="sum-factor"
+                            class="font-medium text-neutral-800"></span>
+                        <span class="text-neutral-500">CO₂e</span> <span id="sum-co2e"
+                            class="font-medium text-emerald-700"></span>
+                    </div>
                 </div>
             </div>
 
-            <hr class="border-neutral-200">
-
-            <!-- Emission Factor -->
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Emission Factor</label>
-                <select name="emission_factor_id"
-                    class="w-full rounded-lg border-neutral-300 focus:border-primary-500 focus:ring-primary-500">
-                    <option value="">-- Select Factor (Optional) --</option>
-                    {% for factor in factors %}
-                    <option value="{{ factor.id }}">{{ factor.name }} ({{ factor.factor }} kg CO2e / {{ factor.unit }})
-                    </option>
-                    {% endfor %}
-                </select>
-                <p class="text-xs text-neutral-500 mt-1">Select a standard factor to auto-calculate CO2e.</p>
+            <div class="p-5 border-t border-neutral-100 flex justify-between items-center">
+                <button type="button" onclick="goToStep(2)"
+                    class="px-5 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
+                    <span class="material-icons text-sm">arrow_back</span> Back
+                </button>
+                <div class="flex gap-3">
+                    <button type="submit" name="action" value="draft"
+                        class="px-5 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
+                        Save as Draft
+                    </button>
+                    <button type="submit" name="action" value="submit"
+                        class="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                        <span class="material-icons text-sm">send</span> Submit for Validation
+                    </button>
+                </div>
             </div>
-
-            <!-- Activity Data -->
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Activity Data (JSON)</label>
-                <textarea name="activity_data" rows="4"
-                    class="w-full rounded-lg border-neutral-300 focus:border-primary-500 focus:ring-primary-500 font-mono text-sm"
-                    placeholder='{"amount": 100, "fuel_type": "diesel"}'></textarea>
-                <p class="text-xs text-neutral-500 mt-1">Enter raw activity data in JSON format.</p>
-            </div>
-
-            <!-- Evidence Upload -->
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Evidence Document (Encrypted)</label>
-                <input type="file" name="evidence_file"
-                    class="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
-                <p class="text-xs text-neutral-500 mt-1">Upload supporting documentation (invoices, meter readings,
-                    etc). Files are encrypted at rest.</p>
-            </div>
-
-            <div class="flex justify-end gap-3">
-                <a href="{{ url_for('dashboard_worker.worker_index') }}"
-                    class="px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">Cancel</a>
-                <button type="submit"
-                    class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">Create
-                    Draft</button>
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
+
+<script>
+    // ─── State ─────────────────────────────────────────────────────────────
+    let currentStep = 1;
+    let selectedFactor = null;
+    let searchTimeout = null;
+
+    // ─── Step Navigation ────────────────────────────────────────────────────
+    function goToStep(n) {
+        // Validate step 1
+        if (n > 1) {
+            const scope = document.querySelector('input[name="scope"]:checked');
+            const category = document.getElementById('category-input').value.trim();
+            if (!scope || !category) {
+                alert('Please complete all required fields in Step 1 first.');
+                return;
+            }
+        }
+        // Validate step 2
+        if (n > 2 && !selectedFactor) {
+            alert('Please select an ADEME emission factor before proceeding.');
+            return;
+        }
+
+        // Hide all panels
+        [1, 2, 3].forEach(i => {
+            const panel = document.getElementById(`step-panel-${i}`);
+            panel.classList.toggle('hidden', i !== n);
+        });
+
+        // Update progress bar
+        [1, 2, 3].forEach(i => {
+            const circle = document.getElementById(`step-circle-${i}`);
+            const label = document.getElementById(`step-label-${i}`);
+            const isActive = i === n;
+            const isDone = i < n;
+
+            circle.className = `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${isActive ? 'bg-emerald-600 text-white' :
+                    isDone ? 'bg-emerald-100 text-emerald-600' :
+                        'bg-neutral-100 text-neutral-400'
+                }`;
+            circle.innerHTML = isDone
+                ? '<span class="material-icons text-sm">check</span>'
+                : (isActive ? i : `<span class="material-icons text-sm">${['info', 'search', 'calculate'][i - 1]}</span>`);
+
+            if (label) {
+                label.className = `text-sm font-medium hidden sm:block ${isActive ? 'text-emerald-700' : isDone ? 'text-emerald-500' : 'text-neutral-400'
+                    }`;
+            }
+        });
+
+        currentStep = n;
+
+        // When entering step 3, update summary and show transport fields
+        if (n === 3) {
+            updateActivityType();
+            updatePreview();
+            updateSummary();
+        }
+    }
+
+    // ─── Scope Cards ────────────────────────────────────────────────────────
+    document.querySelectorAll('.scope-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const radio = card.querySelector('input[type="radio"]');
+            radio.checked = true;
+
+            document.querySelectorAll('.scope-card').forEach(c => {
+                c.classList.remove('border-emerald-500', 'bg-emerald-50');
+                c.classList.add('border-neutral-200');
+            });
+            card.classList.add('border-emerald-500', 'bg-emerald-50');
+            card.classList.remove('border-neutral-200');
+        });
+    });
+
+    // ─── Activity Type Toggle (transport fields) ─────────────────────────────
+    function updateActivityType() {
+        const type = document.getElementById('activity-type-select').value;
+        const simpleDiv = document.getElementById('quantity-simple');
+        const transportDiv = document.getElementById('quantity-transport');
+        const isTransport = type === 'transport';
+        simpleDiv.classList.toggle('hidden', isTransport);
+        transportDiv.classList.toggle('hidden', !isTransport);
+    }
+    document.getElementById('activity-type-select').addEventListener('change', () => {
+        updateActivityType();
+        updatePreview();
+    });
+
+    // ─── ADEME Factor Search ─────────────────────────────────────────────────
+    const searchInput = document.getElementById('factor-search-input');
+    const resultsDiv = document.getElementById('factor-results');
+    const noResultsDiv = document.getElementById('factor-no-results');
+    const spinner = document.getElementById('search-spinner');
+    const selectedCard = document.getElementById('selected-factor-card');
+    const nextBtn = document.getElementById('btn-step2-next');
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        const q = searchInput.value.trim();
+        if (q.length < 2) {
+            resultsDiv.innerHTML = '';
+            noResultsDiv.classList.add('hidden');
+            return;
+        }
+        spinner.classList.remove('hidden');
+        searchTimeout = setTimeout(() => searchFactors(q), 300);
+    });
+
+    async function searchFactors(q) {
+        try {
+            const res = await fetch(`/api/v1/factors/search?q=${encodeURIComponent(q)}&limit=15`);
+            const data = await res.json();
+            spinner.classList.add('hidden');
+            renderResults(data);
+        } catch (e) {
+            spinner.classList.add('hidden');
+            resultsDiv.innerHTML = '<div class="text-red-500 text-sm p-2">Search error. Please try again.</div>';
+        }
+    }
+
+    function renderResults(factors) {
+        resultsDiv.innerHTML = '';
+        if (!factors.length) {
+            noResultsDiv.classList.remove('hidden');
+            return;
+        }
+        noResultsDiv.classList.add('hidden');
+
+        factors.forEach(f => {
+            const el = document.createElement('div');
+            el.className = 'factor-result-item cursor-pointer rounded-lg border border-neutral-200 p-3 hover:border-emerald-400 hover:bg-emerald-50/50 transition-all duration-150';
+            el.innerHTML = `
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-neutral-800 truncate">${escHtml(f.name_fr || f.name_en)}</div>
+          <div class="text-xs text-neutral-500 truncate mt-0.5">${escHtml(f.category)}</div>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <div class="text-sm font-bold text-emerald-700">${f.factor}</div>
+          <div class="text-xs text-neutral-400">${escHtml(f.unit_fr)}</div>
+        </div>
+      </div>
+      ${f.source ? `<div class="mt-1.5 text-xs text-neutral-400 flex items-center gap-1"><span class="material-icons text-xs">source</span>${escHtml(f.source)}</div>` : ''}
+    `;
+            el.addEventListener('click', () => selectFactor(f));
+            resultsDiv.appendChild(el);
+        });
+    }
+
+    function selectFactor(f) {
+        selectedFactor = f;
+
+        // Update hidden fields
+        document.getElementById('f-ademe-id').value = f.id;
+        document.getElementById('f-ademe-name').value = f.name_fr || f.name_en;
+        document.getElementById('f-ademe-value').value = f.factor;
+        document.getElementById('f-ademe-unit').value = f.unit_fr;
+        document.getElementById('f-ademe-source').value = f.source || '';
+        document.getElementById('f-ademe-category').value = f.category || '';
+        document.getElementById('quantity-unit-hidden').value = f.unit_fr;
+
+        // Update selected card
+        document.getElementById('sf-name').textContent = f.name_fr || f.name_en;
+        document.getElementById('sf-category').textContent = f.category;
+        document.getElementById('sf-source').textContent = f.source || '';
+        document.getElementById('sf-factor').textContent = `${f.factor} kgCO₂e`;
+        document.getElementById('sf-unit').textContent = f.unit_fr;
+        document.getElementById('unit-hint').textContent = `(${f.unit_fr})`;
+
+        // GHG breakdown
+        const bk = document.getElementById('sf-ghg-breakdown');
+        bk.innerHTML = '';
+        [['CO₂f', f.co2_fossil], ['CH₄f', f.ch4_fossil], ['N₂O', f.n2o]].forEach(([label, val]) => {
+            if (val != null) {
+                bk.innerHTML += `<div class="bg-white rounded px-2 py-1 border border-neutral-100">
+        <div class="font-semibold text-neutral-700">${val}</div><div class="text-neutral-400">${label}</div></div>`;
+            }
+        });
+
+        selectedCard.classList.remove('hidden');
+        resultsDiv.innerHTML = '';
+        searchInput.value = '';
+        nextBtn.disabled = false;
+        nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+    }
+
+    function clearFactor() {
+        selectedFactor = null;
+        ['f-ademe-id', 'f-ademe-name', 'f-ademe-value', 'f-ademe-unit', 'f-ademe-source', 'f-ademe-category'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        selectedCard.classList.add('hidden');
+        nextBtn.disabled = true;
+    }
+
+    // ─── Live CO2e Preview ───────────────────────────────────────────────────
+    function updatePreview() {
+        const type = document.getElementById('activity-type-select').value;
+        const factorVal = selectedFactor ? selectedFactor.factor : null;
+
+        let qty = 0;
+        let formula = '—';
+
+        if (type === 'transport') {
+            const t = parseFloat(document.getElementById('tonnage-input')?.value) || 0;
+            const d = parseFloat(document.getElementById('distance-input')?.value) || 0;
+            qty = t * d;
+            formula = `${t} t × ${d} km × ${factorVal ?? '?'} kgCO₂e/t·km`;
+            document.getElementById('preview-quantity').textContent = `${qty.toLocaleString()} t·km`;
+        } else {
+            qty = parseFloat(document.getElementById('quantity-input')?.value) || 0;
+            const unit = (selectedFactor?.unit_fr) || 'unit';
+            formula = `${qty} ${unit} × ${factorVal ?? '?'} kgCO₂e/${unit}`;
+            document.getElementById('preview-quantity').textContent = `${qty.toLocaleString()} ${unit}`;
+        }
+
+        const resultKg = factorVal ? qty * factorVal : 0;
+        const resultT = resultKg / 1000;
+
+        document.getElementById('preview-factor').textContent = factorVal ? `${factorVal}` : '—';
+        document.getElementById('preview-result-kg').textContent = resultKg.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        document.getElementById('preview-result-t').textContent = resultT.toLocaleString(undefined, { maximumFractionDigits: 4 });
+        document.getElementById('preview-formula').textContent = formula;
+    }
+
+    // Attach live preview listeners
+    ['quantity-input', 'tonnage-input', 'distance-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updatePreview);
+    });
+
+    // ─── Activity Summary ─────────────────────────────────────────────────────
+    function updateSummary() {
+        const scope = document.querySelector('input[name="scope"]:checked')?.value || '—';
+        const cat = document.getElementById('category-input').value || '—';
+        const type = document.getElementById('activity-type-select').value || '—';
+        const ps = document.querySelector('input[name="period_start"]').value || '—';
+        const pe = document.querySelector('input[name="period_end"]').value || '—';
+        const factorName = selectedFactor ? (selectedFactor.name_fr || selectedFactor.name_en) : '—';
+
+        document.getElementById('sum-scope').textContent = scope;
+        document.getElementById('sum-category').textContent = cat;
+        document.getElementById('sum-type').textContent = type;
+        document.getElementById('sum-period').textContent = `${ps} → ${pe}`;
+        document.getElementById('sum-factor').textContent = factorName.substring(0, 50) + (factorName.length > 50 ? '…' : '');
+        document.getElementById('sum-co2e').textContent = document.getElementById('preview-result-t').textContent + ' tCO₂e';
+        document.getElementById('activity-summary').classList.remove('hidden');
+    }
+
+    // ─── Utils ───────────────────────────────────────────────────────────────
+    function escHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+    }
+</script>
 {% endblock %}

@@ -1,27 +1,30 @@
 <div class="bg-white dark:bg-white/5 p-8 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
     <form action="{href=#}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- CSRF Token (Required for Flask-WTF) -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
         <!-- Full Name -->
         <div class="flex flex-col gap-2">
             <label class="text-sm font-semibold text-text-main dark:text-gray-200">Full Name</label>
-            <input class="w-full p-3 h-12" name="full_name" placeholder="Alex Carter" required type="text"/>
+            <input class="w-full p-3 h-12" name="full_name" placeholder="Alex Carter" required type="text" />
         </div>
 
         <!-- Business Email -->
         <div class="flex flex-col gap-2">
             <label class="text-sm font-semibold text-text-main dark:text-gray-200">Business Email</label>
-            <input class="w-full p-3 h-12" name="email" placeholder="alex@organization.com" required type="email"/>
+            <input class="w-full p-3 h-12" name="email" placeholder="alex@organization.com" required type="email" />
         </div>
 
         <!-- Organization -->
         <div class="flex flex-col gap-2">
             <label class="text-sm font-semibold text-text-main dark:text-gray-200">Organization</label>
-            <input class="w-full p-3 h-12" name="organization" placeholder="Company Name" required type="text"/>
+            <input class="w-full p-3 h-12" name="organization" placeholder="Company Name" required type="text" />
         </div>
 
         <!-- Job Title -->
         <div class="flex flex-col gap-2">
             <label class="text-sm font-semibold text-text-main dark:text-gray-200">Job Title</label>
-            <input class="w-full p-3 h-12" name="job_title" placeholder="Director of Sustainability" type="text"/>
+            <input class="w-full p-3 h-12" name="job_title" placeholder="Director of Sustainability" type="text" />
         </div>
 
         <!-- Inquiry Type -->
@@ -40,16 +43,20 @@
         <!-- Message -->
         <div class="flex flex-col gap-2 md:col-span-2">
             <label class="text-sm font-semibold text-text-main dark:text-gray-200">Message</label>
-            <textarea class="w-full p-3 resize-none" name="message" placeholder="How can we help you?" rows="5" required></textarea>
+            <textarea class="w-full p-3 resize-none" name="message" placeholder="How can we help you?" rows="5"
+                required></textarea>
         </div>
 
         <!-- Submit -->
         <div class="md:col-span-2 mt-4">
-            <button class="w-full md:w-auto flex min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary hover:bg-primary/90 text-black text-base font-bold leading-normal tracking-[0.015em] transition-all shadow-lg shadow-primary/20" type="submit">
+            <button
+                class="w-full md:w-auto flex min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-primary hover:bg-primary/90 text-black text-base font-bold leading-normal tracking-[0.015em] transition-all shadow-lg shadow-primary/20"
+                type="submit">
                 Send Message
             </button>
             <p class="text-[11px] text-gray-400 mt-4 leading-relaxed">
-                By submitting this form, you agree to our Terms of Service and Privacy Policy. We process your data to provide the requested service and for enterprise engagement.
+                By submitting this form, you agree to our Terms of Service and Privacy Policy. We process your data to
+                provide the requested service and for enterprise engagement.
             </p>
         </div>
     </form>

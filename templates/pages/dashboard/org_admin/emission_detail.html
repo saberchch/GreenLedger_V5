@@ -1,0 +1,187 @@
+{% extends "pages/dashboard/org_admin/index.html" %}
+
+{% block dashboard_content %}
+<div class="max-w-3xl mx-auto space-y-5">
+
+    <!-- Back + Header -->
+    <div class="flex items-center gap-4">
+        <a href="{{ url_for('dashboard_org_admin.emissions') }}"
+            class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors">
+            <span class="material-icons text-xl">arrow_back</span>
+        </a>
+        <div class="flex-1">
+            <h1 class="text-xl font-bold text-neutral-900">Activity #{{ activity.id }}</h1>
+            <p class="text-sm text-neutral-500">{{ activity.category }} · Submitted by {{ activity.created_by.full_name
+                if activity.created_by else '?' }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+            {% if activity.status.value != 'audited' %}
+            <a href="{{ url_for('dashboard_org_admin.edit_emission', id=activity.id) }}"
+                class="px-3 py-1.5 text-sm font-medium border border-emerald-300 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors flex items-center gap-1">
+                <span class="material-icons text-sm">edit</span> Edit
+            </a>
+            {% endif %}
+            <span class="px-3 py-1 rounded-full text-sm font-semibold
+          {% if activity.status.value == 'validated' %}bg-emerald-100 text-emerald-700
+          {% elif activity.status.value == 'submitted' %}bg-blue-100 text-blue-700
+          {% elif activity.status.value == 'rejected' %}bg-red-100 text-red-700
+          {% elif activity.status.value == 'audited' %}bg-purple-100 text-purple-700
+          {% else %}bg-neutral-100 text-neutral-600{% endif %}">
+                {{ activity.status.value | title }}
+            </span>
+        </div>
+    </div>
+
+    <!-- CO2e Hero -->
+    <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl p-6 text-white">
+        <div class="text-sm opacity-80 mb-1">Calculated Emissions</div>
+        <div class="flex items-end gap-3">
+            <div class="text-4xl font-extrabold">{{ "%.4f" | format((activity.co2e_result or 0) / 1000) }}</div>
+            <div class="text-xl opacity-80 mb-1">tCO₂e</div>
+        </div>
+        <div class="text-sm opacity-70 mt-1">{{ (activity.co2e_result or 0) | round(2) }} kgCO₂e</div>
+        <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/20 text-center">
+            <div>
+                <div class="text-lg font-bold">{{ activity.scope.value }}</div>
+                <div class="text-xs opacity-70">Scope</div>
+            </div>
+            <div>
+                <div class="text-lg font-bold">{{ activity.activity_type.value | title }}</div>
+                <div class="text-xs opacity-70">Type</div>
+            </div>
+            <div>
+                <div class="text-lg font-bold">{{ activity.period_start.year }}</div>
+                <div class="text-xs opacity-70">Year</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADEME Factor -->
+    {% if activity.ademe_factor_name %}
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
+        <h2 class="font-semibold text-neutral-800 mb-3 flex items-center gap-2">
+            <span class="material-icons text-emerald-500">verified</span> ADEME Factor (Snapshot)
+        </h2>
+        <dl class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
+            <div>
+                <dt class="text-neutral-500 text-xs">Factor Name</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.ademe_factor_name }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500 text-xs">Value</dt>
+                <dd class="font-bold text-emerald-700">{{ activity.ademe_factor_value }} kgCO₂e / {{
+                    activity.ademe_factor_unit }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500 text-xs">Source</dt>
+                <dd class="text-neutral-700">{{ activity.ademe_factor_source or '—' }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500 text-xs">ADEME ID</dt>
+                <dd class="font-mono text-xs text-neutral-500">{{ activity.ademe_factor_id or '—' }}</dd>
+            </div>
+        </dl>
+        <div
+            class="mt-3 pt-3 border-t border-neutral-100 bg-neutral-50 rounded-lg p-3 font-mono text-sm text-neutral-700">
+            {% if activity.activity_type.value == 'transport' %}
+            {{ activity.tonnage }} t × {{ activity.distance }} km × {{ activity.ademe_factor_value }}
+            = <strong>{{ (activity.co2e_result or 0) | round(2) }} kgCO₂e</strong>
+            {% else %}
+            {{ activity.quantity }} {{ activity.quantity_unit }}
+            × {{ activity.ademe_factor_value }} kgCO₂e/{{ activity.ademe_factor_unit }}
+            = <strong>{{ (activity.co2e_result or 0) | round(2) }} kgCO₂e</strong>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Details -->
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
+        <h2 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+            <span class="material-icons text-neutral-400">info</span> Activity Details
+        </h2>
+        <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">
+            <div>
+                <dt class="text-neutral-500">Worker</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.created_by.full_name if activity.created_by else
+                    '—' }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Submitted</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.created_at.strftime('%d %b %Y') }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Category</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.category }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Period Start</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.period_start }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Period End</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.period_end }}</dd>
+            </div>
+            {% if activity.description %}
+            <div class="col-span-2 sm:col-span-3">
+                <dt class="text-neutral-500">Notes</dt>
+                <dd class="text-neutral-700 mt-0.5">{{ activity.description }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </div>
+
+    <!-- Rejection note (read) -->
+    {% if activity.rejection_reason %}
+    <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+        <span class="material-icons text-red-500 mt-0.5">cancel</span>
+        <div>
+            <div class="font-semibold text-red-700 text-sm">Previous Rejection Reason</div>
+            <div class="text-sm text-red-600 mt-0.5">{{ activity.rejection_reason }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    {% if activity.status.value == 'submitted' %}
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
+        <h2 class="font-semibold text-neutral-800 mb-4">Validation</h2>
+        <div class="flex gap-3 flex-wrap">
+            <form method="POST" action="{{ url_for('dashboard_org_admin.approve_emission', id=activity.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button type="submit"
+                    class="px-6 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                    <span class="material-icons text-sm">check_circle</span> Approve
+                </button>
+            </form>
+            <button type="button" onclick="document.getElementById('reject-section').classList.toggle('hidden')"
+                class="px-6 py-2 border border-red-300 text-red-600 text-sm font-semibold rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2">
+                <span class="material-icons text-sm">cancel</span> Reject
+            </button>
+        </div>
+        <div id="reject-section" class="hidden mt-4 pt-4 border-t border-neutral-100">
+            <form method="POST" action="{{ url_for('dashboard_org_admin.reject_emission', id=activity.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <label class="block text-sm font-medium text-neutral-700 mb-2">Rejection Reason <span
+                        class="text-red-500">*</span></label>
+                <textarea name="rejection_reason" rows="3" required
+                    placeholder="Explain the issue so the worker can fix it..."
+                    class="w-full rounded-lg border-neutral-300 focus:border-red-500 focus:ring-red-500 text-sm resize-none mb-3"></textarea>
+                <button type="submit"
+                    class="px-5 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors">
+                    Confirm Rejection
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if activity.status.value == 'audited' %}
+    <div
+        class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-700 font-medium flex items-center gap-2">
+        <span class="material-icons">lock</span>
+        This activity has been finalised by an auditor and is locked.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

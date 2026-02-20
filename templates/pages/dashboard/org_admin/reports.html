@@ -28,6 +28,9 @@
                         organization's carbon footprint with scope breakdown and trends</p>
                     <div class="flex gap-2">
                         <form method="POST" action="{{ url_for('dashboard_org_admin.generate_report') }}">
+                            <!-- CSRF Token (Required for Flask-WTF) -->
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
                             <button
                                 class="h-9 px-4 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors flex items-center gap-2">
                                 <span class="material-symbols-outlined" style="font-size: 16px;">picture_as_pdf</span>

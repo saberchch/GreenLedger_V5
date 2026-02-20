@@ -1,0 +1,248 @@
+{% extends "pages/dashboard/org_admin/index.html" %}
+
+{% block dashboard_content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-xl font-bold text-neutral-900 flex items-center gap-2">
+                <span class="material-icons text-emerald-600">edit</span>
+                Edit Activity #{{ activity.id }}
+            </h1>
+            <p class="text-sm text-neutral-500 mt-0.5">
+                Editing as org admin — changes stay validated automatically
+            </p>
+        </div>
+        <a href="{{ url_for('dashboard_org_admin.emission_detail', id=activity.id) }}"
+            class="text-sm px-4 py-2 border border-neutral-300 rounded-lg text-neutral-600 hover:bg-neutral-50 transition-colors flex items-center gap-2">
+            <span class="material-icons text-sm">arrow_back</span> Back to detail
+        </a>
+    </div>
+
+    {% if activity.status.value == 'audited' %}
+    <div
+        class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm font-medium flex items-center gap-2">
+        <span class="material-icons">lock</span>
+        This activity has been audited and is locked. No edits allowed.
+    </div>
+    {% else %}
+
+    <form method="POST" class="space-y-6">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <!-- Activity Details -->
+        <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-icons text-emerald-600 text-lg">info</span>
+                    Activity Details
+                </h2>
+            </div>
+            <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Scope -->
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Scope *</label>
+                    <select name="scope" required
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                        {% for s in scopes %}
+                        <option value="{{ s }}" {% if activity.scope.value==s %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Category -->
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Category *</label>
+                    <input type="text" name="category" value="{{ activity.category or '' }}" required
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                </div>
+                <!-- Activity Type -->
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Activity Type</label>
+                    <select name="activity_type"
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                        <option value="simple" {% if activity.activity_type.value=='simple' %}selected{% endif %}>Simple
+                        </option>
+                        <option value="transport" {% if activity.activity_type.value=='transport' %}selected{% endif %}>
+                            Transport</option>
+                        <option value="process" {% if activity.activity_type.value=='process' %}selected{% endif %}>
+                            Process</option>
+                        <option value="fugitive" {% if activity.activity_type.value=='fugitive' %}selected{% endif %}>
+                            Fugitive</option>
+                    </select>
+                </div>
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Description</label>
+                    <textarea name="description" rows="2"
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500 resize-none">{{ activity.description or '' }}</textarea>
+                </div>
+                <!-- Period -->
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Period Start *</label>
+                    <input type="date" name="period_start" value="{{ activity.period_start }}" required
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Period End *</label>
+                    <input type="date" name="period_end" value="{{ activity.period_end }}" required
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                </div>
+            </div>
+        </div>
+
+        <!-- ADEME Factor -->
+        <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-icons text-emerald-600 text-lg">search</span>
+                    ADEME Emission Factor
+                </h2>
+            </div>
+            <div class="p-5 space-y-4">
+                <!-- Current factor display -->
+                {% if activity.ademe_factor_name %}
+                <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm" id="current-factor-card">
+                    <div class="font-semibold text-emerald-800">{{ activity.ademe_factor_name }}</div>
+                    <div class="text-emerald-700 mt-1">
+                        <strong>{{ activity.ademe_factor_value }}</strong> kgCO₂e / {{ activity.ademe_factor_unit }}
+                        {% if activity.ademe_factor_source %} · {{ activity.ademe_factor_source }}{% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Search input -->
+                <div class="relative">
+                    <span
+                        class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl pointer-events-none">search</span>
+                    <input type="text" id="factor-search-input"
+                        placeholder="Search to change factor: électricité, camion, gaz naturel…"
+                        class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                </div>
+                <div id="factor-results" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+
+                <!-- Hidden fields -->
+                <input type="hidden" name="ademe_factor_id" id="ademe_factor_id"
+                    value="{{ activity.ademe_factor_id or '' }}" />
+                <input type="hidden" name="quantity_unit" id="quantity_unit"
+                    value="{{ activity.quantity_unit or '' }}" />
+            </div>
+        </div>
+
+        <!-- Quantity & Transport -->
+        <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-icons text-emerald-600 text-lg">calculate</span>
+                    Quantity & Calculation
+                </h2>
+            </div>
+            <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Quantity</label>
+                    <input type="number" name="quantity" step="any" value="{{ activity.quantity or '' }}"
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                </div>
+                <!-- Transport fields -->
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Tonnage (transport only)</label>
+                    <input type="number" name="tonnage" step="any" value="{{ activity.tonnage or '' }}"
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Distance km (transport only)</label>
+                    <input type="number" name="distance" step="any" value="{{ activity.distance or '' }}"
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-neutral-600 mb-1">Transport mode</label>
+                    <select name="transport_mode"
+                        class="w-full rounded-lg border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                        <option value="">— none —</option>
+                        {% for m in ['truck','rail','ship','air'] %}
+                        <option value="{{ m }}" {% if activity.transport_mode==m %}selected{% endif %}>{{ m | title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Live CO2e preview -->
+                {% if activity.co2e_result %}
+                <div class="md:col-span-2 bg-emerald-50 rounded-lg p-3 flex items-center gap-3">
+                    <span class="material-icons text-emerald-600">eco</span>
+                    <div>
+                        <div class="text-xs text-emerald-700">Current CO₂e</div>
+                        <div class="text-lg font-bold text-emerald-800">
+                            {{ "%.4f" | format(activity.co2e_result / 1000) }} tCO₂e
+                            <span class="text-xs font-normal text-emerald-600">({{ "%.2f" | format(activity.co2e_result)
+                                }} kgCO₂e)</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex justify-end gap-3">
+            <a href="{{ url_for('dashboard_org_admin.emission_detail', id=activity.id) }}"
+                class="px-5 py-2.5 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-600 hover:bg-neutral-50 transition-colors">
+                Cancel
+            </a>
+            <button type="submit"
+                class="px-5 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                <span class="material-icons text-sm">save</span>
+                Save Changes
+            </button>
+        </div>
+    </form>
+    {% endif %}
+</div>
+
+<!-- ADEME Factor Search JS -->
+<script>
+    (function () {
+        const input = document.getElementById('factor-search-input');
+        const results = document.getElementById('factor-results');
+        const hiddenId = document.getElementById('ademe_factor_id');
+        const hiddenUnit = document.getElementById('quantity_unit');
+        let timer;
+
+        input.addEventListener('input', function () {
+            clearTimeout(timer);
+            const q = this.value.trim();
+            if (q.length < 2) { results.innerHTML = ''; return; }
+            timer = setTimeout(() => {
+                fetch(`/api/v1/factors/search?q=${encodeURIComponent(q)}&limit=10`)
+                    .then(r => r.json())
+                    .then(data => {
+                        results.innerHTML = data.map(f => `
+                        <div class="p-3 rounded-lg border border-neutral-200 hover:border-emerald-400 hover:bg-emerald-50 cursor-pointer transition-colors text-sm"
+                             onclick="selectFactor('${f.id}', '${f.name_fr.replace(/'/g, "\\'")}', ${f.factor}, '${f.unit_fr}')">
+                            <div class="font-medium text-neutral-800">${f.name_fr}</div>
+                            <div class="text-xs text-neutral-500 mt-0.5">
+                                <strong>${f.factor}</strong> kgCO₂e / ${f.unit_fr}
+                                ${f.source ? ' · ' + f.source : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                    });
+            }, 300);
+        });
+
+        window.selectFactor = function (id, name, value, unit) {
+            hiddenId.value = id;
+            hiddenUnit.value = unit;
+            const card = document.getElementById('current-factor-card');
+            if (card) {
+                card.innerHTML = `
+                <div class="font-semibold text-emerald-800">${name}</div>
+                <div class="text-emerald-700 mt-1"><strong>${value}</strong> kgCO₂e / ${unit}</div>
+            `;
+            }
+            results.innerHTML = '';
+            input.value = '';
+        };
+    })();
+</script>
+{% endblock %}

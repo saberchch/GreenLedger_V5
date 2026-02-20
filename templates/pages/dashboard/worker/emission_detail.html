@@ -1,0 +1,195 @@
+{% extends "pages/dashboard/worker/index.html" %}
+
+{% block dashboard_content %}
+<div class="max-w-3xl mx-auto space-y-5">
+
+    <!-- Back + Header -->
+    <div class="flex items-center gap-4">
+        <a href="{{ url_for('dashboard_worker.worker_index') }}"
+            class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors">
+            <span class="material-icons text-xl">arrow_back</span>
+        </a>
+        <div class="flex-1">
+            <h1 class="text-xl font-bold text-neutral-900">Emission Activity #{{ activity.id }}</h1>
+            <p class="text-sm text-neutral-500">{{ activity.category }} · {{ activity.period_start }} → {{
+                activity.period_end }}</p>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold
+      {% if activity.status.value == 'validated' %}bg-emerald-100 text-emerald-700
+      {% elif activity.status.value == 'submitted' %}bg-blue-100 text-blue-700
+      {% elif activity.status.value == 'rejected' %}bg-red-100 text-red-700
+      {% else %}bg-neutral-100 text-neutral-600{% endif %}">
+            {{ activity.status.value | title }}
+        </span>
+    </div>
+
+    <!-- Rejection Banner -->
+    {% if activity.status.value == 'rejected' and activity.rejection_reason %}
+    <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+        <span class="material-icons text-red-500 mt-0.5">cancel</span>
+        <div>
+            <div class="font-semibold text-red-700 text-sm">Rejected</div>
+            <div class="text-sm text-red-600 mt-0.5">{{ activity.rejection_reason }}</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- CO2e Result Hero -->
+    <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-xl p-6 text-white">
+        <div class="text-sm opacity-80 mb-1">Total Emissions</div>
+        <div class="flex items-end gap-3">
+            <div class="text-4xl font-extrabold">
+                {{ "%.4f" | format((activity.co2e_result or 0) / 1000) }}
+            </div>
+            <div class="text-xl opacity-80 mb-1">tCO₂e</div>
+        </div>
+        <div class="text-sm opacity-70 mt-1">
+            {{ (activity.co2e_result or 0) | round(2) }} kgCO₂e
+        </div>
+        <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/20 text-center">
+            <div>
+                <div class="text-lg font-bold">{{ activity.scope.value }}</div>
+                <div class="text-xs opacity-70">Scope</div>
+            </div>
+            <div>
+                <div class="text-lg font-bold">{{ activity.activity_type.value | title }}</div>
+                <div class="text-xs opacity-70">Type</div>
+            </div>
+            <div>
+                <div class="text-lg font-bold">{{ activity.quantity or '—' }}</div>
+                <div class="text-xs opacity-70">{{ activity.quantity_unit or 'unit' }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADEME Factor Card -->
+    {% if activity.ademe_factor_name %}
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="material-icons text-emerald-600">verified</span>
+            <h2 class="font-semibold text-neutral-800">ADEME Emission Factor Used</h2>
+            <span class="ml-auto text-xs text-neutral-400">Snapshot at submission</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+            <div><span class="text-neutral-500">Name</span>
+                <div class="font-medium text-neutral-800">{{ activity.ademe_factor_name }}</div>
+            </div>
+            <div><span class="text-neutral-500">Value</span>
+                <div class="font-bold text-emerald-700 text-lg">{{ activity.ademe_factor_value }} kgCO₂e / {{
+                    activity.ademe_factor_unit }}</div>
+            </div>
+            <div><span class="text-neutral-500">Source</span>
+                <div class="font-medium text-neutral-800">{{ activity.ademe_factor_source or '—' }}</div>
+            </div>
+            <div><span class="text-neutral-500">ADEME ID</span>
+                <div class="font-mono text-neutral-600 text-xs">{{ activity.ademe_factor_id or '—' }}</div>
+            </div>
+            {% if activity.ademe_factor_category %}
+            <div class="sm:col-span-2"><span class="text-neutral-500">Category</span>
+                <div class="text-neutral-600 text-xs mt-0.5">{{ activity.ademe_factor_category }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Calculation Breakdown -->
+        <div class="mt-4 pt-4 border-t border-neutral-100 bg-neutral-50 rounded-lg p-3 font-mono text-sm">
+            {% if activity.activity_type.value == 'transport' %}
+            {{ activity.tonnage }} t × {{ activity.distance }} km × {{ activity.ademe_factor_value }} kgCO₂e/t·km
+            = <strong>{{ (activity.co2e_result or 0) | round(2) }} kgCO₂e</strong>
+            {% else %}
+            {{ activity.quantity }} {{ activity.quantity_unit or 'units' }}
+            × {{ activity.ademe_factor_value }} kgCO₂e/{{ activity.ademe_factor_unit }}
+            = <strong>{{ (activity.co2e_result or 0) | round(2) }} kgCO₂e</strong>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Details -->
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
+        <h2 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+            <span class="material-icons text-neutral-400">info</span> Activity Details
+        </h2>
+        <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">
+            <div>
+                <dt class="text-neutral-500">Scope</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.scope.value }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Category</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.category }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Type</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.activity_type.value | title }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Period Start</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.period_start }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Period End</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.period_end }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Created</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.created_at.strftime('%d %b %Y') }}</dd>
+            </div>
+            {% if activity.transport_mode %}
+            <div>
+                <dt class="text-neutral-500">Transport Mode</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.transport_mode | title }}</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Tonnage</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.tonnage }} t</dd>
+            </div>
+            <div>
+                <dt class="text-neutral-500">Distance</dt>
+                <dd class="font-medium text-neutral-800">{{ activity.distance }} km</dd>
+            </div>
+            {% endif %}
+        </dl>
+        {% if activity.description %}
+        <div class="mt-4 pt-4 border-t border-neutral-100">
+            <div class="text-sm text-neutral-500 mb-1">Description</div>
+            <div class="text-sm text-neutral-800">{{ activity.description }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Documents -->
+    {% if documents %}
+    <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
+        <h2 class="font-semibold text-neutral-800 mb-3 flex items-center gap-2">
+            <span class="material-icons text-neutral-400">attach_file</span> Evidence Documents
+        </h2>
+        <div class="space-y-2">
+            {% for doc in documents %}
+            <div class="flex items-center gap-3 p-3 rounded-lg bg-neutral-50 border border-neutral-200">
+                <span class="material-icons text-neutral-500">description</span>
+                <div class="flex-1">
+                    <div class="text-sm font-medium text-neutral-800">{{ doc.filename }}</div>
+                    <div class="text-xs text-neutral-500">{{ (doc.file_size / 1024) | round(1) }} KB · Encrypted</div>
+                </div>
+                <span class="material-icons text-emerald-500 text-sm">lock</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    {% if activity.status.value == 'draft' %}
+    <div class="flex justify-end gap-3">
+        <form method="POST" action="{{ url_for('dashboard_worker.submit_emission', id=activity.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button type="submit"
+                class="px-6 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+                <span class="material-icons text-sm">send</span> Submit for Validation
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

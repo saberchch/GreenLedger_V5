@@ -7,11 +7,16 @@
     </div>
     <div class="flex items-center gap-6">
         {% block header_actions %}
-        <a href="{{ url_for('dashboard_worker.new_emission') if current_user.role.value == 'worker' else '#' }}"
+        {% set _new_url = url_for('dashboard_worker.new_emission') if current_user.role.value == 'worker'
+                          else url_for('dashboard_org_admin.new_emission') if current_user.role.value == 'org_admin'
+                          else none %}
+        {% if _new_url %}
+        <a href="{{ _new_url }}"
             class="hidden md:flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-[#111814] text-sm font-bold rounded-lg transition-colors shadow-sm shadow-primary/20">
             <span class="material-symbols-outlined" style="font-size: 20px;">add</span>
             <span>New Record</span>
         </a>
+        {% endif %}
         {% endblock %}
         <div class="h-8 w-px bg-[#f0f4f2] dark:border-[#2a4035]"></div>
         <button

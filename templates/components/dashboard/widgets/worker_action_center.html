@@ -1,0 +1,23 @@
+{% from "components/dashboard/alert_item.html" import alert_item %}
+
+{% macro worker_action_center(alerts) %}
+<!-- Action Center / Alerts -->
+<div
+    class="bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white">Action Center</h3>
+        <div class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-bold px-2 py-1 rounded-md">
+            {{ alerts|length }} Urgent
+        </div>
+    </div>
+    <div class="flex flex-col gap-4 overflow-y-auto pr-1">
+        {% for alert in alerts %}
+        {{ alert_item(alert.type, alert.color, alert.title, alert.subtitle) }}
+        {% endfor %}
+    </div>
+    <button
+        class="mt-auto pt-4 text-center text-sm font-medium text-primary hover:text-primary/80 transition-colors w-full">
+        View all notifications
+    </button>
+</div>
+{% endmacro %}

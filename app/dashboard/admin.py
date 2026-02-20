@@ -81,3 +81,18 @@ def notarize_report(report_id):
     
     flash(f'Report notarized successfully. TX: {report.blockchain_tx_hash[:10]}...', 'success')
     return redirect(url_for('dashboard_admin.admin_index'))
+
+@bp.route('/logs')
+@login_required
+def system_logs():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)
+
+@bp.route('/settings')
+@login_required
+def global_settings():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)
+
+@bp.route('/contracts')
+@login_required
+def smart_contracts():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)

@@ -1,0 +1,29 @@
+{% macro auditor_stats_grid() %}
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">pending_actions</span>
+            <span class="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-1 rounded-full">+2 this week</span>
+        </div>
+        <p class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Pending Reviews</p>
+        <p class="text-3xl font-bold mt-1 text-[#111814] dark:text-white">12</p>
+    </div>
+    <div class="bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <span class="material-symbols-outlined text-emerald-500 bg-emerald-500/10 p-2 rounded-lg">verified</span>
+            <span class="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-1 rounded-full">+15% monthly</span>
+        </div>
+        <p class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Reports Verified</p>
+        <p class="text-3xl font-bold mt-1 text-[#111814] dark:text-white">148</p>
+    </div>
+    <div class="bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <span class="material-symbols-outlined text-amber-500 bg-amber-500/10 p-2 rounded-lg">warning</span>
+            <span class="text-red-500 text-xs font-bold bg-red-50 px-2 py-1 rounded-full">High Priority</span>
+        </div>
+        <p class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Compliance Alerts</p>
+        <p class="text-3xl font-bold mt-1 text-[#111814] dark:text-white">5</p>
+    </div>
+</div>
+{% endmacro %}

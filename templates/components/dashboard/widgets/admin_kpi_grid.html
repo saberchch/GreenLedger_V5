@@ -1,0 +1,50 @@
+{% macro admin_kpi_grid(kpis, pending_orgs_count, audited_reports_count) %}
+<!-- KPIs -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- KPI 1: Active Orgs -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Active Organizations</span>
+            <span class="p-1.5 rounded-md bg-[#f0f4f2] dark:bg-[#23352c] text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined" style="font-size: 20px;">domain</span>
+            </span>
+        </div>
+        <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ kpis.active_orgs }} <span
+                class="text-sm font-normal text-[#618975]">/ {{ kpis.total_orgs }}</span></span>
+    </div>
+    <!-- KPI 2: Total Reports -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Reports Processed</span>
+            <span class="p-1.5 rounded-md bg-[#f0f4f2] dark:bg-[#23352c] text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined" style="font-size: 20px;">description</span>
+            </span>
+        </div>
+        <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ kpis.total_reports }}</span>
+    </div>
+    <!-- KPI 3: Pending Approvals -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">Pending Approvals</span>
+            <span class="p-1.5 rounded-md bg-amber-50 dark:bg-amber-900/20 text-amber-600">
+                <span class="material-symbols-outlined" style="font-size: 20px;">pending_actions</span>
+            </span>
+        </div>
+        <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ pending_orgs_count }}</span>
+    </div>
+    <!-- KPI 4: Pending Notarization -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] p-5 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-[#618975] dark:text-[#8baaa0] text-sm font-medium">To Notarize</span>
+            <span class="p-1.5 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-600">
+                <span class="material-symbols-outlined" style="font-size: 20px;">gavel</span>
+            </span>
+        </div>
+        <span class="text-2xl font-bold text-[#111814] dark:text-white mt-auto">{{ audited_reports_count }}</span>
+    </div>
+</div>
+{% endmacro %}

@@ -16,8 +16,8 @@
         {# Dashboard Link - All Roles #}
         {% if current_user.has_role('admin') %}
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
-                  {% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
-                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            {% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
             href="{{ url_for('dashboard_admin.admin_index') }}">
             <span
                 class="material-symbols-outlined {% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
@@ -25,6 +25,89 @@
             <p
                 class="{% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
                 Dashboard</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/logs' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.system_logs') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/logs' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">terminal</span>
+            <p
+                class="{% if 'dashboard/admin/logs' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                System Logs</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/settings' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.global_settings') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/settings' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">settings_applications</span>
+            <p
+                class="{% if 'dashboard/admin/settings' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Global Settings</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/contracts' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.smart_contracts') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/contracts' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">smart_toy</span>
+            <p
+                class="{% if 'dashboard/admin/contracts' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Smart Contracts</p>
+        </a>
+        {% elif current_user.has_role('org_admin') %}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                {% if 'dashboard/org_admin' in current_page and current_page == url_for('dashboard_org_admin.org_admin_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_org_admin.org_admin_index') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/org_admin' in current_page and current_page == url_for('dashboard_org_admin.org_admin_index') %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">dashboard</span>
+            <p
+                class="{% if 'dashboard/org_admin' in current_page and current_page == url_for('dashboard_org_admin.org_admin_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Dashboard</p>
+        </a>
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Management
+        </p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_org_admin.users') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">group</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Users & Roles</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_org_admin.documents') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">folder_managed</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Documents</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
+            href="{{ url_for('dashboard_org_admin.reports') }}">
+            <span
+                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
+                style="font-size: 24px;">assessment</span>
+            <p
+                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
+                Reports</p>
         </a>
         {% elif current_user.has_role('auditor') %}
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
@@ -38,6 +121,44 @@
                 class="{% if 'dashboard/auditor' in current_page and current_page == url_for('dashboard_auditor.auditor_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
                 Dashboard</p>
         </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/auditor/history' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_auditor.audit_history') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/auditor/history' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">history</span>
+            <p
+                class="{% if 'dashboard/auditor/history' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Audit History</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/auditor/standards' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_auditor.compliance_standards') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/auditor/standards' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">fact_check</span>
+            <p
+                class="{% if 'dashboard/auditor/standards' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Compliance Standards</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/auditor/reports' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_auditor.reporting_tools') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/auditor/reports' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">analytics</span>
+            <p
+                class="{% if 'dashboard/auditor/reports' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Reporting Tools</p>
+        </a>
+
+
         {% elif current_user.has_role('worker') %}
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
                   {% if current_page == url_for('dashboard_worker.worker_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5

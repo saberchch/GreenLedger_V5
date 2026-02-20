@@ -63,114 +63,121 @@ def new_emission():
         return redirect(url_for('dashboard_worker.worker_index'))
 
     if request.method == 'POST':
-        scope = request.form.get('scope')
-        category = request.form.get('category')
-        emission_factor_id = request.form.get('emission_factor_id')
-        activity_data_raw = request.form.get('activity_data', '{}')
-        period_start = request.form.get('period_start')
-        period_end = request.form.get('period_end')
-        
         try:
-            activity_data = json.loads(activity_data_raw)
-        except json.JSONDecodeError:
-            flash('Invalid JSON data.', 'error')
-            return redirect(url_for('dashboard_worker.new_emission'))
+            form = request.form.to_dict()
+            action = form.pop('action', 'draft')
 
-        # Calculate CO2e if factor is present (MVP simplified logic)
-        co2e_result = 0.0
-        factor = None
-        if emission_factor_id:
-            factor = EmissionFactor.query.get(emission_factor_id)
-            if factor and 'amount' in activity_data:
-                co2e_result = float(activity_data['amount']) * factor.factor
+            from app.emissions.services import create_activity, submit_activity
+            activity = create_activity(current_user, form)
 
-        activity = EmissionActivity(
-            organization_id=current_user.organization_id,
-            created_by_id=current_user.id,
-            scope=EmissionScope(scope),
-            category=category,
-            activity_data=activity_data,
-            emission_factor_id=emission_factor_id,
-            co2e_result=co2e_result,
-            status=ActivityStatus.DRAFT,
-            period_start=datetime.strptime(period_start, '%Y-%m-%d').date(),
-            period_end=datetime.strptime(period_end, '%Y-%m-%d').date()
-        )
-        
-        db.session.add(activity)
-        db.session.flush() # Get ID
+            # Handle evidence file upload
+            if 'evidence_file' in request.files:
+                file = request.files['evidence_file']
+                if file and file.filename:
+                    filename = secure_filename(file.filename)
+                    file_data = file.read()
+                    encrypted_data = EncryptionManager.encrypt_file(file_data, current_user.organization_id)
+                    upload_dir = os.path.join(current_app.root_path, 'uploads', str(current_user.organization_id))
+                    os.makedirs(upload_dir, exist_ok=True)
+                    file_path = os.path.join(upload_dir, f"{activity.id}_{filename}.enc")
+                    with open(file_path, "wb") as f:
+                        f.write(encrypted_data)
+                    doc = Document(
+                        filename=filename,
+                        file_path=file_path,
+                        encrypted=True,
+                        hash_checksum=EncryptionManager.get_file_hash(file_data),
+                        content_type=file.content_type,
+                        file_size=len(file_data),
+                        uploaded_by_id=current_user.id,
+                        organization_id=current_user.organization_id,
+                        activity_id=activity.id
+                    )
+                    from app.extensions import db as _db
+                    _db.session.add(doc)
+                    _db.session.commit()
 
-        # Handle File Upload
-        if 'evidence_file' in request.files:
-            file = request.files['evidence_file']
-            if file and file.filename:
-                filename = secure_filename(file.filename)
-                file_data = file.read()
-                
-                # Encrypt
-                encrypted_data = EncryptionManager.encrypt_file(file_data, current_user.organization_id)
-                
-                # Save to disk
-                upload_dir = os.path.join(current_app.root_path, 'uploads', str(current_user.organization_id))
-                os.makedirs(upload_dir, exist_ok=True)
-                file_path = os.path.join(upload_dir, f"{activity.id}_{filename}.enc")
-                
-                with open(file_path, "wb") as f:
-                    f.write(encrypted_data)
-                
-                # Create Document
-                doc = Document(
-                    filename=filename,
-                    file_path=file_path,
-                    encrypted=True,
-                    hash_checksum=EncryptionManager.get_file_hash(file_data),
-                    content_type=file.content_type,
-                    file_size=len(file_data),
-                    uploaded_by_id=current_user.id,
-                    organization_id=current_user.organization_id,
-                    activity_id=activity.id
-                )
-                db.session.add(doc)
+            # Auto-submit if user clicked "Submit for Validation"
+            if action == 'submit':
+                submit_activity(current_user, activity.id)
+                flash('Activity submitted for validation.', 'success')
+            else:
+                flash('Draft saved. You can submit it from the Drafts page.', 'success')
 
-        # Audit Log for creation
-        log = AuditLog(
-            actor_id=current_user.id,
-            organization_id=current_user.organization_id,
-            action="CREATE_EMISSION_DRAFT",
-            entity_type="EmissionActivity",
-            entity_id=activity.id,
-            details="Worker created emission draft."
-        )
-        db.session.add(log)
-        
-        db.session.commit()
+        except Exception as e:
+            current_app.logger.error(f"Error creating emission: {e}")
+            flash(f'Error saving activity: {str(e)}', 'error')
 
-        
-        flash('Emission activity draft created.', 'success')
         return redirect(url_for('dashboard_worker.worker_index'))
 
-    factors = EmissionFactor.query.all()
+    # GET — render wizard (no DB factor dropdown needed anymore)
     scopes = [s.value for s in EmissionScope]
-    return render_template('pages/dashboard/worker/new_emission.html', factors=factors, scopes=scopes)
+    return render_template('pages/dashboard/worker/new_emission.html', scopes=scopes)
 
 @bp.route('/emissions/<int:id>/submit', methods=['POST'])
 @login_required
 def submit_emission(id):
+    from app.emissions.services import submit_activity
+    try:
+        submit_activity(current_user, id)
+        flash('Emission activity submitted for validation.', 'success')
+    except (PermissionError, ValueError) as e:
+        flash(str(e), 'error')
+    return redirect(url_for('dashboard_worker.worker_index'))
+
+
+@bp.route('/emissions/<int:id>')
+@login_required
+def emission_detail(id):
+    """Read-only detail view of a single emission activity."""
     activity = EmissionActivity.query.get_or_404(id)
-    
     if activity.created_by_id != current_user.id:
-        flash('Unauthorized.', 'error')
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard_worker.worker_index'))
-        
-    if activity.status != ActivityStatus.DRAFT:
-        flash('Only drafts can be submitted.', 'error')
+    from app.models.document import Document
+    documents = Document.query.filter_by(activity_id=id).all()
+    return render_template('pages/dashboard/worker/emission_detail.html',
+                           activity=activity, documents=documents)
+
+
+@bp.route('/emissions/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_emission(id):
+    """Worker edits a DRAFT or REJECTED activity. Resets status to DRAFT."""
+    activity = EmissionActivity.query.get_or_404(id)
+    if activity.created_by_id != current_user.id:
+        flash('Access denied.', 'error')
         return redirect(url_for('dashboard_worker.worker_index'))
 
-    activity.status = ActivityStatus.SUBMITTED
-    db.session.commit()
-    
-    flash('Emission activity submitted for validation.', 'success')
-    return redirect(url_for('dashboard_worker.worker_index'))
+    if activity.status == ActivityStatus.AUDITED:
+        flash('This activity has been audited and is locked.', 'error')
+        return redirect(url_for('dashboard_worker.emission_detail', id=id))
+    if activity.status not in (ActivityStatus.DRAFT, ActivityStatus.REJECTED):
+        flash('Only draft or rejected activities can be edited.', 'error')
+        return redirect(url_for('dashboard_worker.emission_detail', id=id))
+
+    if request.method == 'POST':
+        try:
+            form = request.form.to_dict()
+            form.pop('action', None)
+
+            from app.emissions.services import update_activity
+            update_activity(current_user, id, form, is_admin=False)
+            flash(f'Activity #{id} updated. You can now resubmit it.', 'success')
+        except Exception as e:
+            current_app.logger.error(f"Worker edit_emission error: {e}")
+            flash(f'Error: {str(e)}', 'error')
+
+        return redirect(url_for('dashboard_worker.emission_detail', id=id))
+
+    scopes = [s.value for s in EmissionScope]
+    return render_template(
+        'pages/dashboard/worker/edit_emission.html',
+        activity=activity,
+        scopes=scopes,
+    )
+
+
 @bp.route('/submit', methods=['POST'])
 @login_required
 def submit_report():

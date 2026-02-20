@@ -1,0 +1,106 @@
+{% macro audit_assignments_table() %}
+<!-- My Assignments Section -->
+<div
+    class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
+    <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035] flex items-center justify-between">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white">My Assignments</h3>
+        <div class="flex gap-2">
+            <button
+                class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium bg-[#f0f4f2] dark:bg-[#23352c] rounded-lg hover:bg-[#e5e7eb] dark:hover:bg-[#3d5348] text-[#111814] dark:text-white transition-colors">
+                <span class="material-symbols-outlined text-base">filter_list</span>
+                Filter
+            </button>
+            <button
+                class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                <span class="material-symbols-outlined text-base">add</span>
+                New Audit
+            </button>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr
+                    class="bg-[#f9fafb] dark:bg-[#23352c] text-[#618975] dark:text-[#8baaa0] text-xs font-bold uppercase tracking-wider border-b border-[#e5e7eb] dark:border-[#3d5348]">
+                    <th class="px-6 py-4">Organization</th>
+                    <th class="px-6 py-4">Reporting Period</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Deadline</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                <!-- Row 1 -->
+                <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors group">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="size-8 rounded bg-[#f0f4f2] dark:bg-[#3d5348] flex items-center justify-center font-bold text-[#618975] dark:text-[#8baaa0] text-xs">
+                                NL</div>
+                            <div>
+                                <p class="text-sm font-semibold text-[#111814] dark:text-white">Nexus Logistics Ltd</p>
+                                <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Transportation &amp; Supply Chain
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm text-[#618975] dark:text-[#8baaa0]">Q3 2023 (Annual)</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                            Verification in Progress
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm font-medium text-red-500">Oct 24, 2023 (2 days)</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="text-primary text-sm font-bold hover:underline">Resume Audit</button>
+                    </td>
+                </tr>
+                <!-- Row 2 -->
+                <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors group">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="size-8 rounded bg-[#f0f4f2] dark:bg-[#3d5348] flex items-center justify-center font-bold text-[#618975] dark:text-[#8baaa0] text-xs">
+                                GC</div>
+                            <div>
+                                <p class="text-sm font-semibold text-[#111814] dark:text-white">Global Chemicals Co.</p>
+                                <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Manufacturing</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm text-[#618975] dark:text-[#8baaa0]">FY 2023</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                            Data Finalized
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm text-[#618975] dark:text-[#8baaa0]">Nov 12, 2023</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="text-primary text-sm font-bold hover:underline">Start Review</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="p-6 border-t border-[#f0f4f2] dark:border-[#2a4035] flex items-center justify-between">
+        <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Showing 4 of 12 assignments</p>
+        <div class="flex gap-2">
+            <button
+                class="px-3 py-1 text-sm border border-[#e5e7eb] dark:border-[#3d5348] rounded-md disabled:opacity-50 text-[#111814] dark:text-white"
+                disabled="">Previous</button>
+            <button
+                class="px-3 py-1 text-sm border border-[#e5e7eb] dark:border-[#3d5348] rounded-md hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors text-[#111814] dark:text-white">Next</button>
+        </div>
+    </div>
+</div>
+{% endmacro %}

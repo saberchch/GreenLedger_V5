@@ -32,6 +32,9 @@
         </div>
 
         <form method="POST" class="p-6">
+            <!-- CSRF Token (Required for Flask-WTF) -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
             <!-- Theme -->
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-[#111814] dark:text-white mb-3">Theme</label>

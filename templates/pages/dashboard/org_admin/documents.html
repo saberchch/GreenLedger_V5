@@ -4,24 +4,96 @@
 
 {% block dashboard_content %}
 
+<!-- Upload Modal -->
+<div id="upload-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="bg-white dark:bg-[#1a2c24] rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+        <div class="flex justify-between items-center mb-5">
+            <h3 class="text-lg font-bold text-[#111814] dark:text-white">Upload Document</h3>
+            <button onclick="document.getElementById('upload-modal').classList.add('hidden')"
+                class="text-neutral-400 hover:text-neutral-700 transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form method="POST" action="{{ url_for('dashboard_org_admin.upload_document') }}" enctype="multipart/form-data"
+            class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div>
+                <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                    Select file <span class="text-red-500">*</span>
+                </label>
+                <input type="file" name="document_file" required id="doc-file-input" class="block w-full text-sm text-neutral-600 dark:text-neutral-300
+                           file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                           file:text-sm file:font-semibold file:bg-primary/10 file:text-primary
+                           hover:file:bg-primary/20 transition-colors cursor-pointer" />
+                <p class="mt-1.5 text-xs text-neutral-500">PDF, XLSX, CSV, DOCX, PNG — max 50 MB</p>
+            </div>
+            <div id="file-preview"
+                class="hidden bg-neutral-50 dark:bg-[#23352c] rounded-lg p-3 flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary">description</span>
+                <div>
+                    <p class="text-sm font-medium text-neutral-800 dark:text-white" id="file-name"></p>
+                    <p class="text-xs text-neutral-500" id="file-size"></p>
+                </div>
+                <span class="ml-auto inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                    <span class="material-symbols-outlined" style="font-size:14px">lock</span>AES-256
+                </span>
+            </div>
+            <div class="flex justify-end gap-3 pt-2">
+                <button type="button" onclick="document.getElementById('upload-modal').classList.add('hidden')"
+                    class="px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-5 py-2 bg-primary hover:bg-primary/90 text-white font-semibold text-sm rounded-lg transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined" style="font-size:18px">upload_file</span>
+                    Upload & Encrypt
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('doc-file-input').addEventListener('change', function () {
+        const file = this.files[0];
+        const preview = document.getElementById('file-preview');
+        if (file) {
+            document.getElementById('file-name').textContent = file.name;
+            document.getElementById('file-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
+            preview.classList.remove('hidden');
+        } else {
+            preview.classList.add('hidden');
+        }
+    });
+</script>
+
 <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="space-y-2">
+        {% for category, message in messages %}
+        <div
+            class="p-4 text-sm rounded-lg {% if category == 'error' %}bg-red-50 text-red-800{% else %}bg-green-50 text-green-800{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <!-- Header -->
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between items-center flex-wrap gap-4">
         <div>
             <h1 class="text-2xl font-bold text-[#111814] dark:text-white">Documents</h1>
-            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">View encrypted evidence and official documents
-            </p>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Evidence files and official documents — AES-256
+                encrypted</p>
         </div>
         <div class="flex gap-3">
-            <button onclick="alert('Document upload feature coming soon!')"
+            <button onclick="document.getElementById('upload-modal').classList.remove('hidden')"
                 class="h-10 px-4 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors flex items-center gap-2">
                 <span class="material-symbols-outlined" style="font-size: 18px;">upload_file</span>
                 <span>Upload Document</span>
-            </button>
-            <button
-                class="h-10 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
-                <span class="material-symbols-outlined" style="font-size: 18px;">filter_list</span>
-                <span>Filter</span>
             </button>
         </div>
     </div>
@@ -31,30 +103,21 @@
         class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
         <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035]">
             <h3 class="text-lg font-bold text-[#111814] dark:text-white">Evidence Files</h3>
-            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">{{ documents|length }} encrypted documents</p>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">{{ documents|length }} document{{ 's' if
+                documents|length != 1 else '' }}</p>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#e5e7eb] dark:border-[#3d5348]">
                     <tr>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Document</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Uploaded By</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Date</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Size</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">
-                            Encryption</th>
-                        <th
-                            class="px-6 py-4 text-xs font-semibold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider text-right">
-                            Actions</th>
+                        <th class="px-6 py-4 text-xs font-semibold text-[#618975] uppercase tracking-wider">Document
+                        </th>
+                        <th class="px-6 py-4 text-xs font-semibold text-[#618975] uppercase tracking-wider">Uploaded By
+                        </th>
+                        <th class="px-6 py-4 text-xs font-semibold text-[#618975] uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-4 text-xs font-semibold text-[#618975] uppercase tracking-wider">Size</th>
+                        <th class="px-6 py-4 text-xs font-semibold text-[#618975] uppercase tracking-wider">Encryption
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
@@ -63,58 +126,45 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="size-10 rounded bg-[#f0f4f2] dark:bg-[#3d5348] flex items-center justify-center text-[#618975] dark:text-[#8baaa0]">
+                                    class="size-10 rounded bg-[#f0f4f2] dark:bg-[#3d5348] flex items-center justify-center text-[#618975]">
                                     <span class="material-symbols-outlined">description</span>
                                 </div>
                                 <div>
                                     <p class="text-sm font-medium text-[#111814] dark:text-white">{{ doc.filename }}</p>
-                                    <p class="text-xs text-[#618975] dark:text-[#8baaa0]">{{ doc.content_type }}</p>
+                                    <p class="text-xs text-[#618975]">{{ doc.content_type }}</p>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-sm text-[#618975] dark:text-[#8baaa0]">{{ doc.uploaded_by.email }}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-[#618975] dark:text-[#8baaa0]">{{ doc.created_at.strftime('%b
-                            %d, %Y') }}</td>
+                        <td class="px-6 py-4 text-sm text-[#618975]">{{ doc.uploaded_by.email }}</td>
+                        <td class="px-6 py-4 text-sm text-[#618975]">{{ doc.created_at.strftime('%b %d, %Y') }}</td>
                         <td class="px-6 py-4 text-sm text-[#111814] dark:text-white">{{ (doc.file_size / 1024)|round(1)
                             }} KB</td>
                         <td class="px-6 py-4">
                             {% if doc.encrypted %}
                             <span
-                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                                <span class="material-symbols-outlined" style="font-size: 14px;">lock</span>
-                                Encrypted
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">lock</span>Encrypted
                             </span>
                             {% else %}
                             <span
-                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                                <span class="material-symbols-outlined" style="font-size: 14px;">lock_open</span>
-                                Plain
+                                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">lock_open</span>Plain
                             </span>
                             {% endif %}
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex justify-end gap-2">
-                                <button
-                                    class="h-9 px-3 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined" style="font-size: 16px;">visibility</span>
-                                    <span>View</span>
-                                </button>
-                                <button
-                                    class="h-9 px-3 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
-                                    <span>Download</span>
-                                </button>
-                            </div>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-[#618975] dark:text-[#8baaa0]">
+                        <td colspan="5" class="px-6 py-16 text-center text-[#618975]">
                             <div class="flex flex-col items-center gap-3">
-                                <span class="material-symbols-outlined text-4xl">folder_open</span>
+                                <span class="material-symbols-outlined text-5xl">folder_open</span>
                                 <p class="font-medium">No documents uploaded yet</p>
                                 <p class="text-sm">Upload evidence files to support your emissions data</p>
+                                <button onclick="document.getElementById('upload-modal').classList.remove('hidden')"
+                                    class="mt-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-2">
+                                    <span class="material-symbols-outlined" style="font-size:16px">upload_file</span>
+                                    Upload your first document
+                                </button>
                             </div>
                         </td>
                     </tr>

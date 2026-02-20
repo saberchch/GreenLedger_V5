@@ -1,0 +1,37 @@
+{% from "components/dashboard/alert_item.html" import alert_item %}
+
+{% macro action_center(alerts) %}
+<!-- Action Center -->
+<div
+    class="bg-white dark:bg-[#1a2c24] p-6 rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm flex flex-col">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-lg font-bold text-[#111814] dark:text-white">Quick Actions</h3>
+        <div
+            class="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs font-bold px-2 py-1 rounded-md">
+            {{ alerts|length }} Items
+        </div>
+    </div>
+    <div class="flex flex-col gap-3 overflow-y-auto pr-1 flex-1">
+        {% for alert in alerts %}
+        {{ alert_item(alert.type, alert.color, alert.title, alert.subtitle, alert.url | default('#')) }}
+        {% endfor %}
+    </div>
+    <div class="mt-4 pt-4 border-t border-[#f0f4f2] dark:border-[#2a4035] flex flex-col gap-2">
+        <a href="{{ url_for('dashboard_org_admin.new_emission') }}"
+            class="w-full h-10 px-4 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+            <span>New Emission</span>
+        </a>
+        <a href="{{ url_for('dashboard_org_admin.users') }}"
+            class="w-full h-10 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined" style="font-size: 18px;">group</span>
+            <span>Manage Users</span>
+        </a>
+        <a href="{{ url_for('dashboard_org_admin.documents') }}"
+            class="w-full h-10 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined" style="font-size: 18px;">folder</span>
+            <span>View Documents</span>
+        </a>
+    </div>
+</div>
+{% endmacro %}

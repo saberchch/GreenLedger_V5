@@ -1,0 +1,218 @@
+{% extends "pages/dashboard/org_admin/index.html" %}
+
+{% block dashboard_content %}
+<div class="space-y-5">
+
+    <!-- Header + Stats -->
+    <div class="flex items-start justify-between flex-wrap gap-4">
+        <div>
+            <h1 class="text-xl font-bold text-neutral-900">Emission Activities</h1>
+            <p class="text-sm text-neutral-500 mt-0.5">All emission activities for {{ organization.name }}</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="{{ url_for('dashboard_org_admin.new_emission') }}"
+               class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 whitespace-nowrap">
+                <span class="material-icons text-sm">add</span> Add Activity
+            </a>
+        </div>
+        <div class="flex items-center gap-4 text-center">
+            {% for label, count, color in [
+            ("Total", stats.total, "neutral"),
+            ("Submitted", stats.submitted, "blue"),
+            ("Validated", stats.validated, "emerald"),
+            ("Rejected", stats.rejected, "red"),
+            ] %}
+            <div class="bg-white rounded-xl border border-neutral-200 px-4 py-2 min-w-[72px]">
+                <div class="text-xl font-bold text-{{ color }}-600">{{ count }}</div>
+                <div class="text-xs text-neutral-500">{{ label }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" class="bg-white rounded-xl border border-neutral-200/60 p-4 flex flex-wrap gap-3 items-end">
+        <div class="flex-1 min-w-[140px]">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Status</label>
+            <select name="status"
+                class="w-full text-sm rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500">
+                <option value="">All statuses</option>
+                <option value="draft" {% if filters.status=='draft' %}selected{% endif %}>Draft</option>
+                <option value="submitted" {% if filters.status=='submitted' %}selected{% endif %}>Submitted</option>
+                <option value="validated" {% if filters.status=='validated' %}selected{% endif %}>Validated</option>
+                <option value="rejected" {% if filters.status=='rejected' %}selected{% endif %}>Rejected</option>
+            </select>
+        </div>
+        <div class="flex-1 min-w-[120px]">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Scope</label>
+            <select name="scope"
+                class="w-full text-sm rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500">
+                <option value="">All scopes</option>
+                <option value="Scope 1" {% if filters.scope=='Scope 1' %}selected{% endif %}>Scope 1</option>
+                <option value="Scope 2" {% if filters.scope=='Scope 2' %}selected{% endif %}>Scope 2</option>
+                <option value="Scope 3" {% if filters.scope=='Scope 3' %}selected{% endif %}>Scope 3</option>
+            </select>
+        </div>
+        <div class="flex-1 min-w-[120px]">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">From</label>
+            <input type="date" name="date_from" value="{{ filters.date_from or '' }}"
+                class="w-full text-sm rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500" />
+        </div>
+        <div class="flex-1 min-w-[120px]">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">To</label>
+            <input type="date" name="date_to" value="{{ filters.date_to or '' }}"
+                class="w-full text-sm rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500" />
+        </div>
+        <button type="submit"
+            class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
+            <span class="material-icons text-sm">filter_list</span> Filter
+        </button>
+        {% if filters.status or filters.scope or filters.date_from or filters.date_to %}
+        <a href="{{ url_for('dashboard_org_admin.emissions') }}"
+            class="px-4 py-2 border border-neutral-300 text-sm font-medium rounded-lg text-neutral-600 hover:bg-neutral-50 transition-colors flex items-center gap-2">
+            <span class="material-icons text-sm">close</span> Clear
+        </a>
+        {% endif %}
+    </form>
+
+    <!-- Table -->
+    <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+        {% if activities %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-neutral-50 border-b border-neutral-200">
+                    <tr>
+                        <th class="text-left px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            Activity</th>
+                        <th class="text-left px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            Scope</th>
+                        <th class="text-left px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            CO₂e (t)</th>
+                        <th class="text-left px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            Worker</th>
+                        <th class="text-left px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            Period</th>
+                        <th class="text-left px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            Status</th>
+                        <th class="text-right px-4 py-3 font-semibold text-neutral-600 text-xs uppercase tracking-wide">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100">
+                    {% for activity in activities %}
+                    <tr class="hover:bg-neutral-50/50 transition-colors">
+                        <td class="px-4 py-3">
+                            <div class="font-medium text-neutral-800">{{ activity.category }}</div>
+                            {% if activity.ademe_factor_name %}
+                            <div class="text-xs text-neutral-400 truncate max-w-[200px]"
+                                title="{{ activity.ademe_factor_name }}">
+                                {{ activity.ademe_factor_name[:50] }}{% if activity.ademe_factor_name|length > 50 %}…{%
+                                endif %}
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                {% if activity.scope.value == 'Scope 1' %}bg-orange-100 text-orange-700
+                {% elif activity.scope.value == 'Scope 2' %}bg-blue-100 text-blue-700
+                {% else %}bg-violet-100 text-violet-700{% endif %}">
+                                {{ activity.scope.value }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 font-bold text-emerald-700">
+                            {% if activity.co2e_result %}
+                            {{ "%.4f" | format(activity.co2e_result / 1000) }}
+                            {% else %}—{% endif %}
+                        </td>
+                        <td class="px-4 py-3 text-neutral-600">
+                            {{ activity.created_by.full_name if activity.created_by else '—' }}
+                        </td>
+                        <td class="px-4 py-3 text-neutral-500 text-xs">
+                            {{ activity.period_start }}<br>→ {{ activity.period_end }}
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-0.5 rounded-full text-xs font-semibold
+                {% if activity.status.value == 'validated' %}bg-emerald-100 text-emerald-700
+                {% elif activity.status.value == 'submitted' %}bg-blue-100 text-blue-700
+                {% elif activity.status.value == 'rejected' %}bg-red-100 text-red-700
+                {% else %}bg-neutral-100 text-neutral-600{% endif %}">
+                                {{ activity.status.value | title }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ url_for('dashboard_org_admin.emission_detail', id=activity.id) }}"
+                                    class="text-xs px-3 py-1 border border-neutral-300 rounded-lg text-neutral-600 hover:bg-neutral-50 transition-colors">
+                                    View
+                                </a>
+                                {% if activity.status.value == 'submitted' %}
+                                <form method="POST"
+                                    action="{{ url_for('dashboard_org_admin.approve_emission', id=activity.id) }}"
+                                    class="inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <button type="submit"
+                                        class="text-xs px-3 py-1 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
+                                        Approve
+                                    </button>
+                                </form>
+                                <button type="button" onclick="openRejectModal({{ activity.id }})"
+                                    class="text-xs px-3 py-1 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors">
+                                    Reject
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-16 text-neutral-400">
+            <span class="material-icons text-5xl mb-2 block">inbox</span>
+            <div class="font-medium">No emission activities found</div>
+            <div class="text-sm mt-1">Adjust your filters or wait for workers to submit activities</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div id="reject-modal" class="fixed inset-0 z-50 hidden bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+        <h3 class="font-bold text-neutral-800 mb-2 flex items-center gap-2">
+            <span class="material-icons text-red-500">cancel</span> Reject Activity
+        </h3>
+        <p class="text-sm text-neutral-600 mb-4">Please provide a reason so the worker can correct and resubmit.</p>
+        <form id="reject-form" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <textarea name="rejection_reason" rows="3" required
+                placeholder="e.g. Missing supporting documentation, incorrect quantity..."
+                class="w-full rounded-lg border-neutral-300 focus:border-red-500 focus:ring-red-500 text-sm resize-none mb-4"></textarea>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeRejectModal()"
+                    class="px-4 py-2 border border-neutral-300 text-sm font-medium rounded-lg text-neutral-600 hover:bg-neutral-50">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700">
+                    Confirm Rejection
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openRejectModal(id) {
+        document.getElementById('reject-form').action = `/dashboard/org-admin/emission/${id}/reject`;
+        document.getElementById('reject-modal').classList.remove('hidden');
+    }
+    function closeRejectModal() {
+        document.getElementById('reject-modal').classList.add('hidden');
+    }
+    document.getElementById('reject-modal').addEventListener('click', function (e) {
+        if (e.target === this) closeRejectModal();
+    });
+</script>
+{% endblock %}

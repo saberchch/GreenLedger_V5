@@ -99,6 +99,8 @@
 
             <!-- Registration Form -->
             <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.register_company') }}">
+                <!-- CSRF Token (Required for Flask-WTF) -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <!-- Organization Fields -->
                 <div>
                     <h3 class="text-sm font-semibold text-[#618975] mb-3 uppercase tracking-wider">Company Details</h3>

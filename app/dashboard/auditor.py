@@ -106,3 +106,23 @@ def sign_report(report_id):
     
     flash(f'Report #{report.id} signed and approved.', 'success')
     return redirect(url_for('dashboard_auditor.auditor_index'))
+
+@bp.route('/history')
+@login_required
+def audit_history():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)
+
+@bp.route('/standards')
+@login_required
+def compliance_standards():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)
+
+@bp.route('/reports')
+@login_required
+def reporting_tools():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)
+
+@bp.route('/settings')
+@login_required
+def settings():
+    return render_template('pages/dashboard/coming_soon.html', user=current_user)
