@@ -11,8 +11,22 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        f'sqlite:///{basedir / "greenledger.db"}'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    if SQLALCHEMY_DATABASE_URI and SQLALCHEMY_DATABASE_URI.startswith('mysql://'):
+        SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace('mysql://', 'mysql+pymysql://', 1)
+    
+    if not SQLALCHEMY_DATABASE_URI:
+        # Construct from individual variables (Render MySQL Private Service)
+        mysql_user = os.environ.get('MYSQL_USER')
+        mysql_pass = os.environ.get('MYSQL_PASSWORD')
+        mysql_host = os.environ.get('MYSQL_HOST', 'mysql')
+        mysql_db = os.environ.get('MYSQL_DATABASE', 'greenledger')
+        
+        if mysql_user and mysql_pass:
+            SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{mysql_user}:{mysql_pass}@{mysql_host}:3306/{mysql_db}'
+    
+    if not SQLALCHEMY_DATABASE_URI:
+        SQLALCHEMY_DATABASE_URI = f'sqlite:///{basedir / "greenledger.db"}'
     
     # Application settings
     DEBUG = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'

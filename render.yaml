@@ -1,0 +1,51 @@
+services:
+  # MySQL Private Service
+  - type: privateService
+    name: mysql
+    env: docker
+    repo: https://github.com/render-examples/mysql # Use the standard MySQL image from render-examples
+    branch: main
+    envVars:
+      - key: MYSQL_DATABASE
+        value: greenledger
+      - key: MYSQL_USER
+        value: user
+      - key: MYSQL_PASSWORD
+        generateValue: true
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+
+  # GreenLedger Web Service
+  - type: web
+    name: greenledger-web
+    env: docker
+    plan: free # Change if needed
+    envVars:
+      - key: MYSQL_USER
+        fromService:
+          name: mysql
+          type: privateService
+          envVar: MYSQL_USER
+      - key: MYSQL_PASSWORD
+        fromService:
+          name: mysql
+          type: privateService
+          envVar: MYSQL_PASSWORD
+      - key: MYSQL_DATABASE
+        fromService:
+          name: mysql
+          type: privateService
+          envVar: MYSQL_DATABASE
+      - key: MYSQL_HOST
+        value: mysql # The internal name of the private service
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_APP
+        value: run.py
+    # Render automatically detects Dockerfile in root
