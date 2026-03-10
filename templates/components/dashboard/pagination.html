@@ -1,0 +1,67 @@
+{# templates/components/dashboard/pagination.html #}
+{% macro render_pagination(pagination, endpoint, current_page=None, page_param='page') %}
+{% if pagination.pages > 1 %}
+<div class="px-6 py-4 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+    <div class="text-sm text-neutral-500 dark:text-neutral-400">
+        Showing <span class="font-medium text-neutral-900 dark:text-white">{{ pagination.first_item }}</span> to <span
+            class="font-medium text-neutral-900 dark:text-white">{{ pagination.last_item }}</span> of <span
+            class="font-medium text-neutral-900 dark:text-white">{{ pagination.total }}</span> entries
+    </div>
+
+    <div class="flex items-center gap-2">
+        {# Previous Button #}
+        {% if pagination.has_prev %}
+        {% set prev_args = kwargs.copy() %}
+        {% set _ = prev_args.update({page_param: pagination.prev_num}) %}
+        <a href="{{ url_for(endpoint, **prev_args) }}"
+            class="px-3 py-1.5 text-sm font-medium rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
+            Previous
+        </a>
+        {% else %}
+        <button disabled
+            class="px-3 py-1.5 text-sm font-medium rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-400 dark:text-neutral-600 cursor-not-allowed">
+            Previous
+        </button>
+        {% endif %}
+
+        {# Page Numbers #}
+        <div class="flex items-center gap-1">
+            {% for page_num in pagination.iter_pages(left_edge=1, left_current=1, right_current=2, right_edge=1) %}
+            {% if page_num %}
+            {% if page_num == pagination.page %}
+            <span
+                class="w-8 h-8 flex items-center justify-center text-sm font-semibold rounded-lg bg-emerald-600 text-white">
+                {{ page_num }}
+            </span>
+            {% else %}
+            {% set page_args = kwargs.copy() %}
+            {% set _ = page_args.update({page_param: page_num}) %}
+            <a href="{{ url_for(endpoint, **page_args) }}"
+                class="w-8 h-8 flex items-center justify-center text-sm font-medium rounded-lg text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                {{ page_num }}
+            </a>
+            {% endif %}
+            {% else %}
+            <span class="text-neutral-400 px-1">...</span>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        {# Next Button #}
+        {% if pagination.has_next %}
+        {% set next_args = kwargs.copy() %}
+        {% set _ = next_args.update({page_param: pagination.next_num}) %}
+        <a href="{{ url_for(endpoint, **next_args) }}"
+            class="px-3 py-1.5 text-sm font-medium rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
+            Next
+        </a>
+        {% else %}
+        <button disabled
+            class="px-3 py-1.5 text-sm font-medium rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-400 dark:text-neutral-600 cursor-not-allowed">
+            Next
+        </button>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endmacro %}

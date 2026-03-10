@@ -1,0 +1,95 @@
+{% extends "layouts/dashboard_base.html" %}
+{% block title %}GreenLedger Platform Support{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-[1000px] mx-auto flex flex-col h-[calc(100vh-140px)]">
+
+    <!-- Header -->
+    <div class="mb-6 flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-500">
+                    {{ 'person' if current_user.is_platform_admin else 'support_agent' }}
+                </span>
+                {{ 'Support: ' ~ (other.first_name ~ ' ' ~ other.last_name if other.first_name else other.email) if
+                current_user.is_platform_admin else 'GreenLedger Platform Support' }}
+            </h1>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                {{ 'Direct encrypted conversation with the user regarding their request.' if
+                current_user.is_platform_admin else 'Direct channel for credentials, verification, and platform
+                assistance.' }}
+            </p>
+        </div>
+        <a href="{{ url_for('dashboard_messages.inbox') }}"
+            class="flex items-center gap-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+            <span class="material-symbols-outlined text-[18px]">forum</span>
+            Back to Inbox
+        </a>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="flex-1 min-h-0 flex flex-col gap-4">
+
+        <!-- Messages Area -->
+        <div class="flex-1 overflow-y-auto rounded-2xl border border-white/20 bg-white/40 dark:bg-[#111814]/40 backdrop-blur-xl shadow-lg p-6 space-y-6"
+            id="message-container">
+            {% if messages %}
+            {% for msg in messages %}
+            {% set is_me = msg.sender_id == current_user.id %}
+            <div class="flex {{ 'justify-end' if is_me else 'justify-start' }}">
+                <div class="max-w-[80%] flex flex-col {{ 'items-end' if is_me else 'items-start' }}">
+                    <div
+                        class="px-4 py-3 rounded-2xl shadow-sm text-sm 
+                                {{ 'bg-emerald-600 text-white rounded-tr-none' if is_me else 'bg-white dark:bg-black/40 text-neutral-800 dark:text-neutral-200 rounded-tl-none border border-neutral-100 dark:border-white/5' }}">
+                        {{ msg.encrypted_content }}
+                    </div>
+                    <span class="mt-1.5 text-[10px] uppercase font-bold tracking-wider text-neutral-400">
+                        {{ 'You' if is_me else (other.first_name if other.first_name else 'Platform Support') }} &bull;
+                        {{
+                        msg.created_at.strftime('%H:%M') }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="h-full flex flex-col items-center justify-center text-neutral-400 py-12">
+                <div class="size-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-3xl text-emerald-500">lock</span>
+                </div>
+                <p class="font-bold text-neutral-900 dark:text-white">Secure Support Channel</p>
+                <p class="text-sm">Start a conversation with the Platform Admin.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Reply Area -->
+        <form
+            action="{{ url_for('dashboard_messages.platform_support_reply', other_id=other.id if current_user.is_platform_admin else None) }}"
+            method="POST"
+            class="relative rounded-2xl border border-white/20 bg-white dark:bg-[#111814] shadow-lg p-2 focus-within:ring-2 focus-within:ring-emerald-500/30 transition-all">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <textarea name="message" rows="1" placeholder="Type your reply here..."
+                class="w-full resize-none bg-transparent border-none focus:ring-0 text-sm py-3 px-4 dark:text-white"
+                oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+            <div class="flex items-center justify-between px-2 pb-1">
+                <div class="flex items-center gap-1 text-xs text-neutral-400">
+                    <span class="material-symbols-outlined text-[16px]">encrypted</span>
+                    End-to-end encrypted
+                </div>
+                <button type="submit"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-xl transition-colors shadow-lg shadow-emerald-600/20">
+                    <span class="material-symbols-outlined text-[20px] block">send</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Auto-scroll to bottom of messages
+    const container = document.getElementById('message-container');
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
+</script>
+{% endblock %}

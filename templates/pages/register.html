@@ -2,94 +2,210 @@
 {% from 'components/forms/input_field.html' import input_field %}
 {% from 'components/macros.html' import auth_button %}
 
+{% block title %}GreenLedger - Create Account{% endblock %}
+
+{% block extra_head %}
+<style>
+    .role-card {
+        cursor: pointer;
+        transition: all 0.25s ease;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .role-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(29, 201, 115, 0.15);
+        border-color: rgba(29, 201, 115, 0.4);
+    }
+
+    .role-card.selected {
+        border-color: #1dc973;
+        box-shadow: 0 8px 24px rgba(29, 201, 115, 0.25);
+    }
+
+    .role-card.selected .role-check {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .role-card.selected .role-icon-bg {
+        background-color: #1dc973;
+    }
+
+    .role-card.selected .role-icon-bg span {
+        color: white;
+    }
+
+    .role-check {
+        opacity: 0;
+        transform: scale(0.6);
+        transition: all 0.2s ease;
+    }
+
+    .step {
+        display: none;
+    }
+
+    .step.active {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: 1.5px solid;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: transparent;
+        text-decoration: none;
+    }
+
+    .social-btn:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+        transform: translateY(-1px);
+    }
+
+    .dark .social-btn:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .step-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .step-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #dce5e0;
+        transition: all 0.3s ease;
+    }
+
+    .step-dot.active {
+        width: 24px;
+        border-radius: 4px;
+        background-color: #1dc973;
+    }
+
+    .progress-bar {
+        height: 3px;
+        background: linear-gradient(to right, #1dc973, #12a056);
+        border-radius: 2px;
+        transition: width 0.4s ease;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Main Container -->
-<div class="relative min-h-screen flex flex-col md:flex-row w-full">
-    <!-- Left Column: Visual & Brand (Desktop Only) -->
-    <div class="hidden md:flex md:w-1/2 lg:w-5/12 relative bg-background-dark flex-col justify-between overflow-hidden">
-        <!-- Background Image -->
-        <div class="absolute inset-0 z-0">
-            <div class="w-full h-full bg-cover bg-center opacity-60 mix-blend-overlay"
-                data-alt="Abstract green data visualization resembling a forest canopy from above"
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAY8q01vxYZ5sf3P6JlGgDOwHXcdn4Ucpz3oP6zNJR_74h0TpeH9zuZH79vW42HiQHhAn_0fAyYGmHY1CoUSUhpeGJaYdXP-rYINLHqelfgmbxZb5Rc3Bs5D5VOnXn9iWgSMexbw1TWT7KV1r2jttNbmnymR_7DhwAavazcw0HTDeU0nHM0k1oo1y7-UjfI0dVfzNMSUJkSUUB8eUw_aYfDCoqfVqmw7olVPaGS4hTl3cRbjCJNYiO69Bs-DtuZd25yUlAfOBdRSN-A");'>
-            </div>
-            <!-- Gradient Overlay for readability -->
-            <div
-                class="absolute inset-0 bg-gradient-to-b from-background-dark/40 via-background-dark/20 to-background-dark/90">
-            </div>
+<div class="relative min-h-screen flex flex-col md:flex-row w-full bg-white dark:bg-background-dark">
+
+    <!-- Left Column: Visual & Brand (Desktop) -->
+    <div
+        class="hidden md:flex md:w-[45%] lg:w-5/12 relative bg-[#0a1a12] flex-col justify-between overflow-hidden shrink-0">
+        <!-- Background gradient orbs -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-80 h-80 bg-primary/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-60 h-60 bg-primary/10 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/2 left-1/3 w-40 h-40 bg-emerald-400/10 rounded-full blur-2xl"></div>
         </div>
-        <!-- Content Overlay -->
-        <div class="relative z-10 p-12 flex flex-col h-full justify-between">
-            <!-- Brand Logo -->
+        <!-- Forest image overlay -->
+        <div class="absolute inset-0 z-0 opacity-25 bg-cover bg-center"
+            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAY8q01vxYZ5sf3P6JlGgDOwHXcdn4Ucpz3oP6zNJR_74h0TpeH9zuZH79vW42HiQHhAn_0fAyYGmHY1CoUSUhpeGJaYdXP-rYINLHqelfgmbxZb5Rc3Bs5D5VOnXn9iWgSMexbw1TWT7KV1r2jttNbmnymR_7DhwAavazcw0HTDeU0nHM0k1oo1y7-UjfI0dVfzNMSUJkSUUB8eUw_aYfDCoqfVqmw7olVPaGS4hTl3cRbjCJNYiO69Bs-DtuZd25yUlAfOBdRSN-A");'>
+        </div>
+        <!-- Content -->
+        <div class="relative z-10 p-10 flex flex-col h-full justify-between">
             <div class="flex items-center gap-3 text-white">
                 <span class="material-symbols-outlined text-primary text-4xl">eco</span>
-                <h1 class="text-2xl font-bold tracking-tight">GreenLedger</h1>
+                <span class="text-2xl font-bold tracking-tight">GreenLedger</span>
             </div>
-            <!-- Testimonial / Value Prop -->
-            <div class="flex flex-col gap-6 max-w-md">
-                <div class="space-y-2">
-                    <p class="text-primary font-bold text-sm uppercase tracking-wider">Get Started</p>
-                    <h2 class="text-3xl font-bold leading-tight text-white">
-                        Join the future of carbon accounting.
-                    </h2>
-                </div>
-                <p class="text-gray-300 text-lg font-medium leading-relaxed">
-                    Create your account and start managing your organization's carbon footprint with precision and
-                    compliance.
-                </p>
-                <!-- Compliance Badge -->
+
+            <div class="flex flex-col gap-6 max-w-sm">
                 <div
-                    class="mt-4 flex items-center gap-3 py-3 px-4 bg-white/10 backdrop-blur-md rounded-lg border border-white/10 w-fit">
-                    <span class="material-symbols-outlined text-primary">verified_user</span>
-                    <div class="flex flex-col">
-                        <span class="text-xs text-gray-300 font-medium">Secure Registration</span>
-                        <span class="text-sm font-bold text-white">Enterprise Ready</span>
+                    class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/20 border border-primary/30 rounded-full w-fit">
+                    <span class="size-2 rounded-full bg-primary animate-pulse"></span>
+                    <span class="text-primary text-xs font-bold uppercase tracking-wider">Enterprise Carbon
+                        Platform</span>
+                </div>
+                <h2 class="text-4xl font-bold leading-tight text-white">
+                    Track, report, and prove your carbon impact.
+                </h2>
+                <p class="text-gray-300 text-base leading-relaxed">
+                    Trusted by leading organizations for GHG accounting, CBAM reporting, and transparent audit trails.
+                </p>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-3 mt-2">
+                    <div
+                        class="flex flex-col items-center justify-center p-3 bg-white/5 border border-white/10 rounded-xl text-center">
+                        <span class="text-2xl font-bold text-primary">500+</span>
+                        <span class="text-xs text-gray-400 font-medium mt-0.5">Organizations</span>
+                    </div>
+                    <div
+                        class="flex flex-col items-center justify-center p-3 bg-white/5 border border-white/10 rounded-xl text-center">
+                        <span class="text-2xl font-bold text-primary">ISO</span>
+                        <span class="text-xs text-gray-400 font-medium mt-0.5">14064 Ready</span>
+                    </div>
+                    <div
+                        class="flex flex-col items-center justify-center p-3 bg-white/5 border border-white/10 rounded-xl text-center">
+                        <span class="text-2xl font-bold text-primary">99.9%</span>
+                        <span class="text-xs text-gray-400 font-medium mt-0.5">Uptime SLA</span>
                     </div>
                 </div>
             </div>
-            <!-- Footer Legal on Image Side -->
-            <div class="text-xs text-gray-400">
-                © 2024 GreenLedger Inc. All rights reserved.
+
+            <div class="text-xs text-gray-500">
+                © 2025 GreenLedger Inc. All rights reserved.
             </div>
         </div>
     </div>
 
-    <!-- Right Column: Registration Form -->
-    <div
-        class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-24 relative bg-background-light dark:bg-background-dark">
-        <!-- Back to Home Link -->
-        <div class="absolute top-6 left-6 md:top-12 md:left-12">
-            <a href="{{ url_for('main.landing') }}"
-                class="flex items-center gap-2 text-[#618975] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
+    <!-- Right Column: Registration Flow -->
+    <div class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-16 relative overflow-y-auto">
+        <!-- Back Link -->
+        <div class="absolute top-6 left-6">
+            <a href="{{ url_for('main.index') }}"
+                class="flex items-center gap-1.5 text-[#618975] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
                 <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-                <span>Back to Home</span>
+                <span>Back</span>
             </a>
         </div>
 
-        <!-- Mobile Header (Visible only on small screens) -->
-        <div class="md:hidden w-full flex items-center gap-2 mb-8 text-[#111814] dark:text-white">
+        <!-- Mobile Logo -->
+        <div class="md:hidden flex items-center gap-2 mb-8 text-[#111814] dark:text-white self-start">
             <span class="material-symbols-outlined text-primary text-3xl">eco</span>
             <span class="font-bold text-xl">GreenLedger</span>
         </div>
 
-        <div class="w-full max-w-[440px] flex flex-col gap-8">
-            <!-- Form Header -->
-            <div class="flex flex-col gap-2">
-                <h2 class="text-[#111814] dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]">
-                    Create Account
-                </h2>
-                <p class="text-[#618975] dark:text-gray-400 text-base font-normal leading-normal">
-                    Sign up to start managing your carbon accounting.
-                </p>
+        <div class="w-full max-w-[480px]">
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1 mb-8 overflow-hidden">
+                <div class="progress-bar" id="progress-bar" style="width: 50%;"></div>
             </div>
 
             <!-- Flash Messages -->
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-            <div class="w-full">
+            <div class="mb-4 space-y-2">
                 {% for category, message in messages %}
                 <div
-                    class="p-4 rounded-lg mb-4 {% if category == 'error' %}bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800{% elif category == 'success' %}bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800{% else %}bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800{% endif %}">
+                    class="p-3 rounded-lg text-sm
+                    {% if category == 'error' %}bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800
+                    {% elif category == 'success' %}bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800
+                    {% else %}bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800{% endif %}">
                     {{ message }}
                 </div>
                 {% endfor %}
@@ -97,54 +213,319 @@
             {% endif %}
             {% endwith %}
 
-            <!-- Registration Form -->
-            <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.register') }}">
-                <!-- CSRF Token (Required for Flask-WTF) -->
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
-                <!-- First Name -->
-                {{ input_field('first_name', 'First Name', 'text', 'John', 'person') }}
-
-                <!-- Last Name -->
-                {{ input_field('last_name', 'Last Name', 'text', 'Doe', 'person') }}
-
-                <!-- Email Field -->
-                {{ input_field('email', 'Email Address', 'email', 'name@company.com', 'mail') }}
-
-                <!-- Organization Name -->
-                {{ input_field('organization_name', 'Organization Name (Optional)', 'text', 'Acme Corp', 'business') }}
-
-                <!-- Password Field -->
-                {{ input_field('password', 'Password', 'password', 'Minimum 8 characters', 'lock') }}
-
-                <!-- Confirm Password Field -->
-                {{ input_field('password_confirm', 'Confirm Password', 'password', 'Re-enter your password', 'lock') }}
-
-                <!-- Primary Action Button -->
-                {{ auth_button('Create Account', 'primary') }}
-            </form>
-
-            <!-- Login Link -->
-            <div class="text-center">
-                <p class="text-sm text-[#618975] dark:text-gray-400">
-                    Already have an account?
-                    <a href="{{ url_for('auth.login') }}" class="text-primary font-medium hover:underline">Sign in</a>
-                </p>
-            </div>
-
-            <!-- Regulatory Footer -->
-            <div class="mt-auto pt-6 border-t border-[#f0f4f2] dark:border-gray-800">
-                <div class="flex items-start gap-3">
-                    <span class="material-symbols-outlined text-[#618975] shrink-0"
-                        style="font-size: 18px;">shield</span>
-                    <p class="text-xs text-[#618975] dark:text-gray-500 leading-relaxed">
-                        By creating an account, you agree to the
-                        <a class="text-primary hover:underline font-medium" href="#">Privacy Policy</a> and
-                        <a class="text-primary hover:underline font-medium" href="#">Terms of Service</a>.
+            <!-- =========================================== -->
+            <!-- STEP 1: Role Selection                      -->
+            <!-- =========================================== -->
+            <div class="step active" id="step-1">
+                <div>
+                    <p class="text-primary font-bold text-xs uppercase tracking-widest mb-2">Step 1 of 2</p>
+                    <h2 class="text-[#111814] dark:text-white text-[28px] font-bold leading-tight">
+                        What's your role?
+                    </h2>
+                    <p class="text-[#618975] dark:text-gray-400 text-sm mt-1">
+                        We'll personalize your experience based on your responsibilities.
                     </p>
                 </div>
+
+                <!-- Role Cards -->
+                <div class="flex flex-col gap-3">
+
+                    <!-- Worker -->
+                    <div class="role-card flex items-start gap-4 p-4 rounded-xl bg-white dark:bg-[#152418] border-[1.5px] border-[#dce5e0] dark:border-[#2a3d32]"
+                        data-role="worker" onclick="selectRole(this)">
+                        <div
+                            class="role-icon-bg size-11 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0 transition-colors">
+                            <span
+                                class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-xl">engineering</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-[#111814] dark:text-white text-sm">Team Member / Worker</p>
+                            <p class="text-[#618975] dark:text-gray-400 text-xs mt-0.5 leading-relaxed">
+                                Record activities, upload documents, and submit emission data for your organization.
+                            </p>
+                        </div>
+                        <div
+                            class="role-check shrink-0 size-5 rounded-full bg-primary flex items-center justify-center mt-0.5">
+                            <span class="material-symbols-outlined text-white text-[14px]">check</span>
+                        </div>
+                    </div>
+
+                    <!-- Auditor -->
+                    <div class="role-card flex items-start gap-4 p-4 rounded-xl bg-white dark:bg-[#152418] border-[1.5px] border-[#dce5e0] dark:border-[#2a3d32]"
+                        data-role="auditor" onclick="selectRole(this)">
+                        <div
+                            class="role-icon-bg size-11 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center shrink-0 transition-colors">
+                            <span
+                                class="material-symbols-outlined text-violet-600 dark:text-violet-400 text-xl">fact_check</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-[#111814] dark:text-white text-sm">Platform Auditor</p>
+                            <p class="text-[#618975] dark:text-gray-400 text-xs mt-0.5 leading-relaxed">
+                                Certified auditors who independently review, validate, and sign off on carbon reports.
+                            </p>
+                        </div>
+                        <div
+                            class="role-check shrink-0 size-5 rounded-full bg-primary flex items-center justify-center mt-0.5">
+                            <span class="material-symbols-outlined text-white text-[14px]">check</span>
+                        </div>
+                    </div>
+
+                    <!-- Viewer -->
+                    <div class="role-card flex items-start gap-4 p-4 rounded-xl bg-white dark:bg-[#152418] border-[1.5px] border-[#dce5e0] dark:border-[#2a3d32]"
+                        data-role="viewer" onclick="selectRole(this)">
+                        <div
+                            class="role-icon-bg size-11 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center shrink-0 transition-colors">
+                            <span
+                                class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-xl">visibility</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-bold text-[#111814] dark:text-white text-sm">Read-only Viewer</p>
+                            <p class="text-[#618975] dark:text-gray-400 text-xs mt-0.5 leading-relaxed">
+                                Investors, board members, or partners who need visibility into sustainability
+                                performance.
+                            </p>
+                        </div>
+                        <div
+                            class="role-check shrink-0 size-5 rounded-full bg-primary flex items-center justify-center mt-0.5">
+                            <span class="material-symbols-outlined text-white text-[14px]">check</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue Button -->
+                <button id="continue-btn" onclick="goToStep2()" disabled
+                    class="w-full py-3.5 px-6 rounded-xl text-sm font-bold bg-primary text-white opacity-40 cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2">
+                    Continue
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+
+                <!-- Already have account -->
+                <div class="text-center text-sm text-[#618975] dark:text-gray-400">
+                    Already have an account?
+                    <a href="{{ url_for('auth.login') }}" class="text-primary font-semibold hover:underline">Sign in</a>
+                </div>
             </div>
+
+            <!-- =========================================== -->
+            <!-- STEP 2: Account Details Form                -->
+            <!-- =========================================== -->
+            <div class="step" id="step-2">
+                <div>
+                    <button onclick="goToStep1()"
+                        class="flex items-center gap-1 text-[#618975] hover:text-primary text-sm font-medium mb-4 transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        Change role
+                    </button>
+                    <p class="text-primary font-bold text-xs uppercase tracking-widest mb-2">Step 2 of 2</p>
+                    <h2 class="text-[#111814] dark:text-white text-[28px] font-bold leading-tight">
+                        Create your account
+                    </h2>
+                    <p id="role-description" class="text-[#618975] dark:text-gray-400 text-sm mt-1">
+                        Fill in your details to get started.
+                    </p>
+                </div>
+
+                <!-- Registration Form -->
+                <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.register') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <input type="hidden" name="role" id="selected_role" value="worker" />
+                    <input type="hidden" name="organization_id" id="selected_org_id" value="" />
+
+                    <div class="grid grid-cols-2 gap-4">
+                        {{ input_field('first_name', 'First Name', 'text', 'John', 'person') }}
+                        {{ input_field('last_name', 'Last Name', 'text', 'Doe', 'person') }}
+                    </div>
+                    {{ input_field('email', 'Email Address', 'email', 'name@company.com', 'mail') }}
+
+                    <!-- Organization Search (Worker only) -->
+                    <div id="org-search-wrapper" class="hidden flex-col gap-1.5">
+                        <p class="text-[#111714] dark:text-white text-sm font-medium leading-normal">Your Organization
+                            <span class="text-red-500">*</span>
+                        </p>
+                        <div class="relative">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-3 text-[#618975] text-xl pointer-events-none">business</span>
+                            <input type="text" id="org-search-input" placeholder="Search for your organization..."
+                                autocomplete="off"
+                                class="w-full pl-10 pr-4 py-3 rounded-lg border border-[#dce5e0] dark:border-[#2f4b3a] bg-white dark:bg-[#1a2e24] text-[#111714] dark:text-white text-sm focus:outline-none focus:border-primary transition-colors"
+                                oninput="searchOrgs(this.value)" />
+                        </div>
+                        <div id="org-results"
+                            class="hidden flex-col rounded-lg border border-[#dce5e0] dark:border-[#2a4035] bg-white dark:bg-[#1a2e24] shadow-lg overflow-hidden max-h-52 overflow-y-auto">
+                        </div>
+                        <div id="selected-org-badge"
+                            class="hidden items-center gap-2 px-3 py-2 bg-primary/10 border border-primary/20 rounded-lg text-sm text-primary font-semibold">
+                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                            <span id="selected-org-name"></span>
+                            <button type="button" onclick="clearOrg()" class="ml-auto">
+                                <span
+                                    class="material-symbols-outlined text-[16px] hover:text-red-500 transition-colors">close</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {{ input_field('password', 'Password', 'password', 'Minimum 8 characters', 'lock') }}
+                    {{ input_field('password_confirm', 'Confirm Password', 'password', 'Re-enter your password', 'lock')
+                    }}
+
+                    {{ auth_button('Create Account', 'primary') }}
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center gap-3">
+                    <div class="flex-1 h-px bg-[#f0f4f2] dark:bg-gray-800"></div>
+                    <span class="text-xs text-[#618975] dark:text-gray-500 font-medium shrink-0">or continue with</span>
+                    <div class="flex-1 h-px bg-[#f0f4f2] dark:bg-gray-800"></div>
+                </div>
+
+                <!-- Social Auth (placeholders for future) -->
+                <div class="flex flex-col gap-3">
+                    <button type="button" onclick="alert('Google auth — coming soon!')"
+                        class="social-btn border-[#e0e5e2] dark:border-[#2a3d32] text-[#111814] dark:text-white">
+                        <svg class="size-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
+                        </svg>
+                        Continue with Google
+                        <span class="ml-auto text-xs text-[#618975] dark:text-gray-500 font-normal">Coming soon</span>
+                    </button>
+
+                    <button type="button" onclick="alert('Microsoft auth — coming soon!')"
+                        class="social-btn border-[#e0e5e2] dark:border-[#2a3d32] text-[#111814] dark:text-white">
+                        <svg class="size-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.4 2H2v9.4h9.4V2z" fill="#F35325" />
+                            <path d="M22 2h-9.4v9.4H22V2z" fill="#81BC06" />
+                            <path d="M11.4 12.6H2V22h9.4v-9.4z" fill="#05A6F0" />
+                            <path d="M22 12.6h-9.4V22H22v-9.4z" fill="#FFBA08" />
+                        </svg>
+                        Continue with Microsoft
+                        <span class="ml-auto text-xs text-[#618975] dark:text-gray-500 font-normal">Coming soon</span>
+                    </button>
+                </div>
+
+                <!-- Sign in link -->
+                <div class="text-center text-sm text-[#618975] dark:text-gray-400 pb-4">
+                    Already have an account?
+                    <a href="{{ url_for('auth.login') }}" class="text-primary font-semibold hover:underline">Sign in</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
+<script>
+    let selectedRole = null;
+
+    const roleDescriptions = {
+        worker: 'You\'re signing up as a Team Member of an organization.',
+        auditor: 'You\'re registering as a certified Platform Auditor.',
+        viewer: 'You\'re joining as a Read-only Viewer.'
+    };
+
+    function selectRole(card) {
+        // Deselect all
+        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+
+        // Select this one
+        card.classList.add('selected');
+        selectedRole = card.dataset.role;
+
+        // Enable continue button
+        const btn = document.getElementById('continue-btn');
+        btn.disabled = false;
+        btn.classList.remove('opacity-40', 'cursor-not-allowed');
+        btn.classList.add('hover:bg-primary/90', 'cursor-pointer');
+    }
+
+    function goToStep2() {
+        if (!selectedRole) return;
+
+        document.getElementById('selected_role').value = selectedRole;
+        document.getElementById('role-description').textContent = roleDescriptions[selectedRole];
+
+        const orgWrapper = document.getElementById('org-search-wrapper');
+        if (selectedRole === 'worker') {
+            orgWrapper.classList.remove('hidden');
+            orgWrapper.classList.add('flex');
+        } else {
+            orgWrapper.classList.add('hidden');
+            orgWrapper.classList.remove('flex');
+        }
+
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-2').classList.add('active');
+        document.getElementById('progress-bar').style.width = '100%';
+        window.scrollTo(0, 0);
+    }
+
+    function goToStep1() {
+        document.getElementById('step-2').classList.remove('active');
+        document.getElementById('step-1').classList.add('active');
+        document.getElementById('progress-bar').style.width = '50%';
+        window.scrollTo(0, 0);
+    }
+
+    // ── Organization Search ──────────────────────────────────────────
+    let searchTimer;
+
+    function searchOrgs(query) {
+        clearTimeout(searchTimer);
+        const resultsEl = document.getElementById('org-results');
+        if (query.length < 2) { resultsEl.classList.add('hidden'); return; }
+        searchTimer = setTimeout(() => {
+            fetch('/orgs/search?q=' + encodeURIComponent(query))
+                .then(r => r.json())
+                .then(data => {
+                    resultsEl.innerHTML = '';
+                    if (data.length === 0) {
+                        resultsEl.innerHTML = '<div class="p-3 text-sm text-[#618975] text-center">No organizations found</div>';
+                    } else {
+                        data.forEach(org => {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'w-full flex items-center gap-3 px-4 py-3 hover:bg-primary/5 transition-colors text-left border-b border-[#f0f4f2] dark:border-[#2a4035] last:border-0';
+                            btn.innerHTML = '<span class="material-symbols-outlined text-[#618975] text-lg">business</span>'
+                                + '<div><p class="text-sm font-semibold text-[#111714] dark:text-white">' + org.name + '</p>'
+                                + (org.industry ? '<p class="text-xs text-[#618975]">' + org.industry + '</p>' : '')
+                                + '</div>';
+                            btn.onclick = function () { selectOrg(org.id, org.name); };
+                            resultsEl.appendChild(btn);
+                        });
+                    }
+                    resultsEl.classList.remove('hidden');
+                    resultsEl.classList.add('flex');
+                });
+        }, 300);
+    }
+
+    function selectOrg(id, name) {
+        document.getElementById('selected_org_id').value = id;
+        document.getElementById('selected-org-name').textContent = name;
+        document.getElementById('org-results').classList.add('hidden');
+        document.getElementById('org-search-input').value = '';
+        const badge = document.getElementById('selected-org-badge');
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+    }
+
+    function clearOrg() {
+        document.getElementById('selected_org_id').value = '';
+        document.getElementById('selected-org-name').textContent = '';
+        document.getElementById('org-search-input').value = '';
+        const badge = document.getElementById('selected-org-badge');
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+    }
+</script>
 {% endblock %}

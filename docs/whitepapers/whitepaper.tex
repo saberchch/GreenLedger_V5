@@ -1,0 +1,200 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{cite}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{amsmath}
+
+\geometry{a4paper, margin=1in}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!50!black
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\title{\textbf{GreenLedger Technical Whitepaper}\\
+\large Decentralized and Verifiable Carbon Accounting Platform}
+\author{GreenLedger Protocol Engineering Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+As enterprise sustainability reporting evolves from voluntary ESG disclosures to strict regulatory mandates (e.g., CSRD in Europe, SEC climate rules in the US), organizations require software infrastructure that ensures strict data provenance, mathematical determinism, and irrefutable audit trails. Traditional ERP systems and spreadsheet-based reporting engines lack innate defense against ex-post modification or "greenwashing." 
+This whitepaper details the technical architecture of \textbf{GreenLedger}, a multi-tenant, Python-based monolithic stack leveraging strict Role-Based Access Control (RBAC), multi-format cryptographic report compilation (PDF, DOCX, XLSX), and an integrated Web3 component for Layer-1 EVM blockchain anchoring. GreenLedger achieves a deterministic state machine for third-party auditing without incurring the exorbitant gas costs traditionally associated with fully decentralized applications (dApps).
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{System Architecture and Technology Stack}
+
+GreenLedger is designed as a secure, stateless monolithic web application, utilizing an asynchronous event-driven JavaScript frontend paired with a synchronous Python backend handling heavy computational and cryptographic loads.
+
+\subsection{Backend Infrastructure}
+The core engine is built atop \textbf{Python 3.12} utilizing the \textbf{Flask 3.x} micro-framework. It interfaces with the relational database using \textbf{SQLAlchemy ORM}, allowing for database-agnostic deployment (e.g., SQLite for Edge/Testing, PostgreSQL/Aurora for Production).
+\begin{itemize}[noitemsep]
+    \item \textbf{Routing \& Middleware}: Flask blueprints handle modular route definitions (\texttt{admin.py}, \texttt{org\_admin.py}, \texttt{auditor.py}, \texttt{worker.py}). Request middleware manages CSRF protection and session validation via \texttt{Flask-Login}.
+    \item \textbf{Reporting Engine}: The system features a polymorphic report generator utilizing \texttt{ReportLab} for dynamically drawn, paginated PDFs with vector charts, \texttt{openpyxl} for native Excel workbook generation, and \texttt{python-docx} for OOXML compliance.
+\end{itemize}
+
+\subsection{Frontend Presentation Layer}
+The user interface is entirely server-side rendered (SSR) using \textbf{Jinja2} templates, eliminating the overhead of a heavy Single Page Application (SPA) framework while maintaining high SEO metrics and extremely low time-to-interactive (TTI).
+\begin{itemize}[noitemsep]
+    \item \textbf{Styling}: Tailwind CSS via CDN with customized utility classes to enforce the exact GreenLedger design system (\texttt{\#13ec80} primary brand color).
+    \item \textbf{Cryptography Client}: Integration with \texttt{Ethers.js v6.7.0} for localized, client-side transaction signing via the Web3 provider injected by the user's browser (e.g., MetaMask).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{tcolorbox}[colback=gray!5!white,colframe=gray!50!black,width=0.9\textwidth,halign=center,valign=center,height=6cm]
+    \textit{[Insert UML Component Diagram Here]} \\
+    \vspace{0.5cm}
+    \footnotesize The diagram should depict the Flask application context, SQLAlchemy interaction with the RDBMS layer, Jinja2 template rendering, and the distinct client-side interactions: standard HTTP requests vs JSON-RPC calls via Ethers.js to the Ethereum nodes.
+    \end{tcolorbox}
+    \caption{Core Architecture Topology}
+    \label{fig:architecture}
+\end{figure}
+
+\section{Database Schema and State Management}
+
+Data integrity relies on a rigorously normalized relational model enforcing strict referential constraints.
+
+\subsection{Entity Relationship Model}
+The central entities governing the application state are \texttt{User}, \texttt{Organization}, \texttt{EmissionActivity}, and \texttt{Report}.
+
+\begin{lstlisting}[language=Python, caption=SQLAlchemy Model Definition for EmissionActivity]
+class EmissionActivity(BaseModel):
+    __tablename__ = "emission_activities"
+
+    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=False)
+    created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    scope = db.Column(db.Enum(EmissionScope), nullable=False)
+    status = db.Column(db.Enum(ActivityStatus), default=ActivityStatus.PENDING, nullable=False)
+    
+    ademe_factor_id = db.Column(db.String(100), nullable=True)
+    ademe_factor_value = db.Column(db.Float, nullable=True)
+    quantity = db.Column(db.Float, nullable=False)
+    co2e_result = db.Column(db.Float, nullable=True)
+\end{lstlisting}
+
+\subsection{Finite State Machine (FSM)}
+The \texttt{status} field of an \texttt{EmissionActivity} is restricted to a strictly defined algorithmic state machine. Transitions are enforced at the Route level via the \texttt{PermissionManager} utility.
+
+\begin{itemize}
+    \item \textbf{PENDING}: Created by Worker. Mutable by Worker.
+    \item \textbf{REJECTED}: Vetoed by Org Admin.
+    \item \textbf{APPROVED}: Internal sign-off achieved. Ready for External Audit.
+    \item \textbf{VALIDATED}: Third-party Auditor confirmed math and proof documents.
+    \item \textbf{AUDITED}: Activity locked into a formalized \texttt{Report}. Immutable.
+\end{itemize}
+
+\section{Computational Determinism for GHG Accounting}
+
+GreenLedger prevents arbitrary manual calculations by enforcing automated translation from raw activity data to final Carbon Dioxide Equivalents ($CO_2e$).
+
+\subsection{Engine Pipeline}
+When a record transitions, the calculation is invoked atomically within the database transaction boundary:
+
+\begin{equation}
+    Result_{CO_2e} = Quantity \times Factor_{ADEME}
+\end{equation}
+
+By storing both the \texttt{ademe\_factor\_id} (e.g., \texttt{29243} for standard electricity) and the exact float \texttt{ademe\_factor\_value} utilized at the time of calculation, the system is immune to historical drift within upstream API databases. This ensures backward compatibility for legal discovery years after the initial audit.
+
+The Reporting Engine loops over these records in O(n) complexity, aggregating the values by Scope bucket and extracting the top 5 highest emitting categories dynamically to inject into the \texttt{VerticalBarChart} objects.
+
+\section{Web3 Notarization and Immutable Anchoring}
+
+Storing sensitive corporate data completely on a public ledger involves significant privacy trade-offs and potentially millions of dollars in gas fees scaling with storage load. GreenLedger utilizes a hybrid "On-Chain Anchoring" approach.
+
+\subsection{Zero-Value Contextual Hashing}
+Rather than deploying a custom Smart Contract mapping IDs to Structs, Greenledger encodes the finalized plaintext summary of the Carbon Report into the \texttt{calldata} parameter of a standard \texttt{ETH} transfer.
+
+\begin{lstlisting}[language=Java, caption=Client-Side Web3 Injection via Ethers.js]
+// 1. Instantiate the provider connected to MetaMask
+const provider = new ethers.BrowserProvider(window.ethereum);
+const signer = await provider.getSigner();
+
+// 2. Convert UTF-8 representation of the report to bytecode
+const hexData = ethers.hexlify(ethers.toUtf8Bytes(summaryText));
+
+// 3. Dispatch a 0-WeI transaction, utilizing ONLY the data field
+const tx = await signer.sendTransaction({
+    to: window.connectedWallet, // Loopback transaction
+    value: 0,
+    data: hexData
+});
+
+const receipt = await tx.wait();
+\end{lstlisting}
+
+\subsection{Cryptographic Proof Model}
+Because the \texttt{tx.data} is permanently recorded on the blockchain ledger (e.g., Ethereum Mainnet or an L2 like Arbitrum), any party can retrieve the transaction hash via an RPC endpoint, decode the hex, and retrieve the exact UTF-8 localized summary of the report generated by the GreenLedger backend. 
+
+If an organization is accused of altering historical records natively inside the centralized RDBMS array, the original transaction hash serves as an irrefutable cryptographic timestamp (enforced by the block's header) displaying exactly what the independent Auditor signed off on at the time of finalization.
+
+\begin{figure}[H]
+    \centering
+    \begin{tcolorbox}[colback=blue!5!white,colframe=blue!40!black,width=0.9\textwidth,halign=center,valign=center,height=5cm]
+    \textit{[Insert Web3 Sequence Diagram Here]} \\
+    \vspace{0.5cm}
+    \footnotesize Sequence showing: Backend UI Render $\rightarrow$ Admin Clicks Notarize $\rightarrow$ MetaMask Signature Prompt $\rightarrow$ RPC Node Broadcast $\rightarrow$ Mempool $\rightarrow$ Receipt Generation $\rightarrow$ Asynchronous POST back to Flask Backend.
+    \end{tcolorbox}
+    \caption{Web3 Notarization Sequence}
+    \label{fig:web3seq}
+\end{figure}
+
+\section{Security Architecture}
+
+\subsection{Authentication and Authorization}
+Session tokens are generated via PBKDF2-HMAC-SHA256 hashed passwords managed by \texttt{Werkzeug.security}. The RBAC matrix is rigorously enforced by custom decorator wrappers (e.g., \texttt{@login\_required}, followed by permission boundary checks querying the \texttt{UserRole} Enum).
+
+\subsection{Document Encryption Protocol}
+(Future Implementation Scope): Documentary evidence (PDF invoices, PNG readouts) uploaded by Workers for audit review are subjected to symmetric AES-256 encryption at rest, preventing horizontal lateral movement data exposure in the event of a filesystem breach.
+
+\section{Conclusion}
+
+GreenLedger bridges the divide between strict Web2 regulatory compliance engines and Web3 trustless architectures. By leveraging robust Python FSM implementations alongside decentralized JSON-RPC payload anchoring, the platform offers an enterprise-grade solution to the growing necessity of mathematically verifiable, unalterable ESG and GHG reporting.
+
+\end{document}

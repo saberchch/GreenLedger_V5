@@ -1,4 +1,5 @@
 {% extends "layouts/dashboard_base.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block title %}Users & Roles - Organization Admin{% endblock %}
 
@@ -30,7 +31,7 @@
             <span
                 class="h-10 px-4 rounded-lg bg-neutral-100 dark:bg-[#23352c] text-neutral-500 font-medium text-sm flex items-center gap-2">
                 <span class="material-symbols-outlined" style="font-size: 18px;">group</span>
-                {{ users|length }} members
+                {{ users.total }} members
             </span>
         </div>
     </div>
@@ -40,8 +41,8 @@
         class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
         <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035]">
             <h3 class="text-lg font-bold text-[#111814] dark:text-white">Organization Members</h3>
-            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">{{ users|length }} active user{{ 's' if
-                users|length != 1 else '' }}</p>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">{{ users.total }} active user{{ 's' if
+                users.total != 1 else '' }}</p>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left">
@@ -57,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
-                    {% for user_item in users %}
+                    {% for user_item in users.items %}
                     <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
@@ -102,7 +103,6 @@
                                     {% for role_val, role_label in [
                                     ('worker', 'Worker'),
                                     ('org_admin', 'Org Admin'),
-                                    ('auditor', 'Auditor'),
                                     ('viewer', 'Viewer'),
                                     ] %}
                                     <option value="{{ role_val }}" {% if user_item.role.value==role_val %}selected{%
@@ -133,37 +133,195 @@
                 </tbody>
             </table>
         </div>
+        {{ render_pagination(users, 'dashboard_org_admin.users') }}
     </div>
 
-    <!-- Auditor Access Section -->
+    <!-- Auditor Contracts Section (Smart Contract System) -->
+    {% set org = current_user.organization %}
+    {% set allc = org.auditor_contracts.all() %}
+    {% set active_contracts = allc | selectattr('status.value', 'in', ['trial','active','pending']) | list %}
     <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-6">
-        <div class="flex justify-between items-start mb-4">
+        <div class="mb-5 flex items-center justify-between">
             <div>
-                <h3 class="text-lg font-bold text-[#111814] dark:text-white">Auditor Access</h3>
-                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">External auditors assigned to your
-                    organization</p>
+                <h3 class="text-lg font-bold text-[#111814] dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-xl">contract</span>
+                    Auditor Contracts
+                </h3>
+                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Smart-contract engagements. 1 Primary + 1
+                    Collateral allowed per year.</p>
+            </div>
+            <a href="{{ url_for('dashboard_messages.inbox') }}"
+                class="flex items-center gap-1.5 px-3 py-1.5 border border-neutral-200 rounded-lg text-xs font-medium hover:bg-neutral-50 transition-colors">
+                <span class="material-symbols-outlined text-[15px]">mail</span> Messages
+            </a>
+        </div>
+
+        <!-- Primary & Collateral Slots -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {% for slot_type, slot_label in [('primary','Primary'), ('collateral','Collateral')] %}
+            {% set slot_auditor_id = org.primary_auditor_id if slot_type == 'primary' else org.collateral_auditor_id %}
+            {% set slot_contract = active_contracts | selectattr('auditor_type.value', 'equalto', slot_type) | list |
+            first | default(None) %}
+            <div
+                class="rounded-xl border-2 p-5 {% if slot_auditor_id %}border-emerald-200 bg-emerald-50/40 dark:bg-emerald-900/10{% else %}border-dashed border-neutral-200 dark:border-neutral-700 bg-neutral-50/50{% endif %}">
+                <div class="flex items-center gap-2 mb-3">
+                    <span
+                        class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase {% if slot_type=='primary' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">{{
+                        slot_label }}</span>
+                    <span class="text-xs font-medium text-neutral-500">Auditor Slot</span>
+                </div>
+                {% if slot_contract %}
+                {% set a = slot_contract.auditor %}
+                <div class="flex items-center gap-3 mb-3">
+                    <div
+                        class="size-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm">
+                        {{ (a.first_name or a.email)[0]|upper }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-bold text-sm text-neutral-900 dark:text-white">{{ a.first_name }} {{ a.last_name
+                            }}</p>
+                        <p class="text-xs text-neutral-500 truncate">{{ a.email }}</p>
+                    </div>
+                    <span
+                        class="shrink-0 text-[10px] font-bold uppercase px-2 py-0.5 rounded-full {% if slot_contract.status.value == 'trial' %}bg-amber-100 text-amber-800{% elif slot_contract.status.value == 'active' %}bg-emerald-100 text-emerald-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                        {{ slot_contract.status.value }}
+                    </span>
+                </div>
+                <div class="text-xs text-neutral-500 space-y-0.5 mb-3">
+                    {% if slot_contract.monthly_fee %}<p>Fee: <span class="font-semibold text-neutral-700">${{
+                            "%.2f"|format(slot_contract.monthly_fee) }}/mo</span></p>{% endif %}
+                    {% if slot_contract.status.value == 'trial' and slot_contract.trial_end %}<p>Trial ends: <span
+                            class="font-semibold text-amber-700">{{ slot_contract.trial_end.strftime('%b %d, %Y')
+                            }}</span> ({{ slot_contract.trial_days_remaining() }}d left)</p>{% endif %}
+                    {% if slot_contract.contract_end %}<p>Contract ends: {{ slot_contract.contract_end.strftime('%b %d,
+                        %Y') }}</p>{% endif %}
+                    {% if slot_contract.missed_months %}<p class="text-red-600">Missed months: {{
+                        slot_contract.missed_months }}</p>{% endif %}
+                    <p>Rep. score: <span
+                            class="font-semibold {% if a.reputation_score >= 80 %}text-emerald-600{% elif a.reputation_score >= 60 %}text-amber-600{% else %}text-red-600{% endif %}">{{
+                            a.reputation_score }}/100</span></p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ url_for('dashboard_org_admin.contract_detail', contract_id=slot_contract.id) }}"
+                        class="text-xs px-3 py-1.5 bg-white dark:bg-transparent border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors font-medium">View
+                        Contract</a>
+                    <a href="{{ url_for('dashboard_messages.chat', other_id=a.id) }}"
+                        class="text-xs px-3 py-1.5 bg-white dark:bg-transparent border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors font-medium flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[13px]">mail</span> Message
+                    </a>
+                    {% if slot_contract.status.value == 'trial' %}
+                    {# TRIAL — show a prominent Terminate button with smart-contract consequence warning #}
+                    <form action="{{ url_for('dashboard_org_admin.cancel_contract', contract_id=slot_contract.id) }}"
+                        method="POST"
+                        onsubmit="return confirm('⚠️ Terminate this TRIAL contract?\n\nThis will:\n• Mark the auditor as DISCARDED (trial failure)\n• Auto-promote the Collateral auditor to acting Primary\n• Reopen the Collateral slot for a new auditor\n\nProceed?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit"
+                            class="text-xs px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-semibold flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">gavel</span> Terminate Trial
+                        </button>
+                    </form>
+                    {% else %}
+                    {# ACTIVE — regular cancel #}
+                    <form action="{{ url_for('dashboard_org_admin.cancel_contract', contract_id=slot_contract.id) }}"
+                        method="POST" onsubmit="return confirm('Cancel this contract?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit"
+                            class="text-xs px-3 py-1.5 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium">Cancel</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="text-center py-3">
+                    <span class="material-symbols-outlined text-3xl text-neutral-300 block mb-1">person_add</span>
+                    <p class="text-sm text-neutral-500">No {{ slot_label | lower }} auditor</p>
+                    <p class="text-xs text-neutral-400 mt-0.5">Propose a contract below</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Available Auditors -->
+        {% if available_auditors %}
+        <div class="border-t border-neutral-100 dark:border-[#2a4035] pt-5">
+            <h4 class="text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-blue-500 text-base">person_search</span>
+                Available Platform Auditors — Propose a Contract
+            </h4>
+            <div class="space-y-3">
+                {% for a in available_auditors %}
+                <details class="rounded-xl border border-neutral-200 dark:border-[#2a4035] overflow-hidden group">
+                    <summary
+                        class="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-neutral-50 dark:hover:bg-[#15251d] transition-colors list-none">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="size-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">
+                                {{ (a.first_name or a.email)[0]|upper }}</div>
+                            <div>
+                                <p class="text-sm font-bold text-neutral-900 dark:text-white">{{ a.first_name }} {{
+                                    a.last_name }}</p>
+                                <p class="text-xs text-neutral-500">{{ a.email }} · Rep: {{ a.reputation_score }}/100
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-semibold text-primary group-open:hidden">Propose ▾</span>
+                        <span class="text-xs font-semibold text-neutral-400 hidden group-open:inline">Close ▴</span>
+                    </summary>
+                    <form action="{{ url_for('dashboard_org_admin.propose_contract', auditor_id=a.id) }}" method="POST"
+                        class="px-4 py-4 bg-neutral-50 dark:bg-[#12201a] border-t border-neutral-100 dark:border-[#2a4035] flex flex-wrap gap-4 items-end">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-600 mb-1">Type</label>
+                            <select name="auditor_type"
+                                class="text-sm rounded-lg border border-neutral-200 bg-white dark:bg-[#1a2e25] px-3 py-2 focus:outline-none focus:border-primary">
+                                <option value="primary" {% if org.primary_auditor_id %}disabled{% endif %}>Primary{% if
+                                    org.primary_auditor_id %} (Filled){% endif %}</option>
+                                <option value="collateral" {% if org.collateral_auditor_id %}disabled{% endif %}>
+                                    Collateral{% if org.collateral_auditor_id %} (Filled){% endif %}</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-600 mb-1">Monthly Fee ($)</label>
+                            <input type="number" name="monthly_fee" step="0.01" min="0" placeholder="e.g. 500.00"
+                                class="text-sm rounded-lg border border-neutral-200 bg-white dark:bg-[#1a2e25] px-3 py-2 w-36 focus:outline-none focus:border-primary">
+                        </div>
+                        <div class="flex-1 min-w-[180px]">
+                            <label class="block text-xs font-semibold text-neutral-600 mb-1">Message (optional)</label>
+                            <input type="text" name="message" placeholder="Brief proposal note..."
+                                class="w-full text-sm rounded-lg border border-neutral-200 bg-white dark:bg-[#1a2e25] px-3 py-2 focus:outline-none focus:border-primary">
+                        </div>
+                        <button type="submit"
+                            class="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors whitespace-nowrap">Send
+                            Proposal</button>
+                    </form>
+                </details>
+                {% endfor %}
             </div>
         </div>
-        {% set auditors = users | selectattr('role.value', 'equalto', 'auditor') | list %}
-        {% if auditors %}
-        <ul class="space-y-2">
-            {% for a in auditors %}
-            <li
-                class="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
-                <span class="material-symbols-outlined text-green-600" style="font-size:20px">verified_user</span>
-                <div>
-                    <p class="text-sm font-medium text-neutral-900 dark:text-white">{{ a.first_name }} {{ a.last_name }}
-                    </p>
-                    <p class="text-xs text-neutral-500">{{ a.email }}</p>
+        {% endif %}
+
+        <!-- Pending contract proposals waiting for auditor reply -->
+        {% set pending_cs = active_contracts | selectattr('status.value', 'equalto', 'pending') | list %}
+        {% if pending_cs %}
+        <div class="border-t border-neutral-100 dark:border-[#2a4035] pt-5 mt-4">
+            <h4 class="text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-base">schedule</span>
+                Awaiting Auditor Response
+            </h4>
+            <div class="space-y-2">
+                {% for c in pending_cs %}
+                <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800">
+                    <div>
+                        <p class="text-sm font-medium">{{ c.auditor.first_name }} {{ c.auditor.last_name }} <span
+                                class="text-xs text-neutral-500">({{ c.auditor_type.value }})</span></p>
+                        <p class="text-xs text-neutral-500">Sent {{ c.created_at.strftime('%b %d, %Y') }}{% if
+                            c.monthly_fee %} · ${{ "%.2f"|format(c.monthly_fee) }}/mo{% endif %}</p>
+                    </div>
+                    <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full">Pending</span>
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <div class="text-center py-8 text-[#618975]">
-            <span class="material-symbols-outlined text-4xl mb-2 block">shield</span>
-            <p class="font-medium">No auditors delegated yet</p>
-            <p class="text-sm mt-1">Change a user's role to "Auditor" above to grant audit access</p>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
     </div>

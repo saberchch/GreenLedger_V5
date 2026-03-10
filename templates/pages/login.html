@@ -60,7 +60,7 @@
         class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-24 relative bg-background-light dark:bg-background-dark">
         <!-- Back to Home Link -->
         <div class="absolute top-6 left-6 md:top-12 md:left-12">
-            <a href="{{ url_for('main.landing') }}"
+            <a href="{{ url_for('main.index') }}"
                 class="flex items-center gap-2 text-[#618975] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
                 <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                 <span>Back to Home</span>
@@ -102,9 +102,6 @@
             <form class="flex flex-col gap-5" method="POST" action="{{ url_for('auth.login') }}">
                 <!-- CSRF Token (Required for Flask-WTF) -->
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-
-                <!-- Organization ID Field (Optional) -->
-                {{ input_field('org_id', 'Organization ID (Optional)', 'text', 'e.g. acme-global-eu', 'domain') }}
 
                 <!-- Email Field -->
                 {{ input_field('email', 'Email Address', 'email', 'name@company.com', 'mail') }}

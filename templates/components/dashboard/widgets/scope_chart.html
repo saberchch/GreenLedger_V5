@@ -1,5 +1,5 @@
 {% macro scope_chart(kpis) %}
-{# Values come in as formatted strings like "1,234.56" — strip commas for JS math #}
+{# Values come in as formatted strings like "1,234.56" — strip commas for float math #}
 {% set s1_val = kpis.scope1 | replace(',','') | float %}
 {% set s2_val = kpis.scope2 | replace(',','') | float %}
 {% set s3_val = kpis.scope3 | replace(',','') | float %}
@@ -10,10 +10,10 @@
 {% set s2_pct = (s2_val / total_denom * 100) | round(1) %}
 {% set s3_pct = (s3_val / total_denom * 100) | round(1) %}
 
-{# Bar heights: minimum 4px so empty scopes still show a sliver #}
-{% set s1_height = [s1_pct | int, 4] | max %}
-{% set s2_height = [s2_pct | int, 4] | max %}
-{% set s3_height = [s3_pct | int, 4] | max %}
+{# flex-grow values: proportional to percentage, minimum 2 so an empty scope shows a tiny sliver #}
+{% set s1_grow = [s1_pct | float, 2] | max %}
+{% set s2_grow = [s2_pct | float, 2] | max %}
+{% set s3_grow = [s3_pct | float, 2] | max %}
 
 <!-- Scope Breakdown Chart -->
 <div
@@ -67,52 +67,82 @@
         {% endif %}
     </div>
 
-    <!-- Bar chart -->
+    <!-- Bar chart — fixed pixel height, bars use flex-grow for correct proportions -->
     <div class="flex-1 flex flex-col justify-end gap-4">
-        <div class="flex gap-6 h-48 sm:h-56 items-end w-full px-4">
+        <div class="flex gap-6 items-end w-full px-4" style="height: 200px;">
 
             <!-- Scope 1 -->
-            <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                <div
-                    class="text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-[#111814] dark:text-white mb-1">
+            <div class="flex-1 flex flex-col items-stretch" style="height: 100%;">
+                <!-- Spacer pushes bar down -->
+                <div class="flex-1"></div>
+                <!-- Hover tooltip -->
+                <div class="text-center text-xs font-bold text-[#111814] dark:text-white mb-1 opacity-0 hover-show">
                     {{ kpis.scope1 }} tCO₂e<br>
                     <span class="font-normal text-neutral-500">{{ s1_pct }}%</span>
                 </div>
-                <div class="w-full bg-[#13ec80] hover:bg-[#0fd673] rounded-t-lg transition-all duration-500"
-                    style="height: {{ s1_height }}%;"></div>
-                <p class="text-center text-xs font-semibold text-[#0f7844]">Scope 1</p>
+                <!-- The bar — height driven by explicit inline style relative to parent 200px -->
+                <div class="w-full bg-[#13ec80] hover:bg-[#0fd673] rounded-t-lg transition-all duration-500 group relative js-bar-height"
+                    data-height="{{ s1_pct|round(1) }}">
+                    <!-- Tooltip on hover -->
+                    <div
+                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:flex flex-col items-center pointer-events-none">
+                        <div class="bg-[#111814] text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+                            {{ kpis.scope1 }} tCO₂e · {{ s1_pct }}%
+                        </div>
+                        <div class="border-4 border-transparent border-t-[#111814]"></div>
+                    </div>
+                </div>
+                <p class="text-center text-xs font-semibold text-[#0f7844] mt-1">Scope 1</p>
                 <p class="text-center text-[10px] text-[#618975]">Direct</p>
             </div>
 
             <!-- Scope 2 -->
-            <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                <div
-                    class="text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-[#111814] dark:text-white mb-1">
-                    {{ kpis.scope2 }} tCO₂e<br>
-                    <span class="font-normal text-neutral-500">{{ s2_pct }}%</span>
+            <div class="flex-1 flex flex-col items-stretch" style="height: 100%;">
+                <div class="flex-1"></div>
+                <div class="w-full bg-[#102219] dark:bg-[#618975] hover:opacity-80 rounded-t-lg transition-all duration-500 group relative js-bar-height"
+                    data-height="{{ s2_pct|round(1) }}">
+                    <div
+                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:flex flex-col items-center pointer-events-none">
+                        <div class="bg-[#111814] text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+                            {{ kpis.scope2 }} tCO₂e · {{ s2_pct }}%
+                        </div>
+                        <div class="border-4 border-transparent border-t-[#111814]"></div>
+                    </div>
                 </div>
-                <div class="w-full bg-[#102219] dark:bg-[#618975] hover:opacity-80 rounded-t-lg transition-all duration-500"
-                    style="height: {{ s2_height }}%;"></div>
-                <p class="text-center text-xs font-semibold text-[#111814] dark:text-[#8baaa0]">Scope 2</p>
+                <p class="text-center text-xs font-semibold text-[#111814] dark:text-[#8baaa0] mt-1">Scope 2</p>
                 <p class="text-center text-[10px] text-[#618975]">Purchased energy</p>
             </div>
 
             <!-- Scope 3 -->
-            <div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
-                <div
-                    class="text-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold text-[#111814] dark:text-white mb-1">
-                    {{ kpis.scope3 }} tCO₂e<br>
-                    <span class="font-normal text-neutral-500">{{ s3_pct }}%</span>
+            <div class="flex-1 flex flex-col items-stretch" style="height: 100%;">
+                <div class="flex-1"></div>
+                <div class="w-full bg-[#82f6ba] hover:bg-[#6ef0ae] rounded-t-lg transition-all duration-500 group relative js-bar-height"
+                    data-height="{{ s3_pct|round(1) }}">
+                    <div
+                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:flex flex-col items-center pointer-events-none">
+                        <div class="bg-[#111814] text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+                            {{ kpis.scope3 }} tCO₂e · {{ s3_pct }}%
+                        </div>
+                        <div class="border-4 border-transparent border-t-[#111814]"></div>
+                    </div>
                 </div>
-                <div class="w-full bg-[#82f6ba] hover:bg-[#6ef0ae] rounded-t-lg transition-all duration-500"
-                    style="height: {{ s3_height }}%;"></div>
-                <p class="text-center text-xs font-semibold text-[#0f7844]">Scope 3</p>
+                <p class="text-center text-xs font-semibold text-[#0f7844] mt-1">Scope 3</p>
                 <p class="text-center text-[10px] text-[#618975]">Value chain</p>
             </div>
 
         </div>
 
-        <!-- Legend + note -->
+        <!-- Y-axis guide lines (decorative) -->
+        <div class="relative w-full px-4 -mt-2 pointer-events-none" style="height: 0;">
+            {% for pct in [75, 50, 25] %}
+            <div class="absolute w-full left-0 border-t border-dashed border-neutral-200 dark:border-[#2a4035] flex items-center js-guide-bottom"
+                data-pct="{{ pct }}">
+                <span class="text-[9px] text-neutral-400 ml-1">{{ pct }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Legend -->
         <div class="border-t border-[#f0f4f2] dark:border-[#2a4035] pt-3">
             <div class="flex justify-center gap-6 mb-2">
                 <div class="flex items-center gap-2">
@@ -129,9 +159,16 @@
                 </div>
             </div>
             <p class="text-center text-[10px] text-[#618975] dark:text-[#8baaa0]">
-                Includes submitted &amp; validated activities · hover bars for details
+                Includes submitted &amp; validated activities &middot; hover bars for details
             </p>
         </div>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.js-bar-height, .js-guide-bottom').forEach(el => {
+        if (el.dataset.height) { el.style.height = el.dataset.height + '%'; }
+        if (el.dataset.pct) { el.style.bottom = 'calc(' + el.dataset.pct + '% + 24px)'; el.style.padding = '0 16px'; }
+        el.classList.remove('js-bar-height', 'js-guide-bottom');
+    });
+</script>
 {% endmacro %}

@@ -66,6 +66,14 @@ def create_app(config_name='default'):
     from app.api.v1.factors import bp as api_factors_bp
     app.register_blueprint(api_factors_bp)
 
+    # API v1 — messaging
+    from app.api.v1.messages import bp as api_messages_bp
+    app.register_blueprint(api_messages_bp)
+
+    # API v1 — analytics
+    from app.api.v1.analytics import bp as api_analytics_bp
+    app.register_blueprint(api_analytics_bp)
+
     # --------------------
     # Return app
     # --------------------

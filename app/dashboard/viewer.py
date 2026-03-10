@@ -10,6 +10,16 @@ bp = Blueprint(
 )
 
 
+@bp.route('/analytics')
+@login_required
+def analytics():
+    """Detailed standalone analytics page with charts."""
+    if not current_user.organization_id:
+         flash('You are not associated with any organization.', 'error')
+         return redirect(url_for('dashboard_viewer.viewer_index'))
+
+    return render_template('pages/dashboard/viewer/analytics.html', organization=current_user.organization)
+
 @bp.route('/')
 @login_required
 def viewer_index():

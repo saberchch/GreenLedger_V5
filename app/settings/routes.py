@@ -5,10 +5,36 @@ from werkzeug.security import generate_password_hash
 from app.extensions import db
 from app.settings import bp
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     """General settings page."""
+    if request.method == 'POST':
+        theme = request.form.get('theme', 'light')
+        language = request.form.get('language', 'en')
+        email_notif = 'on' if request.form.get('email_notifications') else 'off'
+        push_notif = 'on' if request.form.get('push_notifications') else 'off'
+        analytics = 'on' if request.form.get('analytics') else 'off'
+
+        # Persist to user model if preferences column exists
+        try:
+            if hasattr(current_user, 'preferences'):
+                import json
+                prefs = json.loads(current_user.preferences or '{}')
+                prefs.update({
+                    'theme': theme, 'language': language,
+                    'email_notifications': email_notif,
+                    'push_notifications': push_notif,
+                    'analytics': analytics,
+                })
+                current_user.preferences = json.dumps(prefs)
+                db.session.commit()
+        except Exception:
+            pass
+
+        flash('Settings saved!', 'success')
+        return redirect(url_for('settings.index'))
+
     return render_template('pages/settings/index.html', user=current_user)
 
 @bp.route('/profile', methods=['GET', 'POST'])

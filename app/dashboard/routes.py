@@ -23,3 +23,11 @@ def index():
     else:
         # Default to viewer for anyone else
         return redirect(url_for('dashboard_viewer.viewer_index'))
+
+
+@bp.route('/factors')
+@login_required
+def factor_explorer():
+    """Public factor explorer — accessible to all dashboard roles."""
+    return render_template('pages/dashboard/factor_explorer.html')
+

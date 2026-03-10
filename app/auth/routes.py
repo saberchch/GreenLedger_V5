@@ -51,7 +51,12 @@ def register():
         password_confirm = request.form.get('password_confirm', '')
         first_name = request.form.get('first_name', '').strip()
         last_name = request.form.get('last_name', '').strip()
-        organization_name = request.form.get('organization_name', '').strip()
+        
+        # Validate & capture selected role
+        selected_role = request.form.get('role', 'worker').strip().lower()
+        allowed_roles = {'worker', 'auditor', 'viewer'}
+        if selected_role not in allowed_roles:
+            selected_role = 'worker'
 
         if not email or not password:
             flash('Email and password are required', 'error')
@@ -69,17 +74,20 @@ def register():
             flash('Email already registered', 'error')
             return render_template('pages/register.html')
 
+        # Link worker to a selected existing organization
+        from app.models.organization import Organization, OrganizationStatus
         organization = None
-        if organization_name:
-            organization = Organization.query.filter_by(name=organization_name).first()
+        if selected_role == 'worker':
+            org_id = request.form.get('organization_id', '').strip()
+            if not org_id:
+                flash('Workers must select a registered organization to join.', 'error')
+                return render_template('pages/register.html')
+            organization = Organization.query.filter_by(
+                id=org_id, status=OrganizationStatus.ACTIVE
+            ).first()
             if not organization:
-                organization = Organization(
-                    name=organization_name,
-                    legal_name=organization_name,
-                    is_active=True
-                )
-                db.session.add(organization)
-                db.session.flush()
+                flash('Organization not found or not active. Please search and select a valid organization.', 'error')
+                return render_template('pages/register.html')
 
         user = User(
             email=email,
@@ -93,17 +101,14 @@ def register():
         db.session.add(user)
         db.session.flush()
 
-        # Default role for MVP
-        viewer_role = Role.query.filter_by(name='worker').first()
-        if viewer_role:
-            from app.models.user_role import user_roles
-            db.session.execute(
-                user_roles.insert().values(
-                    user_id=user.id,
-                    role_id=viewer_role.id,
-                    organization_id=organization.id if organization else None
-                )
-            )
+        from app.models.user import UserRole
+
+        role_map = {
+            'worker': UserRole.WORKER,
+            'auditor': UserRole.AUDITOR,
+            'viewer': UserRole.VIEWER,
+        }
+        user.role = role_map.get(selected_role, UserRole.WORKER)
 
         db.session.commit()
 
@@ -200,4 +205,4 @@ def logout():
     """Logout route."""
     logout_user()
     flash('You have been logged out successfully', 'info')
-    return redirect(url_for('main.landing'))
+    return redirect(url_for('main.index'))

@@ -1,0 +1,70 @@
+{% extends "layouts/dashboard_base.html" %}
+{% block title %}Global Settings{% endblock %}
+{% block dashboard_content %}
+<div class="max-w-[900px] mx-auto flex flex-col gap-6">
+
+    <!-- Header -->
+    <div
+        class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/40 dark:bg-[#111814]/40 backdrop-blur-xl shadow-lg p-6">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 pointer-events-none"></div>
+        <div class="relative z-10">
+            <h1
+                class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300">
+                Global Settings</h1>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Configure platform-wide defaults. Changes
+                take effect immediately.</p>
+        </div>
+    </div>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}
+    <div>{% for cat, msg in messages %}
+        <div
+            class="p-3 rounded-lg text-sm mb-2 {% if cat=='success' %}bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50{% else %}bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-400 border border-red-200{% endif %}">
+            {{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}{% endwith %}
+
+    <!-- Settings Form -->
+    <form method="POST"
+        class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/40 dark:bg-[#111814]/40 backdrop-blur-xl shadow-sm">
+        <div class="divide-y divide-neutral-100/50 dark:divide-white/5">
+            {% for setting in settings %}
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3 px-6 py-5">
+                <div class="flex-1">
+                    <label class="block text-sm font-semibold text-neutral-900 dark:text-white mb-0.5"
+                        for="setting_{{ setting.key }}">
+                        {{ setting.key | replace('_', ' ') | title }}
+                    </label>
+                    {% if setting.description %}
+                    <p class="text-xs text-neutral-500 dark:text-neutral-400">{{ setting.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="sm:w-72">
+                    {% if setting.value in ['true', 'false'] %}
+                    <select name="setting_{{ setting.key }}" id="setting_{{ setting.key }}"
+                        class="w-full text-sm rounded-lg border border-neutral-200/50 dark:border-white/10 bg-white/70 dark:bg-black/20 dark:text-white px-3 py-2 focus:ring-emerald-500">
+                        <option value="true" {% if setting.value=='true' %}selected{% endif %}>Enabled</option>
+                        <option value="false" {% if setting.value=='false' %}selected{% endif %}>Disabled</option>
+                    </select>
+                    {% else %}
+                    <input type="text" name="setting_{{ setting.key }}" id="setting_{{ setting.key }}"
+                        value="{{ setting.value }}"
+                        class="w-full text-sm rounded-lg border border-neutral-200/50 dark:border-white/10 bg-white/70 dark:bg-black/20 dark:text-white px-3 py-2 focus:ring-emerald-500">
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="px-6 py-4 border-t border-neutral-100/50 dark:border-white/5 flex justify-end">
+            <button type="submit"
+                class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">save</span> Save Settings
+            </button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}

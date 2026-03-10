@@ -114,7 +114,16 @@ class EmissionActivity(BaseModel):
 
     # Workflow notes
     description = db.Column(db.Text, nullable=True)    # worker free-text description
-    rejection_reason = db.Column(db.Text, nullable=True)  # org-admin rejection note
+    rejection_reason = db.Column(db.Text, nullable=True)  # org-admin / auditor rejection note
+
+    # ── Auditor workflow fields ───────────────────────────────────────────────
+    auditor_notes = db.Column(db.Text, nullable=True)      # auditor comment (any action)
+    proof_requested = db.Column(db.Boolean, default=False, nullable=False)  # auditor asked for more docs
+    audited_by_id = db.Column(
+        db.Integer,
+        db.ForeignKey("users.id"),
+        nullable=True
+    )
 
     # ADEME legacy fields (kept for backward compat)
     poste_emission = db.Column(db.String(255), nullable=True)
@@ -123,8 +132,10 @@ class EmissionActivity(BaseModel):
     # Relationships
     organization = db.relationship("Organization", backref="activities")
     created_by = db.relationship("User", foreign_keys=[created_by_id], backref="created_activities")
+    audited_by = db.relationship("User", foreign_keys=[audited_by_id], backref="audited_activities")
     # Note: emission_factor_id is kept for optional database storage,
     # but we primarily use CSV-based emission factors via EmissionFactorLoader
+
 
     def __repr__(self):
         return f"<EmissionActivity {self.id} - {self.scope.value} - {self.activity_type.value} - {self.status.value}>"

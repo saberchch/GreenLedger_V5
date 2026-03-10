@@ -1,15 +1,92 @@
-{% extends "layouts/dashboard_base.html" %}
-
-{% block title %}My Drafts{% endblock %}
-{% block page_title %}My Drafts{% endblock %}
+{% extends "pages/dashboard/worker/index.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block dashboard_content %}
-<div class="max-w-4xl mx-auto">
-    <div
-        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-8 text-center">
-        <span class="material-symbols-outlined text-primary text-6xl mb-4">draft</span>
-        <h2 class="text-2xl font-bold text-[#111814] dark:text-white mb-2">My Drafts</h2>
-        <p class="text-[#618975] dark:text-[#8baaa0]">You have {{ drafts|length }} draft emission(s)</p>
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between flex-wrap gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-[#111814] dark:text-white flex items-center gap-3">
+                <span class="material-symbols-outlined text-amber-500" style="font-size:28px">edit_note</span>
+                My Drafts
+            </h1>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Unsaved activities ready to submit</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{{ url_for('dashboard_worker.new_emission') }}"
+                class="h-10 px-4 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold text-sm transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined" style="font-size:18px">add</span> New Activity
+            </a>
+        </div>
     </div>
+
+    {% if not drafts %}
+    <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] p-16 text-center">
+        <span class="material-symbols-outlined text-6xl text-emerald-400 mb-4 block">check_circle</span>
+        <h3 class="text-xl font-bold text-[#111814] dark:text-white mb-2">No drafts</h3>
+        <p class="text-[#618975] mb-4">All your work has been submitted — great job!</p>
+        <a href="{{ url_for('dashboard_worker.new_emission') }}"
+            class="inline-flex items-center gap-2 px-5 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">add</span> Add new activity
+        </a>
+    </div>
+    {% else %}
+
+    <!-- Draft cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {% for a in drafts.items %}
+        <div
+            class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-5 flex flex-col gap-4 hover:shadow-md transition-shadow">
+            <!-- Top row -->
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs text-neutral-400 font-medium">Activity #{{ a.id }}</p>
+                    <h3 class="font-semibold text-[#111814] dark:text-white text-sm mt-0.5">{{ a.category }}</h3>
+                    <p class="text-xs text-neutral-500 mt-0.5">{{ a.activity_type.value|title }} · {{ a.scope.value }}
+                    </p>
+                </div>
+                <span
+                    class="px-2.5 py-1 rounded-full text-xs font-semibold bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
+                    Draft
+                </span>
+            </div>
+            <!-- CO2e -->
+            {% if a.co2e_result %}
+            <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-3 text-center">
+                <div class="text-lg font-extrabold text-emerald-700">{{ "%.3f"|format(a.co2e_result/1000) }} tCO₂e</div>
+                <div class="text-xs text-emerald-600">Estimated</div>
+            </div>
+            {% endif %}
+            <!-- Period -->
+            <p class="text-xs text-neutral-500">
+                {{ a.period_start }} → {{ a.period_end }}
+            </p>
+            <!-- Actions -->
+            <div class="flex gap-2 pt-2 border-t border-neutral-100 dark:border-[#2a4035]">
+                <form method="POST" action="{{ url_for('dashboard_worker.submit_emission', id=a.id) }}" class="flex-1">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button type="submit"
+                        class="w-full h-9 bg-primary hover:bg-primary/90 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1">
+                        <span class="material-symbols-outlined" style="font-size:15px">send</span> Submit
+                    </button>
+                </form>
+                <a href="{{ url_for('dashboard_worker.edit_emission', id=a.id) }}"
+                    class="flex-1 h-9 border border-neutral-300 dark:border-[#3d5348] text-neutral-600 dark:text-neutral-300 text-xs font-medium rounded-lg hover:bg-neutral-50 dark:hover:bg-[#23352c] transition-colors flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined" style="font-size:15px">edit</span> Edit
+                </a>
+                <a href="{{ url_for('dashboard_worker.emission_detail', id=a.id) }}"
+                    class="h-9 w-9 border border-neutral-300 dark:border-[#3d5348] text-neutral-500 rounded-lg hover:bg-neutral-50 dark:hover:bg-[#23352c] transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined" style="font-size:15px">visibility</span>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="mt-4">
+        {{ render_pagination(drafts, 'dashboard_worker.drafts') }}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

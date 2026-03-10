@@ -76,3 +76,26 @@ class EncryptionManager:
         Returns SHA-256 hash of the original file for integrity verification.
         """
         return hashlib.sha256(file_data).hexdigest()
+
+    @staticmethod
+    def encrypt_text(text: str, context_id: int) -> str:
+        """
+        Encrypt a UTF-8 string and return a base64-encoded string.
+        context_id can be any integer (org_id, user-pair key, etc.)
+        """
+        data = text.encode('utf-8')
+        encrypted_bytes = EncryptionManager.encrypt_file(data, context_id)
+        return base64.b64encode(encrypted_bytes).decode('utf-8')
+
+    @staticmethod
+    def decrypt_text(ciphertext_b64: str, context_id: int) -> str:
+        """
+        Decrypt a base64-encoded encrypted string back to plaintext.
+        Returns the original text, or '[decryption error]' on failure.
+        """
+        try:
+            encrypted_bytes = base64.b64decode(ciphertext_b64.encode('utf-8'))
+            plain_bytes = EncryptionManager.decrypt_file(encrypted_bytes, context_id)
+            return plain_bytes.decode('utf-8')
+        except Exception:
+            return '[decryption error]'

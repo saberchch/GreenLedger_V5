@@ -43,7 +43,7 @@
     class="w-full border-b border-[#f0f4f2] dark:border-[#1a2e24] bg-white dark:bg-background-dark sticky top-0 z-50">
     <div class="px-4 md:px-10 py-4 flex items-center justify-between max-w-7xl mx-auto w-full">
         <div class="flex items-center gap-3 text-[#111714] dark:text-white">
-            <a href="{{ url_for('main.landing') }}" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <a href="{{ url_for('main.index') }}" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 {{ logo('8') }}
                 <h2 class="text-xl font-bold leading-tight tracking-tight">GreenLedger</h2>
             </a>
@@ -61,7 +61,7 @@
 <div class="flex-1 flex justify-center items-start pt-8 pb-16 px-4 md:px-10 relative">
     <!-- Back to Home Link -->
     <div class="absolute top-8 left-4 md:left-10 z-10">
-        <a href="{{ url_for('main.landing') }}"
+        <a href="{{ url_for('main.index') }}"
             class="flex items-center gap-2 text-[#648775] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
             <span class="material-symbols-outlined text-[18px]">arrow_back</span>
             <span>Back to Home</span>

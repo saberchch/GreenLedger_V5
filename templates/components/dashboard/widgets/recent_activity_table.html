@@ -1,4 +1,5 @@
-{% macro recent_activity_table(recent_activities) %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
+{% macro recent_activity_table(recent_activities, endpoint='dashboard_org_admin.org_admin_index') %}
 <!-- Recent Activity Overview -->
 <div
     class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
@@ -31,7 +32,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
-                {% for activity in recent_activities %}
+                {% for activity in recent_activities.items %}
                 <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
                     <td class="px-6 py-4 text-sm font-medium text-[#111814] dark:text-white">
                         <div class="flex items-center gap-3">
@@ -85,6 +86,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        {{ render_pagination(recent_activities, endpoint, page_param='recent_page') }}
     </div>
 </div>
 {% endmacro %}

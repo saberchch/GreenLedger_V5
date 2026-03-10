@@ -1,4 +1,5 @@
 {% extends "layouts/dashboard_base.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block title %}Fix Rejected Data{% endblock %}
 {% block page_title %}Fix Rejected Data{% endblock %}
@@ -9,8 +10,12 @@
         class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-8 text-center">
         <span class="material-symbols-outlined text-red-500 text-6xl mb-4">error</span>
         <h2 class="text-2xl font-bold text-[#111814] dark:text-white mb-2">Fix Rejected Data</h2>
-        <p class="text-[#618975] dark:text-[#8baaa0]">You have {{ rejected|length }} rejected emission(s) that need
+        <p class="text-[#618975] dark:text-[#8baaa0]">You have {{ rejected.total }} rejected emission(s) that need
             correction</p>
+    </div>
+
+    <div class="mt-6">
+        {{ render_pagination(rejected, 'dashboard_worker.rejected') }}
     </div>
 </div>
 {% endblock %}

@@ -1,25 +1,34 @@
 {% if is_admin | default(false) %}
-  {% extends "pages/dashboard/org_admin/index.html" %}
+{% extends "pages/dashboard/org_admin/index.html" %}
 {% else %}
-  {% extends "pages/dashboard/worker/index.html" %}
+{% extends "pages/dashboard/worker/index.html" %}
 {% endif %}
 
 {% block dashboard_content %}
 <div class="max-w-4xl mx-auto space-y-6">
 
+    <!-- Duplicate context banner (shown only when arriving from /duplicate route) -->
+    <div id="duplicate-banner" class="hidden items-center gap-3 bg-teal-50 border border-teal-200 rounded-xl px-5 py-3">
+        <span class="material-symbols-outlined text-teal-600">content_copy</span>
+        <div class="flex-1 text-sm text-teal-800">
+            <span class="font-semibold">Duplicating activity</span> — the ADEME emission factor has been carried over.
+            Just update the <strong>dates</strong> and <strong>quantity</strong> below.
+        </div>
+    </div>
+
     <!-- Header -->
     <div class="flex items-center gap-4">
         <a href="{{ url_for('dashboard_org_admin.emissions') if is_admin | default(false) else url_for('dashboard_worker.worker_index') }}"
-            class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors">
-            <span class="material-icons text-xl">arrow_back</span>
+            class="px-5 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back
         </a>
         <div>
             <h1 class="text-xl font-bold text-neutral-900">New Emission Activity</h1>
             <p class="text-sm text-neutral-500">
                 {% if is_admin | default(false) %}
-                    Direct admin entry — activity will be auto-validated
+                Direct admin entry — activity will be auto-validated
                 {% else %}
-                    Record a GHG emission using official ADEME Base Carbone factors
+                Record a GHG emission using official ADEME Base Carbone factors
                 {% endif %}
             </p>
         </div>
@@ -28,15 +37,15 @@
     <!-- Step Progress Bar -->
     <div class="bg-white rounded-xl border border-neutral-200/60 p-4">
         <div class="flex items-center justify-between">
-            {% set steps = [("1", "Activity Details", "info"), ("2", "ADEME Factor", "search"), ("3", "Quantity &
-            Preview", "calculate")] %}
+            {% set steps = [("1", "Activity Details", "info"), ("2", "ADEME Factor", "search"), ("3", "Period &
+            Quantity", "calculate")] %}
             {% for num, label, icon in steps %}
             <div class="flex items-center gap-2 step-indicator" data-step="{{ num }}">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300
                     {% if loop.first %}bg-emerald-600 text-white step-active{% else %}bg-neutral-100 text-neutral-400 step-inactive{% endif %}"
                     id="step-circle-{{ num }}">
                     {% if not loop.first %}
-                    <span class="material-icons text-sm">{{ icon }}</span>
+                    <span class="material-symbols-outlined text-sm">{{ icon }}</span>
                     {% else %}
                     {{ num }}
                     {% endif %}
@@ -70,7 +79,7 @@
         <div id="step-panel-1" class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
             <div class="p-5 border-b border-neutral-100">
                 <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
-                    <span class="material-icons text-emerald-600 text-lg">info</span>
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">info</span>
                     Step 1 — Activity Details
                 </h2>
             </div>
@@ -124,21 +133,6 @@
                         class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
                 </div>
 
-                <!-- Period Start -->
-                <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Period Start <span
-                            class="text-red-500">*</span></label>
-                    <input type="date" name="period_start" required
-                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
-                </div>
-
-                <!-- Period End -->
-                <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Period End <span
-                            class="text-red-500">*</span></label>
-                    <input type="date" name="period_end" required
-                        class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
-                </div>
 
                 <!-- Description -->
                 <div class="md:col-span-2">
@@ -149,9 +143,9 @@
             </div>
             <div class="p-5 border-t border-neutral-100 flex justify-end">
                 <button type="button" onclick="goToStep(2)"
-                    class="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                    Next: Choose Factor <span class="material-icons text-sm">arrow_forward</span>
-                </button>
+                    class="flex items-center gap-2 text-[#618975] dark:text-gray-400 hover:text-primary transition-colors text-sm font-medium">
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    <span>Next: Choose Factor</span></button>
             </div>
         </div>
 
@@ -159,7 +153,7 @@
         <div id="step-panel-2" class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden hidden">
             <div class="p-5 border-b border-neutral-100">
                 <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
-                    <span class="material-icons text-emerald-600 text-lg">search</span>
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">search</span>
                     Step 2 — Select ADEME Emission Factor
                 </h2>
                 <p class="text-sm text-neutral-500 mt-1">Search 12,000+ official factors from ADEME Base Carbone V23.6
@@ -170,7 +164,7 @@
                 <!-- Search input -->
                 <div class="relative">
                     <span
-                        class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl pointer-events-none">search</span>
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl pointer-events-none">search</span>
                     <input type="text" id="factor-search-input"
                         placeholder="Search in French or English: électricité, camion, gaz naturel…"
                         class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
@@ -188,7 +182,7 @@
 
                 <!-- No results state -->
                 <div id="factor-no-results" class="hidden text-center py-8 text-neutral-400">
-                    <span class="material-icons text-4xl mb-2 block">search_off</span>
+                    <span class="material-symbols-outlined text-4xl mb-2 block">search_off</span>
                     No factors found. Try a different keyword.
                 </div>
 
@@ -212,18 +206,18 @@
                     <div class="mt-3 grid grid-cols-3 gap-2 text-xs" id="sf-ghg-breakdown"></div>
                     <button type="button" onclick="clearFactor()"
                         class="mt-3 text-xs text-neutral-500 hover:text-red-600 transition-colors flex items-center gap-1">
-                        <span class="material-icons text-xs">close</span> Clear selection
+                        <span class="material-symbols-outlined text-xs">close</span> Clear selection
                     </button>
                 </div>
             </div>
             <div class="p-5 border-t border-neutral-100 flex justify-between">
                 <button type="button" onclick="goToStep(1)"
                     class="px-5 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
-                    <span class="material-icons text-sm">arrow_back</span> Back
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back
                 </button>
                 <button type="button" onclick="goToStep(3)" id="btn-step2-next" disabled
                     class="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-2">
-                    Next: Quantity <span class="material-icons text-sm">arrow_forward</span>
+                    Next: Quantity <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
             </div>
         </div>
@@ -232,11 +226,27 @@
         <div id="step-panel-3" class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden hidden">
             <div class="p-5 border-b border-neutral-100">
                 <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
-                    <span class="material-icons text-emerald-600 text-lg">calculate</span>
-                    Step 3 — Quantity & Preview
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">calculate</span>
+                    Step 3 — Period &amp; Quantity
                 </h2>
             </div>
             <div class="p-5 space-y-5">
+
+                <!-- Period dates -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">Period Start <span
+                                class="text-red-500">*</span></label>
+                        <input type="date" name="period_start" id="period-start-input" required
+                            class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-neutral-700 mb-2">Period End <span
+                                class="text-red-500">*</span></label>
+                        <input type="date" name="period_end" id="period-end-input" required
+                            class="w-full rounded-lg border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
+                    </div>
+                </div>
 
                 <!-- Simple quantity (shown by default) -->
                 <div id="quantity-simple">
@@ -278,7 +288,7 @@
                 <!-- Live CO2e Preview -->
                 <div class="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 p-5">
                     <div class="text-sm text-neutral-600 mb-3 font-medium flex items-center gap-2">
-                        <span class="material-icons text-base text-emerald-600">bolt</span>
+                        <span class="material-symbols-outlined text-base text-emerald-600">bolt</span>
                         Live CO₂e Preview
                     </div>
                     <div class="grid grid-cols-3 gap-3 text-center">
@@ -288,7 +298,8 @@
                         </div>
                         <div>
                             <div id="preview-factor" class="text-xl font-bold text-neutral-800">—</div>
-                            <div class="text-xs text-neutral-500 mt-0.5">kgCO₂e/unit</div>
+                            <div class="text-xs text-neutral-500 mt-0.5" id="preview-factor-unit-label">kgCO₂e / unit
+                            </div>
                         </div>
                         <div class="bg-white rounded-lg border border-emerald-200 p-2">
                             <div id="preview-result-kg" class="text-xl font-bold text-emerald-700">0</div>
@@ -343,7 +354,7 @@
             <div class="p-5 border-t border-neutral-100 flex justify-between items-center">
                 <button type="button" onclick="goToStep(2)"
                     class="px-5 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
-                    <span class="material-icons text-sm">arrow_back</span> Back
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back
                 </button>
                 <div class="flex gap-3">
                     <button type="submit" name="action" value="draft"
@@ -352,7 +363,7 @@
                     </button>
                     <button type="submit" name="action" value="submit"
                         class="px-5 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                        <span class="material-icons text-sm">send</span> Submit for Validation
+                        <span class="material-symbols-outlined text-[18px]">send</span> Submit for Validation
                     </button>
                 </div>
             </div>
@@ -365,6 +376,102 @@
     let currentStep = 1;
     let selectedFactor = null;
     let searchTimeout = null;
+
+    // ─── Duplicate Pre-fill (reads URL params set by /duplicate route) ───────
+    (function prefillFromDuplicate() {
+        const p = new URLSearchParams(window.location.search);
+        if (!p.get('ademe_factor_id')) return;   // not a duplicate — do nothing
+
+        // 1. Scope card
+        const scopeVal = p.get('scope') || '';
+        const scopeRadio = document.querySelector(`input[name="scope"][value="${scopeVal}"]`);
+        if (scopeRadio) {
+            scopeRadio.checked = true;
+            const card = scopeRadio.closest('.scope-card');
+            if (card) {
+                card.classList.add('border-emerald-500', 'bg-emerald-50');
+                card.classList.remove('border-neutral-200');
+            }
+        }
+
+        // 2. Category, activity type, description
+        const catInput = document.getElementById('category-input');
+        if (catInput) catInput.value = p.get('category') || '';
+
+        const typeSelect = document.getElementById('activity-type-select');
+        if (typeSelect && p.get('activity_type')) typeSelect.value = p.get('activity_type');
+
+        const descTA = document.querySelector('textarea[name="description"]');
+        if (descTA) descTA.value = p.get('description') || '';
+
+        // 3. Restore ADEME factor into JS state + hidden inputs + UI card
+        const fId = p.get('ademe_factor_id') || '';
+        const fName = p.get('ademe_factor_name') || '';
+        const fVal = parseFloat(p.get('ademe_factor_value')) || 0;
+        const fUnit = p.get('ademe_factor_unit') || '';
+        const fSrc = p.get('ademe_factor_source') || '';
+        const fCat = p.get('ademe_factor_category') || '';
+
+        if (fId) {
+            selectedFactor = {
+                id: fId, name_fr: fName, name_en: fName,
+                factor: fVal, unit_fr: fUnit, unit_en: fUnit,
+                source: fSrc, category: fCat
+            };
+
+            document.getElementById('f-ademe-id').value = fId;
+            document.getElementById('f-ademe-name').value = fName;
+            document.getElementById('f-ademe-value').value = fVal;
+            document.getElementById('f-ademe-unit').value = fUnit;
+            document.getElementById('f-ademe-source').value = fSrc;
+            document.getElementById('f-ademe-category').value = fCat;
+
+            function parseQuantityUnitLocal(u) {
+                if (!u) return 'unit';
+                const s = u.lastIndexOf('/');
+                return s !== -1 ? u.slice(s + 1).trim() : u.trim();
+            }
+            const qUnit = parseQuantityUnitLocal(fUnit);
+            const qtyHidden = document.getElementById('quantity-unit-hidden');
+            if (qtyHidden) qtyHidden.value = qUnit;
+
+            // Show factor card
+            const sfName = document.getElementById('sf-name');
+            const sfCat = document.getElementById('sf-category');
+            const sfSrc = document.getElementById('sf-source');
+            const sfFact = document.getElementById('sf-factor');
+            const sfUnit = document.getElementById('sf-unit');
+            if (sfName) sfName.textContent = fName;
+            if (sfCat) sfCat.textContent = fCat;
+            if (sfSrc) sfSrc.textContent = fSrc;
+            if (sfFact) sfFact.textContent = `${fVal} kgCO₂e`;
+            if (sfUnit) sfUnit.textContent = fUnit;
+
+            const unitHint = document.getElementById('unit-hint');
+            if (unitHint) unitHint.textContent = `(${qUnit})`;
+            const pfUnitLabel = document.getElementById('preview-factor-unit-label');
+            if (pfUnitLabel) pfUnitLabel.textContent = fUnit;
+
+            const selectedCard = document.getElementById('selected-factor-card');
+            if (selectedCard) selectedCard.classList.remove('hidden');
+
+            const nextBtn = document.getElementById('btn-step2-next');
+            if (nextBtn) { nextBtn.disabled = false; nextBtn.classList.remove('opacity-40', 'cursor-not-allowed'); }
+        }
+
+        // 4. Transport mode (if applicable)
+        const tmSelect = document.querySelector('select[name="transport_mode"]');
+        if (tmSelect && p.get('transport_mode')) tmSelect.value = p.get('transport_mode');
+
+        // 5. Show the duplicate context banner
+        const banner = document.getElementById('duplicate-banner');
+        if (banner) { banner.classList.remove('hidden'); banner.classList.add('flex'); }
+
+        // 6. Jump straight to Step 3 (dates & quantity).
+        // goToStep is a function declaration so it is hoisted; this script is
+        // placed at the end of <body> so the DOM is already fully parsed.
+        goToStep(3);
+    })();
 
     // ─── Step Navigation ────────────────────────────────────────────────────
     function goToStep(n) {
@@ -397,12 +504,12 @@
             const isDone = i < n;
 
             circle.className = `w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${isActive ? 'bg-emerald-600 text-white' :
-                    isDone ? 'bg-emerald-100 text-emerald-600' :
-                        'bg-neutral-100 text-neutral-400'
+                isDone ? 'bg-emerald-100 text-emerald-600' :
+                    'bg-neutral-100 text-neutral-400'
                 }`;
             circle.innerHTML = isDone
-                ? '<span class="material-icons text-sm">check</span>'
-                : (isActive ? i : `<span class="material-icons text-sm">${['info', 'search', 'calculate'][i - 1]}</span>`);
+                ? '<span class="material-symbols-outlined text-sm">check</span>'
+                : (isActive ? i : `<span class="material-symbols-outlined text-sm">${['info', 'search', 'calculate'][i - 1]}</span>`);
 
             if (label) {
                 label.className = `text-sm font-medium hidden sm:block ${isActive ? 'text-emerald-700' : isDone ? 'text-emerald-500' : 'text-neutral-400'
@@ -503,32 +610,50 @@
           <div class="text-xs text-neutral-400">${escHtml(f.unit_fr)}</div>
         </div>
       </div>
-      ${f.source ? `<div class="mt-1.5 text-xs text-neutral-400 flex items-center gap-1"><span class="material-icons text-xs">source</span>${escHtml(f.source)}</div>` : ''}
+      ${f.source ? `<div class="mt-1.5 text-xs text-neutral-400 flex items-center gap-1"><span class="material-symbols-outlined text-xs">source</span>${escHtml(f.source)}</div>` : ''}
     `;
             el.addEventListener('click', () => selectFactor(f));
             resultsDiv.appendChild(el);
         });
     }
 
+    // Extract just the denominator from ADEME unit strings.
+    // e.g. "kgCO₂e /kWh" → "kWh",  "kgCO2e /t" → "t",  "kgCO2e /p.km" → "p.km"
+    function parseQuantityUnit(ademeUnit) {
+        if (!ademeUnit) return 'unit';
+        const slash = ademeUnit.lastIndexOf('/');
+        if (slash !== -1) return ademeUnit.slice(slash + 1).trim();
+        return ademeUnit.trim();
+    }
+
     function selectFactor(f) {
         selectedFactor = f;
 
-        // Update hidden fields
+        // Full ADEME unit string (e.g. "kgCO₂e /kWh") — store as-is
+        const ademeUnit = f.unit_fr || f.unit_en || '';
+        // Just the data-entry unit (e.g. "kWh") — used for quantity input
+        const qtyUnit = parseQuantityUnit(ademeUnit);
+
+        // Update hidden fields — keep full ADEME unit
         document.getElementById('f-ademe-id').value = f.id;
         document.getElementById('f-ademe-name').value = f.name_fr || f.name_en;
         document.getElementById('f-ademe-value').value = f.factor;
-        document.getElementById('f-ademe-unit').value = f.unit_fr;
+        document.getElementById('f-ademe-unit').value = ademeUnit;
         document.getElementById('f-ademe-source').value = f.source || '';
         document.getElementById('f-ademe-category').value = f.category || '';
-        document.getElementById('quantity-unit-hidden').value = f.unit_fr;
+        document.getElementById('quantity-unit-hidden').value = qtyUnit;
 
-        // Update selected card
+        // Update selected card — show full ADEME unit unchanged
         document.getElementById('sf-name').textContent = f.name_fr || f.name_en;
         document.getElementById('sf-category').textContent = f.category;
         document.getElementById('sf-source').textContent = f.source || '';
         document.getElementById('sf-factor').textContent = `${f.factor} kgCO₂e`;
-        document.getElementById('sf-unit').textContent = f.unit_fr;
-        document.getElementById('unit-hint').textContent = `(${f.unit_fr})`;
+        document.getElementById('sf-unit').textContent = ademeUnit;   // e.g. "kgCO₂e /kWh"
+
+        // Quantity label: just the data-entry unit — e.g. "(kWh)"
+        document.getElementById('unit-hint').textContent = `(${qtyUnit})`;
+        // Preview factor column label: full ADEME unit string
+        document.getElementById('preview-factor-unit-label').textContent = ademeUnit;
 
         // GHG breakdown
         const bk = document.getElementById('sf-ghg-breakdown');
@@ -572,8 +697,11 @@
             document.getElementById('preview-quantity').textContent = `${qty.toLocaleString()} t·km`;
         } else {
             qty = parseFloat(document.getElementById('quantity-input')?.value) || 0;
-            const unit = (selectedFactor?.unit_fr) || 'unit';
-            formula = `${qty} ${unit} × ${factorVal ?? '?'} kgCO₂e/${unit}`;
+            // Use the parsed unit (denominator only) for quantity display
+            const ademeUnit = selectedFactor?.unit_fr || selectedFactor?.unit_en || '';
+            const unit = parseQuantityUnit(ademeUnit) || 'unit';
+            const factorLabel = ademeUnit || `kgCO₂e/${unit}`;
+            formula = `${qty.toLocaleString()} ${unit} × ${factorVal ?? '?'} ${factorLabel}`;
             document.getElementById('preview-quantity').textContent = `${qty.toLocaleString()} ${unit}`;
         }
 
@@ -587,9 +715,9 @@
     }
 
     // Attach live preview listeners
-    ['quantity-input', 'tonnage-input', 'distance-input'].forEach(id => {
+    ['quantity-input', 'tonnage-input', 'distance-input', 'period-start-input', 'period-end-input'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('input', updatePreview);
+        if (el) el.addEventListener('input', () => { updatePreview(); updateSummary(); });
     });
 
     // ─── Activity Summary ─────────────────────────────────────────────────────
@@ -597,8 +725,8 @@
         const scope = document.querySelector('input[name="scope"]:checked')?.value || '—';
         const cat = document.getElementById('category-input').value || '—';
         const type = document.getElementById('activity-type-select').value || '—';
-        const ps = document.querySelector('input[name="period_start"]').value || '—';
-        const pe = document.querySelector('input[name="period_end"]').value || '—';
+        const ps = document.getElementById('period-start-input').value || '—';
+        const pe = document.getElementById('period-end-input').value || '—';
         const factorName = selectedFactor ? (selectedFactor.name_fr || selectedFactor.name_en) : '—';
 
         document.getElementById('sum-scope').textContent = scope;

@@ -9,7 +9,7 @@
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-xl font-bold text-neutral-900 flex items-center gap-2">
-                <span class="material-icons text-emerald-600">edit</span>
+                <span class="material-symbols-outlined text-emerald-600">edit</span>
                 Edit Activity #{{ activity.id }}
             </h1>
             <p class="text-sm text-neutral-500 mt-0.5">
@@ -23,27 +23,27 @@
         </div>
         <a href="{{ url_for('dashboard_worker.emission_detail', id=activity.id) }}"
             class="text-sm px-4 py-2 border border-neutral-300 rounded-lg text-neutral-600 hover:bg-neutral-50 transition-colors flex items-center gap-2">
-            <span class="material-icons text-sm">arrow_back</span> Back
+            <span class="material-symbols-outlined text-sm">arrow_back</span> Back
         </a>
     </div>
 
     {% if activity.rejection_reason %}
     <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-sm">
         <div class="font-semibold text-red-700 flex items-center gap-2 mb-1">
-            <span class="material-icons text-sm">warning</span> Rejection Reason
+            <span class="material-symbols-outlined text-sm">warning</span> Rejection Reason
         </div>
         <p class="text-red-600">{{ activity.rejection_reason }}</p>
     </div>
     {% endif %}
 
-    <form method="POST" class="space-y-6">
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
         <!-- Activity Details -->
         <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
             <div class="p-5 border-b border-neutral-100">
                 <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
-                    <span class="material-icons text-emerald-600 text-lg">info</span>
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">info</span>
                     Activity Details
                 </h2>
             </div>
@@ -98,7 +98,7 @@
         <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
             <div class="p-5 border-b border-neutral-100">
                 <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
-                    <span class="material-icons text-emerald-600 text-lg">search</span>
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">search</span>
                     ADEME Emission Factor
                 </h2>
             </div>
@@ -115,7 +115,7 @@
 
                 <div class="relative">
                     <span
-                        class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl pointer-events-none">search</span>
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xl pointer-events-none">search</span>
                     <input type="text" id="factor-search-input"
                         placeholder="Search to change factor: électricité, camion, gaz naturel…"
                         class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" />
@@ -133,7 +133,7 @@
         <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
             <div class="p-5 border-b border-neutral-100">
                 <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
-                    <span class="material-icons text-emerald-600 text-lg">calculate</span>
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">calculate</span>
                     Quantity & Calculation
                 </h2>
             </div>
@@ -167,6 +167,27 @@
             </div>
         </div>
 
+        <!-- Evidence Document -->
+        <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+            <div class="p-5 border-b border-neutral-100">
+                <h2 class="font-semibold text-neutral-800 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600 text-lg">attach_file</span>
+                    Additional Evidence
+                </h2>
+            </div>
+            <div class="p-5">
+                <label class="block text-sm font-medium text-neutral-700 mb-2">
+                    Upload New Document <span class="text-neutral-400 font-normal">(optional)</span>
+                </label>
+                <input type="file" name="evidence_file" accept=".pdf,.jpg,.jpeg,.png,.csv,.xlsx"
+                    class="w-full text-sm text-neutral-500
+                    file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                    file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
+                <p class="text-xs text-neutral-400 mt-1">Previous documents are retained. Upload here to add more
+                    evidence (encrypted at rest).</p>
+            </div>
+        </div>
+
         <!-- Actions -->
         <div class="flex justify-end gap-3">
             <a href="{{ url_for('dashboard_worker.emission_detail', id=activity.id) }}"
@@ -175,7 +196,7 @@
             </a>
             <button type="submit"
                 class="px-5 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                <span class="material-icons text-sm">save</span>
+                <span class="material-symbols-outlined text-sm">save</span>
                 Save & Return to Draft
             </button>
         </div>

@@ -1,15 +1,99 @@
-{% extends "layouts/dashboard_base.html" %}
-
-{% block title %}My Submissions{% endblock %}
-{% block page_title %}My Submissions{% endblock %}
+{% extends "pages/dashboard/worker/index.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block dashboard_content %}
-<div class="max-w-4xl mx-auto">
-    <div
-        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-8 text-center">
-        <span class="material-symbols-outlined text-blue-500 text-6xl mb-4">send</span>
-        <h2 class="text-2xl font-bold text-[#111814] dark:text-white mb-2">My Submissions</h2>
-        <p class="text-[#618975] dark:text-[#8baaa0]">You have {{ submissions|length }} submission(s)</p>
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between flex-wrap gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-[#111814] dark:text-white flex items-center gap-3">
+                <span class="material-symbols-outlined text-blue-500" style="font-size:28px">send</span>
+                My Submissions
+            </h1>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Activities submitted for validation</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <span
+                class="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-sm font-semibold border border-blue-200">
+                {{ submissions.total }} submission{{ 's' if submissions.total != 1 else '' }}
+            </span>
+        </div>
     </div>
+
+    {% if not submissions %}
+    <div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] p-16 text-center">
+        <span class="material-symbols-outlined text-6xl text-neutral-300 mb-4 block">inbox</span>
+        <h3 class="text-xl font-bold text-[#111814] dark:text-white mb-2">No submissions yet</h3>
+        <p class="text-[#618975] mb-4">Save a draft and submit it for your admin to validate.</p>
+        <a href="{{ url_for('dashboard_worker.new_emission') }}"
+            class="inline-flex items-center gap-2 px-5 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">add</span> New activity
+        </a>
+    </div>
+    {% else %}
+
+    <!-- Submissions table -->
+    <div
+        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#e5e7eb]">
+                    <tr>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider">#</th>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider">Activity
+                        </th>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider">Scope</th>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider">CO₂e</th>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider">Status</th>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider">Date</th>
+                        <th class="px-5 py-3 text-xs font-semibold text-[#618975] uppercase tracking-wider text-right">
+                            Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                    {% for a in submissions.items %}
+                    <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
+                        <td class="px-5 py-4 text-sm text-neutral-400 font-mono">#{{ a.id }}</td>
+                        <td class="px-5 py-4">
+                            <p class="text-sm font-medium text-[#111814] dark:text-white">{{ a.category }}</p>
+                            <p class="text-xs text-neutral-500 mt-0.5">{{ a.activity_type.value|title }}</p>
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                                {% if a.scope.value == 'Scope 1' %}bg-red-100 text-red-700
+                                {% elif a.scope.value == 'Scope 2' %}bg-amber-100 text-amber-700
+                                {% else %}bg-blue-100 text-blue-700{% endif %}">
+                                {{ a.scope.value }}
+                            </span>
+                        </td>
+                        <td class="px-5 py-4 text-sm font-semibold text-emerald-700">
+                            {% if a.co2e_result %}{{ "%.3f"|format(a.co2e_result/1000) }} t{% else %}—{% endif %}
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                                {% if a.status.value == 'submitted' %}bg-blue-100 text-blue-700
+                                {% elif a.status.value == 'validated' %}bg-emerald-100 text-emerald-700
+                                {% elif a.status.value == 'rejected' %}bg-red-100 text-red-700
+                                {% elif a.status.value == 'audited' %}bg-purple-100 text-purple-700
+                                {% else %}bg-neutral-100 text-neutral-600{% endif %}">
+                                {{ a.status.value|title }}
+                            </span>
+                        </td>
+                        <td class="px-5 py-4 text-sm text-neutral-500">{{ a.created_at.strftime('%d %b %Y') }}</td>
+                        <td class="px-5 py-4 text-right">
+                            <a href="{{ url_for('dashboard_worker.emission_detail', id=a.id) }}"
+                                class="text-xs font-medium text-[#618975] hover:text-[#111814] dark:hover:text-white transition-colors flex items-center gap-1 justify-end">
+                                <span class="material-symbols-outlined" style="font-size:14px">visibility</span> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ render_pagination(submissions, 'dashboard_worker.submissions') }}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

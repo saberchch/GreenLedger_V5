@@ -1,0 +1,131 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Auditor Management - Platform Admin{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="space-y-2">
+        {% for category, message in messages %}
+        <div
+            class="p-4 text-sm rounded-lg {% if category == 'error' %}bg-red-50 text-red-800{% elif category == 'warning' %}bg-yellow-50 text-yellow-800{% else %}bg-green-50 text-green-800{% endif %} border {% if category == 'error' %}border-red-200{% elif category == 'warning' %}border-yellow-200{% else %}border-green-200{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Header -->
+    <div class="flex justify-between items-center flex-wrap gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-[#111814] dark:text-white">Auditor Management</h1>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Verify auditor credentials and assign them to
+                organizations.</p>
+        </div>
+        <div class="flex gap-3">
+            <span
+                class="h-10 px-4 rounded-lg bg-neutral-100 dark:bg-[#23352c] text-neutral-500 font-medium text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined" style="font-size: 18px;">engineering</span>
+                {{ auditors|length }} Auditors
+            </span>
+        </div>
+    </div>
+
+    <!-- Auditors List -->
+    <div
+        class="bg-white dark:bg-[#1a2e25] rounded-xl border border-neutral-200/60 dark:border-[#2a4035] shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-neutral-100 dark:border-[#2a4035]">
+            <h3 class="text-lg font-bold text-neutral-900 dark:text-white">System Auditors</h3>
+            <p class="text-sm text-neutral-500 mt-1">Users with the "Auditor" role.</p>
+        </div>
+
+        <div class="divide-y divide-neutral-100 dark:divide-[#2a4035]">
+            {% for auditor in auditors %}
+            <div class="p-6">
+                <div class="flex flex-col md:flex-row md:items-start gap-6">
+                    <!-- Auditor Info -->
+                    <div class="flex items-center gap-4 min-w-[300px]">
+                        <div
+                            class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
+                            {{ (auditor.first_name or auditor.email)[0]|upper }}
+                        </div>
+                        <div>
+                            <p class="text-base font-bold text-neutral-900 dark:text-white">
+                                {{ auditor.first_name }} {{ auditor.last_name }}
+                            </p>
+                            <p class="text-sm text-neutral-500">{{ auditor.email }}</p>
+                            {% if auditor.organization %}
+                            <p class="mt-1 flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                                <span class="material-symbols-outlined text-[14px]">home</span>
+                                Native Org: {{ auditor.organization.name }}
+                            </p>
+                            {% else %}
+                            <p class="mt-1 flex items-center gap-1 text-xs font-semibold text-neutral-400">
+                                <span class="material-symbols-outlined text-[14px]">public</span>
+                                Independent Auditor
+                            </p>
+                            {% endif %}
+                            <!-- Verification Status -->
+                            <div class="mt-2 flex items-center gap-2">
+                                {% if auditor.is_verified %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-full">
+                                    <span class="material-symbols-outlined text-[12px]">verified</span> Verified
+                                </span>
+                                <form method="POST"
+                                    action="{{ url_for('dashboard_admin.revoke_auditor_verification', auditor_id=auditor.id) }}"
+                                    class="inline">
+                                    <button type="submit"
+                                        class="text-xs text-red-500 hover:text-red-700 font-semibold transition-colors">Revoke</button>
+                                </form>
+                                {% else %}
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-full">
+                                    <span class="material-symbols-outlined text-[12px]">pending</span> Pending
+                                    Verification
+                                </span>
+                                <form method="POST"
+                                    action="{{ url_for('dashboard_admin.verify_auditor', auditor_id=auditor.id) }}"
+                                    class="inline">
+                                    <button type="submit"
+                                        class="text-xs font-bold px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">Approve
+                                        ✓</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col items-end justify-between gap-3 ml-auto">
+                        <a href="{{ url_for('dashboard_admin.auditor_profile', auditor_id=auditor.id) }}"
+                            class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all">
+                            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                            View Full Profile
+                        </a>
+                        {% set total_contracts = auditor.audit_contracts.count() %}
+                        {% set active_contracts =
+                        auditor.audit_contracts.filter_by(status=ContractStatus.ACTIVE).count() if ContractStatus is
+                        defined else 0 %}
+                        <span class="text-xs text-neutral-500 dark:text-neutral-400">
+                            {{ total_contracts }} contract(s)
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="p-12 text-center">
+                <span
+                    class="material-symbols-outlined text-neutral-300 dark:text-neutral-600 text-5xl mb-4">person_off</span>
+                <p class="font-bold text-neutral-900 dark:text-white">No Auditors Found</p>
+                <p class="text-neutral-500 text-sm mt-1">There are no users with the auditor role in the system.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -35,6 +35,22 @@ def _log(actor_id: int, org_id: int, action: str, entity_id: int, details: str):
     db.session.add(entry)
 
 
+def _notify_auditor_if_needed(activity, action_title, message):
+    """Generate a notification for the auditor who previously reviewed this activity."""
+    from app.models.notification import Notification, NotificationType
+    
+    if activity.audited_by_id:
+        notif = Notification(
+            user_id=activity.audited_by_id,
+            title=action_title,
+            message=message,
+            type=NotificationType.INFO,
+            related_entity_type='emission_activity',
+            related_entity_id=activity.id
+        )
+        db.session.add(notif)
+
+
 def _kg_to_tonnes(kg: float) -> float:
     return round(kg / 1000, 6)
 
@@ -169,6 +185,14 @@ def submit_activity(user, activity_id: int) -> EmissionActivity:
         entity_id=activity.id,
         details=f"Submitted for validation. co2e={activity.co2e_result} kgCO2e",
     )
+    
+    # Notify auditor if this is a resubmission
+    _notify_auditor_if_needed(
+        activity,
+        "Emission Re-submitted",
+        f"Worker has re-submitted emission activity #{activity.id} for validation on {datetime.utcnow().strftime('%Y-%m-%d %H:%M')}."
+    )
+    
     db.session.commit()
     return activity
 
@@ -241,8 +265,6 @@ def update_activity(user, activity_id: int, form: dict,
     if not is_admin:
         if activity.created_by_id != user.id:
             raise PermissionError("You can only edit your own activities.")
-        if activity.status not in (ActivityStatus.DRAFT, ActivityStatus.REJECTED):
-            raise ValueError("You can only edit DRAFT or REJECTED activities.")
 
     if is_admin and activity.organization_id != user.organization_id:
         raise PermissionError("You can only edit activities in your organization.")
@@ -281,7 +303,10 @@ def update_activity(user, activity_id: int, form: dict,
         activity.status = ActivityStatus.VALIDATED
     else:
         activity.status = ActivityStatus.DRAFT
+        
     activity.rejection_reason = None  # clear old rejection
+    activity.proof_requested = False  # clear proof flag
+    activity.auditor_notes = None     # clear auditor notes as they are addressing it
 
     _log(
         actor_id=user.id,
@@ -292,6 +317,13 @@ def update_activity(user, activity_id: int, form: dict,
             f"Updated by {'admin' if is_admin else 'worker'}: "
             f"scope={activity.scope.value}, co2e={co2e_result} kgCO2e"
         ),
+    )
+
+    # If it was previously reviewed by an auditor, editing it signals an update
+    _notify_auditor_if_needed(
+        activity,
+        "Emission Updated",
+        f"Activity #{activity.id} was updated on {datetime.utcnow().strftime('%Y-%m-%d %H:%M')}. They will re-submit when ready."
     )
 
     db.session.commit()

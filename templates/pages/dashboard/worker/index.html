@@ -1,7 +1,7 @@
 {% extends "layouts/dashboard_base.html" %}
 {% from "components/dashboard/kpi_card_v2.html" import kpi_card %}
 {% from "components/dashboard/widgets/worker_workflow_bar.html" import worker_workflow_bar with context %}
-{% from "components/dashboard/widgets/emissions_breakdown_chart.html" import emissions_breakdown_chart %}
+{% from "components/dashboard/widgets/scope_chart.html" import scope_chart %}
 {% from "components/dashboard/widgets/worker_action_center.html" import worker_action_center %}
 {% from "components/dashboard/widgets/recent_uploads_table.html" import recent_uploads_table %}
 
@@ -23,26 +23,34 @@
 {% endwith %}
 
 <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
-    <!-- Filters & Workflow Bar -->
-    {{ worker_workflow_bar() }}
 
-    <!-- KPI Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {{ kpi_card('Total Carbon Footprint', kpis.footprint, 'tCO2e', kpis.footprint_change, 'down', 'cloud') }}
-        {{ kpi_card('Est. CBAM Liability', kpis.liability, '', kpis.liability_change, 'up', 'euro') }}
-        {{ kpi_card('Carbon Cost Exposure', kpis.exposure, '', kpis.exposure_change, 'neutral',
-        'account_balance_wallet') }}
-        {{ kpi_card('Data Completeness', kpis.completeness, '', '', '', 'pie_chart') }}
+
+
+    <!-- KPI Grid - Company Carbon Overview -->
+    <div>
+        <p class="text-xs text-neutral-400 font-medium uppercase tracking-wider mb-2 ml-1">
+            Company-wide carbon overview — {{ current_user.organization.name if current_user.organization else 'Your
+            Org' }}
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {{ kpi_card('Total Emissions', kpis.total_emissions, 'tCO₂e', kpis.total_emissions_change, 'down', 'cloud')
+            }}
+            {{ kpi_card('Scope 1 — Direct', kpis.scope1, 'tCO₂e', kpis.scope1_change, 'down', 'local_fire_department')
+            }}
+            {{ kpi_card('Scope 2 — Energy', kpis.scope2, 'tCO₂e', kpis.scope2_change, 'up', 'bolt') }}
+            {{ kpi_card('Scope 3 — Value Chain', kpis.scope3, 'tCO₂e', kpis.scope3_change, 'down', 'public') }}
+        </div>
     </div>
 
     <!-- Charts & Actions Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto min-h-[400px]">
-        {{ emissions_breakdown_chart() }}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {{ scope_chart(kpis) }}
         {{ worker_action_center(alerts) }}
     </div>
 
-    <!-- Recent Activity Table -->
+    <!-- My Recent Activities -->
     {{ recent_uploads_table(my_activities) }}
+
 </div>
 
 {% endblock %}

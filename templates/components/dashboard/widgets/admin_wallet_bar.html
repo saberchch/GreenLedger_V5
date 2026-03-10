@@ -14,17 +14,50 @@
 </div>
 
 <script>
-    function connectWallet() {
+    window.connectedWallet = null;
+
+    async function connectWallet() {
         const btn = document.getElementById('walletBtn');
         const text = document.getElementById('walletText');
-        text.innerText = 'Connecting...';
 
-        setTimeout(() => {
-            text.innerText = '0x71C...93F2';
+        if (typeof window.ethereum === 'undefined') {
+            alert('MetaMask or another Web3 wallet is not installed. Please install it to proceed.');
+            return;
+        }
+
+        try {
+            text.innerText = 'Connecting...';
+            // Request account access
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            window.connectedWallet = accounts[0];
+
+            // Format address: 0x1234...abcd
+            const shortAddress = window.connectedWallet.slice(0, 6) + '...' + window.connectedWallet.slice(-4);
+            text.innerText = shortAddress;
+
+            // UI Update
             btn.classList.remove('bg-[#13ec80]', 'hover:bg-[#0fd673]', 'text-[#0a1f14]');
             btn.classList.add('bg-[#1a2c24]', 'text-white', 'border', 'border-[#13ec80]');
-            alert('Wallet Connected Successfully!');
-        }, 1500);
+
+            // Dispatch event so the table knows we connected
+            window.dispatchEvent(new Event('walletConnected'));
+
+        } catch (error) {
+            console.error("User denied account access or error occurred:", error);
+            text.innerText = 'Connect Wallet';
+            alert('Failed to connect wallet. Please try again.');
+        }
     }
+
+    // Auto-connect if already authorized previously
+    window.addEventListener('load', async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                // Silently auto-connect
+                connectWallet();
+            }
+        }
+    });
 </script>
 {% endmacro %}

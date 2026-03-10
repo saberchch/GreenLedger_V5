@@ -1,0 +1,257 @@
+{% extends "layouts/dashboard_base.html" %}
+{% block title %}AI Bot Monitoring{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-[1200px] mx-auto flex flex-col gap-8 pb-12">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-neutral-900 dark:text-white flex items-center gap-3">
+                <span class="material-symbols-outlined text-purple-500 text-3xl">smart_toy</span>
+                AI Bot Monitoring
+            </h1>
+            <p class="text-neutral-500 dark:text-neutral-400 mt-2">
+                Real-time visibility into the GreenLedger Platform Assistant's activity and configuration.
+            </p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div
+                class="px-4 py-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 text-sm font-bold flex items-center gap-2">
+                <span class="size-2 rounded-full bg-purple-500 animate-pulse"></span>
+                System Role: BOT
+            </div>
+            <div
+                class="px-4 py-2 rounded-xl bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-500 dark:text-neutral-400 text-sm font-bold flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">verified_user</span>
+                Read-Only Mode
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div
+            class="bg-white dark:bg-[#1a2e25] p-6 rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm">
+            <p class="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-1">Status</p>
+            <p class="text-2xl font-bold {{ 'text-emerald-500' if metrics.status == 'Online' else 'text-red-500' }}">{{
+                metrics.status }}</p>
+        </div>
+        <div
+            class="bg-white dark:bg-[#1a2e25] p-6 rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm">
+            <p class="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-1">Total Messages</p>
+            <p class="text-2xl font-bold text-neutral-900 dark:text-white">{{ "{:,}".format(metrics.total_messages) }}
+            </p>
+        </div>
+        <div
+            class="bg-white dark:bg-[#1a2e25] p-6 rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm">
+            <p class="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-1">Estimated Tokens</p>
+            <p class="text-2xl font-bold text-neutral-900 dark:text-white">{{ "{:,}".format(metrics.estimated_tokens) }}
+            </p>
+        </div>
+        <div
+            class="bg-white dark:bg-[#1a2e25] p-6 rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm">
+            <p class="text-xs font-bold text-neutral-400 uppercase tracking-widest mb-1">Unique Users</p>
+            <p class="text-2xl font-bold text-neutral-900 dark:text-white">{{ metrics.interacted_users }}</p>
+        </div>
+    </div>
+
+    <!-- Main Content Tabs/Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Left Column: Bot Profile & Automations -->
+        <div class="lg:col-span-2 space-y-8">
+
+            <!-- Bot Profile Card -->
+            <div
+                class="bg-white dark:bg-[#1a2e25] rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm overflow-hidden">
+                <div
+                    class="px-6 py-4 border-b border-neutral-100 dark:border-[#2a4035] flex items-center justify-between bg-neutral-50/50 dark:bg-white/5">
+                    <h3 class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-purple-500 text-[20px]">badge</span>
+                        Core Identity
+                    </h3>
+                </div>
+                <div class="p-6 grid sm:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Email
+                                Address</label>
+                            <div
+                                class="p-3 bg-neutral-50 dark:bg-black/20 rounded-xl text-sm font-medium border border-neutral-100 dark:border-white/5 dark:text-neutral-300">
+                                {{ bot.email if bot else "N/A" }}
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Display
+                                Name</label>
+                            <div
+                                class="p-3 bg-neutral-50 dark:bg-black/20 rounded-xl text-sm font-medium border border-neutral-100 dark:border-white/5 dark:text-neutral-300">
+                                {{ bot.first_name if bot else "AI Assistant" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Public
+                                ID</label>
+                            <div
+                                class="p-3 bg-neutral-50 dark:bg-black/20 rounded-xl text-sm font-mono text-[11px] break-all border border-neutral-100 dark:border-white/5 dark:text-neutral-400">
+                                {{ bot.id if bot else "0" }}
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Reputation
+                                Score</label>
+                            <div
+                                class="p-3 bg-neutral-50 dark:bg-black/20 rounded-xl text-sm font-medium flex items-center justify-between border border-neutral-100 dark:border-white/5">
+                                <span class="dark:text-neutral-300">{{ bot.reputation_score if bot else 100 }}</span>
+                                <span
+                                    class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-widest">Fixed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Automation Rules Table -->
+            <div
+                class="bg-white dark:bg-[#1a2e25] rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm overflow-hidden">
+                <div
+                    class="px-6 py-4 border-b border-neutral-100 dark:border-[#2a4035] flex items-center justify-between bg-neutral-50/50 dark:bg-white/5">
+                    <h3 class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-purple-500 text-[20px]">dynamic_form</span>
+                        Automation Engine Logic
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="bg-neutral-50 dark:bg-white/5 text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                                <th class="px-6 py-4">Rule Name</th>
+                                <th class="px-6 py-4">Trigger Event</th>
+                                <th class="px-6 py-4">Automated Action</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-neutral-100 dark:divide-[#2a4035]">
+                            {% for rule in automation_rules %}
+                            <tr class="text-sm dark:bg-transparent">
+                                <td class="px-6 py-4 font-bold text-neutral-900 dark:text-white">{{ rule.name }}</td>
+                                <td class="px-6 py-4 text-neutral-600 dark:text-neutral-400">{{ rule.trigger }}</td>
+                                <td class="px-6 py-4">
+                                    <code
+                                        class="px-2 py-1 bg-neutral-100 dark:bg-white/5 rounded text-[11px] text-purple-600 dark:text-purple-400">{{ rule.action }}</code>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase tracking-wider">
+                                        <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                                        Active
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: System Config & Infrastructure -->
+        <div class="space-y-8">
+
+            <!-- Global AI Settings -->
+            <div
+                class="bg-white dark:bg-[#1a2e25] rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm overflow-hidden">
+                <div
+                    class="px-6 py-4 border-b border-neutral-100 dark:border-[#2a4035] bg-neutral-50/50 dark:bg-white/5">
+                    <h3 class="font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+                        <span
+                            class="material-symbols-outlined text-purple-500 text-[20px]">settings_input_component</span>
+                        System Configuration
+                    </h3>
+                </div>
+                <div class="p-6 space-y-4">
+                    {% for s in settings %}
+                    {% if 'ai' in s.key.lower() or 'bot' in s.key.lower() or 'model' in s.key.lower() %}
+                    <div>
+                        <p class="text-[11px] font-bold text-neutral-400 uppercase mb-1">{{ s.key|replace('_', ' ') }}
+                        </p>
+                        <div
+                            class="p-3 bg-neutral-50 dark:bg-black/20 rounded-xl text-xs font-mono border border-neutral-100 dark:border-white/5 dark:text-neutral-300 flex items-center justify-between">
+                            <span class="truncate pr-2">{{ s.value }}</span>
+                            <span class="material-symbols-outlined text-emerald-500 text-[14px]">lock</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+
+                    <div class="pt-4 mt-4 border-t border-neutral-100 dark:border-[#2a4035]">
+                        <div class="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+                            <h4
+                                class="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-2 mb-2">
+                                <span class="material-symbols-outlined text-[16px]">info</span>
+                                Configuration Note
+                            </h4>
+                            <p class="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                                Bot settings are controlled via the primary platform configuration files. Changes
+                                require a system restart.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Status -->
+            <div
+                class="bg-white dark:bg-[#1a2e25] rounded-2xl border border-neutral-200 dark:border-[#2a4035] shadow-sm overflow-hidden p-6">
+                <h3 class="font-bold text-neutral-900 dark:text-white flex items-center gap-2 mb-6">
+                    <span class="material-symbols-outlined text-purple-500 text-[20px]">hub</span>
+                    Infrastructure Health
+                </h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="size-8 rounded-lg bg-neutral-100 dark:bg-white/5 flex items-center justify-center text-neutral-500">
+                                <span class="material-symbols-outlined text-[18px]">dns</span>
+                            </div>
+                            <p class="text-sm font-bold text-neutral-700 dark:text-neutral-300">Model Inference</p>
+                        </div>
+                        <span class="text-xs font-bold text-emerald-500">Operational</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="size-8 rounded-lg bg-neutral-100 dark:bg-white/5 flex items-center justify-center text-neutral-500">
+                                <span class="material-symbols-outlined text-[18px]">storage</span>
+                            </div>
+                            <p class="text-sm font-bold text-neutral-700 dark:text-neutral-300">Memory VectorDB</p>
+                        </div>
+                        <span class="text-xs font-bold text-emerald-500">Operational</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="size-8 rounded-lg bg-neutral-100 dark:bg-white/5 flex items-center justify-center text-neutral-500">
+                                <span class="material-symbols-outlined text-[18px]">api</span>
+                            </div>
+                            <p class="text-sm font-bold text-neutral-700 dark:text-neutral-300">External LLM API</p>
+                        </div>
+                        <span class="text-xs font-bold text-emerald-500">Operational</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

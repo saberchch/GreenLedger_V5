@@ -1,0 +1,278 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Factor Explorer — ADEME Base Carbone{% endblock %}
+
+{% block dashboard_content %}
+
+<!-- Factor detail modal -->
+<div id="factor-modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+    onclick="if(event.target===this) closeModal()">
+    <div class="bg-white dark:bg-[#1a2c24] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div
+            class="sticky top-0 bg-white dark:bg-[#1a2c24] p-5 border-b border-neutral-200 dark:border-[#2a4035] flex justify-between items-start rounded-t-2xl">
+            <div>
+                <h2 id="modal-name" class="text-lg font-bold text-[#111814] dark:text-white pr-4"></h2>
+                <p id="modal-category" class="text-sm text-neutral-500 mt-0.5"></p>
+            </div>
+            <button onclick="closeModal()" class="text-neutral-400 hover:text-neutral-700 shrink-0">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div id="modal-body" class="p-5 space-y-4"></div>
+    </div>
+</div>
+
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+
+    <!-- Header + search -->
+    <div class="bg-gradient-to-r from-[#0f7844] to-[#13a05e] rounded-2xl p-6 text-white">
+        <div class="flex flex-wrap justify-between items-start gap-4 mb-5">
+            <div>
+                <h1 class="text-2xl font-black flex items-center gap-2">
+                    <span class="material-symbols-outlined" style="font-size:28px">database</span>
+                    Factor Explorer
+                </h1>
+                <p class="text-white/75 text-sm mt-1">ADEME Base Carbone V23.6 — 12,817 factors · 8,163 valid · 401
+                    categories</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <select id="lang-select"
+                    class="h-9 px-3 rounded-xl bg-white/15 border border-white/25 text-white text-sm font-medium focus:outline-none backdrop-blur-sm">
+                    <option value="fr">🇫🇷 French</option>
+                    <option value="en">🇬🇧 English</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Search bar -->
+        <div class="relative">
+            <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none"
+                style="font-size:22px">search</span>
+            <input id="factor-search" type="text"
+                placeholder="Search factors… e.g. electricity, fuel, transport, agriculture" autocomplete="off"
+                class="w-full h-12 pl-12 pr-4 rounded-xl text-[#111814] bg-white shadow-inner text-sm focus:outline-none focus:ring-2 focus:ring-white/50 placeholder:text-neutral-400" />
+        </div>
+
+        <!-- Quick filters -->
+        <div class="flex flex-wrap gap-2 mt-4">
+            {% for label, query in [('⚡ Electricity', 'electricity'), ('✈️ Aviation', 'aviation'), ('🚗 Transport',
+            'transport'), ('🔥 Natural Gas', 'gaz naturel'), ('🏭 Steel', 'acier'), ('🌾 Agriculture', 'agriculture'),
+            ('🏗️ Cement', 'béton'), ('🛢️ Fuel', 'fioul')] %}
+            <button onclick="quickSearch('{{ query }}')"
+                class="px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-medium transition-all border border-white/20">
+                {{ label }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Controls bar -->
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div id="result-count" class="text-sm text-neutral-500 font-medium">Type at least 2 characters to search…</div>
+        <div class="flex items-center gap-3">
+            <label
+                class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300 cursor-pointer select-none">
+                <input type="checkbox" id="valid-only" checked class="accent-[#0f7844] w-4 h-4 rounded" />
+                Valid only
+            </label>
+            <select id="limit-select"
+                class="h-9 px-3 rounded-lg border border-neutral-200 dark:border-[#2a4035] bg-white dark:bg-[#1a2c24] text-sm text-neutral-700 dark:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                <option value="20">20 results</option>
+                <option value="50">50 results</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading" class="hidden flex flex-col items-center py-12 text-neutral-400">
+        <div class="w-8 h-8 border-4 border-neutral-200 border-t-primary rounded-full animate-spin mb-3"></div>
+        <p class="text-sm">Searching…</p>
+    </div>
+
+    <!-- Results grid -->
+    <div id="results-grid" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden flex flex-col items-center py-16 text-neutral-400">
+        <span class="material-symbols-outlined text-6xl mb-3">search_off</span>
+        <p class="text-lg font-medium">No factors found</p>
+        <p class="text-sm mt-1">Try different keywords or disable "Valid only"</p>
+    </div>
+
+    <!-- Initial stats -->
+    <div id="initial-state">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div
+                class="bg-white dark:bg-[#1a2c24] rounded-xl p-5 border border-neutral-200 dark:border-[#2a4035] text-center">
+                <div class="text-3xl font-black text-primary">12,817</div>
+                <div class="text-sm text-neutral-500 mt-1">Total factors</div>
+            </div>
+            <div
+                class="bg-white dark:bg-[#1a2c24] rounded-xl p-5 border border-neutral-200 dark:border-[#2a4035] text-center">
+                <div class="text-3xl font-black text-emerald-600">8,163</div>
+                <div class="text-sm text-neutral-500 mt-1">Valid & active</div>
+            </div>
+            <div
+                class="bg-white dark:bg-[#1a2c24] rounded-xl p-5 border border-neutral-200 dark:border-[#2a4035] text-center">
+                <div class="text-3xl font-black text-blue-600">401</div>
+                <div class="text-sm text-neutral-500 mt-1">Categories</div>
+            </div>
+        </div>
+        <p class="text-center text-neutral-400 text-sm mt-4">
+            Data: <strong>ADEME Base Carbone V23.6</strong> — France's official GHG emission factors reference
+        </p>
+    </div>
+</div>
+
+<script>
+    const searchEl = document.getElementById('factor-search');
+    const langEl = document.getElementById('lang-select');
+    const validEl = document.getElementById('valid-only');
+    const limitEl = document.getElementById('limit-select');
+    const grid = document.getElementById('results-grid');
+    const loading = document.getElementById('loading');
+    const emptyState = document.getElementById('empty-state');
+    const initState = document.getElementById('initial-state');
+    const countEl = document.getElementById('result-count');
+
+    let debounceTimer;
+
+    function quickSearch(q) {
+        searchEl.value = q;
+        doSearch(q);
+    }
+
+    function doSearch(q) {
+        if (!q || q.length < 2) {
+            grid.classList.add('hidden');
+            emptyState.classList.add('hidden');
+            initState.classList.remove('hidden');
+            countEl.textContent = 'Type at least 2 characters to search…';
+            return;
+        }
+        loading.classList.remove('hidden');
+        grid.classList.add('hidden');
+        emptyState.classList.add('hidden');
+        initState.classList.add('hidden');
+
+        const params = new URLSearchParams({
+            q, lang: langEl.value, limit: limitEl.value,
+            valid_only: validEl.checked ? '1' : '0',
+        });
+
+        fetch(`/api/v1/factors/search?${params}`)
+            .then(r => r.json())
+            .then(data => {
+                loading.classList.add('hidden');
+                if (!data.length) { emptyState.classList.remove('hidden'); countEl.textContent = 'No results found'; return; }
+                countEl.textContent = `${data.length} factor${data.length !== 1 ? 's' : ''} found`;
+                grid.innerHTML = data.map(f => renderCard(f)).join('');
+                grid.classList.remove('hidden');
+            })
+            .catch(() => loading.classList.add('hidden'));
+    }
+
+    function renderCard(f) {
+        const lang = langEl.value;
+        const name = (lang === 'en' && f.name_en ? f.name_en : f.name_fr) || f.name_fr;
+        const unit = (lang === 'en' && f.unit_en ? f.unit_en : f.unit_fr) || '';
+        const isArchived = f.status === 'Archivé';
+
+        return `<div class="bg-white dark:bg-[#1a2c24] rounded-xl border border-neutral-200 dark:border-[#2a4035]
+    shadow-sm hover:shadow-md transition-all cursor-pointer group p-5 flex flex-col gap-3"
+    onclick="openModal(${JSON.stringify(f).replace(/"/g, '&quot;')})">
+    <div class="flex justify-between items-start gap-2">
+      <p class="text-sm font-semibold text-[#111814] dark:text-white leading-snug line-clamp-2 group-hover:text-primary transition-colors">${esc(name)}</p>
+      ${isArchived
+                ? '<span class="shrink-0 px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">Archived</span>'
+                : '<span class="shrink-0 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Valid</span>'}
+    </div>
+    <div class="bg-gradient-to-r from-[#f0faf4] to-[#e8f5ee] dark:from-[#23352c] dark:to-[#1a2c24] rounded-xl p-4 text-center">
+      <div class="text-2xl font-black text-primary">${fmtNum(f.factor)}</div>
+      <div class="text-xs text-neutral-500 mt-0.5">kgCO₂e / ${esc(unit) || '—'}</div>
+    </div>
+    <div class="flex flex-wrap gap-1.5">
+      ${f.category ? `<span class="px-2 py-0.5 rounded-full text-xs bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300 truncate max-w-[200px]">${esc(f.category)}</span>` : ''}
+      ${f.geographic_location ? `<span class="px-2 py-0.5 rounded-full text-xs bg-blue-50 text-blue-600">📍 ${esc(f.geographic_location)}</span>` : ''}
+    </div>
+    ${renderGhgBar(f)}
+    <div class="flex justify-between items-center pt-1">
+      <span class="text-xs text-neutral-400">${esc(f.source || 'ADEME')}</span>
+      <span class="text-xs text-primary font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span class="material-symbols-outlined" style="font-size:13px">open_in_new</span> Details
+      </span>
+    </div>
+  </div>`;
+    }
+
+    function renderGhgBar(f) {
+        const co2 = parseFloat(f.co2_fossil) || 0;
+        const ch4 = parseFloat(f.ch4_fossil) || 0;
+        const n2o = parseFloat(f.n2o) || 0;
+        const total = co2 + ch4 + n2o;
+        if (total <= 0) return '';
+        const pco2 = (co2 / total * 100).toFixed(1), pch4 = (ch4 / total * 100).toFixed(1), pn2o = (n2o / total * 100).toFixed(1);
+        return `<div>
+    <div class="flex rounded-full overflow-hidden h-2">
+      <div style="width:${pco2}%" class="bg-primary"></div>
+      <div style="width:${pch4}%" class="bg-amber-400"></div>
+      <div style="width:${pn2o}%" class="bg-blue-400"></div>
+    </div>
+    <div class="flex gap-3 mt-1">
+      <span class="text-[10px] text-neutral-400 flex items-center gap-0.5"><span class="inline-block w-2 h-2 rounded-full bg-primary"></span>CO₂ ${pco2}%</span>
+      <span class="text-[10px] text-neutral-400 flex items-center gap-0.5"><span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span>CH₄ ${pch4}%</span>
+      <span class="text-[10px] text-neutral-400 flex items-center gap-0.5"><span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>N₂O ${pn2o}%</span>
+    </div>
+  </div>`;
+    }
+
+    function openModal(f) {
+        const lang = langEl.value;
+        const name = (lang === 'en' && f.name_en ? f.name_en : f.name_fr) || f.name_fr;
+        const unit = (lang === 'en' && f.unit_en ? f.unit_en : f.unit_fr) || '';
+        document.getElementById('modal-name').textContent = name;
+        document.getElementById('modal-category').textContent = f.category || '';
+        const rows = [
+            ['Emission Factor', `<span class="text-2xl font-black text-primary">${fmtNum(f.factor)}</span> <span class="text-sm text-neutral-500">kgCO₂e / ${esc(unit)}</span>`],
+            ['Status', f.status === 'Archivé' ? '<span class="px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">Archived</span>' : '<span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">✓ Valid</span>'],
+            ['Source', esc(f.source || '—')],
+            ['Location', esc(f.geographic_location || '—')],
+            ['Validity', esc(f.validity_period || '—')],
+            ['ADEME ID', `<code class="text-xs bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 rounded">${esc(f.id)}</code>`],
+        ];
+        const ghgRows = [['CO₂ (fossil)', fmtNum(f.co2_fossil)], ['CH₄ (fossil)', fmtNum(f.ch4_fossil)], ['N₂O', fmtNum(f.n2o)]];
+        document.getElementById('modal-body').innerHTML = `
+    <div class="space-y-2">
+      ${rows.map(([k, v]) => `<div class="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-[#2a4035] last:border-0"><span class="text-sm text-neutral-500">${k}</span><span class="text-sm font-medium text-[#111814] dark:text-white text-right ml-4">${v}</span></div>`).join('')}
+    </div>
+    <div class="bg-neutral-50 dark:bg-[#23352c] rounded-xl p-4">
+      <p class="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">GHG Breakdown (kg/unit)</p>
+      ${ghgRows.map(([k, v]) => `<div class="flex justify-between py-1.5 text-sm"><span class="text-neutral-500">${k}</span><span class="font-mono font-medium text-[#111814] dark:text-white">${v}</span></div>`).join('')}
+    </div>
+    ${renderGhgBar(f)}
+    ${f.tags_fr ? `<div><p class="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Tags</p><div class="flex flex-wrap gap-1.5">${f.tags_fr.split(',').map(t => `<span class="px-2 py-1 rounded-full bg-neutral-100 dark:bg-neutral-700 text-xs text-neutral-600 dark:text-neutral-300">${esc(t.trim())}</span>`).join('')}</div></div>` : ''}
+    ${f.name_en ? `<div class="pt-2 border-t border-neutral-100 dark:border-[#2a4035]"><p class="text-xs text-neutral-400">EN: <em>${esc(f.name_en)}</em></p></div>` : ''}`;
+        document.getElementById('factor-modal').classList.remove('hidden');
+    }
+
+    function closeModal() { document.getElementById('factor-modal').classList.add('hidden'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function fmtNum(v) {
+        const n = parseFloat(v);
+        return isNaN(n) ? '—' : n.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    }
+    function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    searchEl.addEventListener('input', () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => doSearch(searchEl.value.trim()), 300); });
+    langEl.addEventListener('change', () => doSearch(searchEl.value.trim()));
+    validEl.addEventListener('change', () => doSearch(searchEl.value.trim()));
+    limitEl.addEventListener('change', () => doSearch(searchEl.value.trim()));
+    searchEl.focus();
+</script>
+
+{% endblock %}

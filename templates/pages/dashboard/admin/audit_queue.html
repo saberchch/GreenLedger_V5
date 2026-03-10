@@ -1,0 +1,150 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Audit Sign-off Queue — GreenLedger Admin{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-[1100px] mx-auto space-y-6">
+
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-neutral-900 dark:text-white">Audit Sign-off Queue</h1>
+            <p class="text-neutral-500 text-sm mt-1">Review finalized audit reports from delegated auditors and sign
+                them off for blockchain notarization.</p>
+        </div>
+        <a href="{{ url_for('dashboard_admin.admin_index') }}"
+            class="px-4 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Admin Dashboard
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}
+    <div>{% for cat, msg in messages %}
+        <div class="p-3 rounded-lg text-sm mb-2
+            {% if cat=='error' %}bg-red-50 text-red-800 border border-red-200
+            {% else %}bg-emerald-50 text-emerald-800 border border-emerald-200{% endif %}">{{ msg }}</div>
+        {% endfor %}
+    </div>{% endif %}{% endwith %}
+
+    {% if reports %}
+    <div
+        class="bg-white dark:bg-[#1a2e25] rounded-xl border border-neutral-200/60 dark:border-[#2a4035] overflow-hidden">
+        <table class="w-full text-sm">
+            <thead class="bg-neutral-50 dark:bg-[#162620] border-b border-neutral-200 dark:border-[#2a4035]">
+                <tr>
+                    <th class="text-left px-5 py-3 font-semibold text-neutral-600 dark:text-neutral-400">Report</th>
+                    <th class="text-left px-5 py-3 font-semibold text-neutral-600 dark:text-neutral-400">Organization
+                    </th>
+                    <th class="text-left px-5 py-3 font-semibold text-neutral-600 dark:text-neutral-400">Auditor</th>
+                    <th class="text-left px-5 py-3 font-semibold text-neutral-600 dark:text-neutral-400">Period</th>
+                    <th class="text-right px-5 py-3 font-semibold text-neutral-600 dark:text-neutral-400">Total tCO₂e
+                    </th>
+                    <th class="text-left px-5 py-3 font-semibold text-neutral-600 dark:text-neutral-400">Finalized</th>
+                    <th class="px-5 py-3"></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-neutral-100 dark:divide-[#2a4035]">
+                {% for r in reports %}
+                <tr class="hover:bg-neutral-50 dark:hover:bg-[#1f3329] transition-colors">
+                    <td class="px-5 py-4">
+                        <div class="font-semibold text-neutral-800 dark:text-white">Report #{{ r.id }}</div>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full mt-1">
+                            <span class="material-symbols-outlined text-[10px]">hourglass_empty</span> Pending Sign-off
+                        </span>
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="font-medium text-neutral-800 dark:text-white">{{ r.organization.name }}</div>
+                        <div class="text-xs text-neutral-500">{{ r.organization.country or '' }}</div>
+                    </td>
+                    <td class="px-5 py-4 text-neutral-600 dark:text-neutral-400">
+                        {{ r.auditor.full_name if r.auditor else '—' }}
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="text-neutral-900 dark:text-white font-medium">{{ r.period_label or '—' }}</div>
+                        {% if r.period_type %}
+                        <div
+                            class="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mt-0.5">
+                            {{ r.period_type }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="px-5 py-4 text-right font-bold text-emerald-700">
+                        {{ '%.3f'|format((r.total_co2e_kg or 0)/1000) }}
+                    </td>
+                    <td class="px-5 py-4 text-neutral-500 text-xs">
+                        {{ r.audit_finalized_at.strftime('%d %b %Y %H:%M') if r.audit_finalized_at else '—' }}
+                    </td>
+                    <td class="px-5 py-4">
+                        <div class="flex gap-2 justify-end">
+                            {# Expandable notes/recommendations toggle #}
+                            {% if r.audit_notes or r.recommendations %}
+                            <button type="button" onclick="toggleNotes('{{ r.id }}')"
+                                class="px-3 py-1.5 text-xs font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-1">
+                                <span class="material-symbols-outlined text-xs">notes</span> Details
+                            </button>
+                            {% endif %}
+                            {# Sign-off form #}
+                            <form method="POST" action="{{ url_for('dashboard_admin.sign_report', report_id=r.id) }}"
+                                onsubmit="return confirm('Sign off Report #{{ r.id }} for {{ r.organization.name }}? This marks it as AUDITED and ready for blockchain notarization.')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                <button type="submit"
+                                    class="px-4 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-xs">verified</span> Sign &amp; Approve
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {# Expandable details row #}
+                {% if r.audit_notes or r.recommendations %}
+                <tr id="notes-row-{{ r.id }}" class="hidden bg-neutral-50 dark:bg-[#162620]">
+                    <td colspan="7" class="px-5 py-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {% if r.audit_notes %}
+                            <div>
+                                <div class="text-[11px] font-bold uppercase tracking-widest text-neutral-500 mb-1.5">
+                                    <span
+                                        class="material-symbols-outlined text-[14px] align-text-bottom mr-1 relative top-[2px]">notes</span>
+                                    Auditor Notes</div>
+                                <div
+                                    class="text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line bg-white dark:bg-[#1a2e25] p-3 rounded-xl border border-neutral-200 dark:border-[#2a4035]">
+                                    {{ r.audit_notes }}</div>
+                            </div>
+                            {% endif %}
+                            {% if r.recommendations %}
+                            <div class="{% if not r.audit_notes %}md:col-span-2{% endif %}">
+                                <div
+                                    class="text-[11px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400 mb-1.5">
+                                    <span
+                                        class="material-symbols-outlined text-[14px] align-text-bottom mr-1 relative top-[2px]">lightbulb</span>
+                                    Strategic Recommendations</div>
+                                <div
+                                    class="text-sm text-teal-800 dark:text-teal-200 whitespace-pre-line bg-teal-50 dark:bg-teal-900/10 p-3 rounded-xl border border-teal-200 dark:border-teal-800/50 shadow-inner">
+                                    {{ r.recommendations }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div
+        class="bg-white dark:bg-[#1a2e25] rounded-xl border border-neutral-200/60 dark:border-[#2a4035] py-20 text-center text-neutral-400">
+        <span class="material-symbols-outlined text-6xl mb-4 block">task_alt</span>
+        <p class="font-semibold text-lg">No reports awaiting sign-off</p>
+        <p class="text-sm mt-1">Auditors have not finalized any reports yet.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    function toggleNotes(id) {
+        const row = document.getElementById('notes-row-' + id);
+        row.classList.toggle('hidden');
+    }
+</script>
+{% endblock %}

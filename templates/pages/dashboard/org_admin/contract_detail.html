@@ -1,0 +1,131 @@
+{% extends "layouts/dashboard_base.html" %}
+{% block title %}Audit Contract — {{ contract.organization.name }}{% endblock %}
+{% block dashboard_content %}
+<div class="max-w-[800px] mx-auto flex flex-col gap-6">
+
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% if msgs %}<div>{% for cat, msg in msgs %}
+        <div
+            class="p-3 mb-2 rounded-lg text-sm {% if cat=='error' %}bg-red-50 text-red-800 border border-red-200{% elif cat=='warning' %}bg-amber-50 text-amber-800 border border-amber-200{% else %}bg-emerald-50 text-emerald-800 border border-emerald-200{% endif %}">
+            {{ msg }}</div>
+        {% endfor %}
+    </div>{% endif %}{% endwith %}
+
+    <div class="flex items-center gap-3">
+        <a href="{{ url_for('dashboard_org_admin.users') }}"
+            class="p-2 rounded-lg border border-neutral-200 dark:border-[#2a4035] hover:bg-neutral-50 transition-colors">
+            <span class="material-symbols-outlined text-[20px] text-neutral-600">arrow_back</span>
+        </a>
+        <div>
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-white">Audit Contract</h2>
+            <p class="text-neutral-500 text-sm mt-0.5">Smart contract engagement with {{ contract.auditor.first_name }}
+                {{ contract.auditor.last_name }}</p>
+        </div>
+    </div>
+
+    {# Contract card #}
+    <div
+        class="bg-white dark:bg-[#1a2e25] rounded-xl border border-neutral-200/60 dark:border-[#2a4035] overflow-hidden shadow-sm">
+        <div class="px-6 py-4 border-b border-neutral-100 dark:border-[#2a4035] flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span
+                    class="material-symbols-outlined text-primary text-xl p-2 bg-primary/10 rounded-lg">contract</span>
+                <div>
+                    <p class="font-bold text-neutral-900 dark:text-white">Contract #{{ contract.id }}</p>
+                    <p class="text-xs text-neutral-500">{{ contract.auditor_type.value|title }} Auditor</p>
+                </div>
+            </div>
+            <span class="px-3 py-1 text-xs font-bold rounded-full uppercase
+                {% if contract.status.value == 'active' %}bg-emerald-100 text-emerald-800
+                {% elif contract.status.value == 'trial' %}bg-amber-100 text-amber-800
+                {% elif contract.status.value == 'pending' %}bg-blue-100 text-blue-800
+                {% elif contract.status.value == 'completed' %}bg-neutral-100 text-neutral-600
+                {% elif contract.status.value == 'discarded' %}bg-red-100 text-red-800
+                {% else %}bg-neutral-100 text-neutral-500{% endif %}">
+                {{ contract.status.value }}
+            </span>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 px-6 py-5">
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Auditor</p>
+                <p class="font-bold text-neutral-900 dark:text-white">{{ contract.auditor.first_name }} {{
+                    contract.auditor.last_name }}</p>
+                <p class="text-xs text-neutral-500">{{ contract.auditor.email }}</p>
+                <p
+                    class="text-xs mt-1 font-semibold {% if contract.auditor.reputation_score >= 90 %}text-emerald-600{% elif contract.auditor.reputation_score >= 70 %}text-blue-600{% elif contract.auditor.reputation_score >= 50 %}text-amber-600{% else %}text-red-600{% endif %}">
+                    Rep. Score: {{ contract.auditor.reputation_score }}/100
+                </p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Monthly Fee</p>
+                <p class="font-bold text-neutral-900 dark:text-white">
+                    {% if contract.monthly_fee %}${{ "%.2f"|format(contract.monthly_fee) }}{% else %}—{% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Type</p>
+                <p class="font-bold text-neutral-900 dark:text-white">{{ contract.auditor_type.value|title }}</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Contract Start</p>
+                <p class="font-semibold text-sm text-neutral-800 dark:text-neutral-200">
+                    {{ contract.contract_start.strftime('%b %d, %Y') if contract.contract_start else '—' }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Trial Ends</p>
+                <p class="font-semibold text-sm text-neutral-800 dark:text-neutral-200">
+                    {{ contract.trial_end.strftime('%b %d, %Y') if contract.trial_end else '—' }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Contract Ends</p>
+                <p class="font-semibold text-sm text-neutral-800 dark:text-neutral-200">
+                    {{ contract.contract_end.strftime('%b %d, %Y') if contract.contract_end else '—' }}
+                </p>
+            </div>
+            {% if contract.missed_months %}
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Missed Months</p>
+                <p class="font-bold text-red-600">{{ contract.missed_months }}</p>
+            </div>
+            {% endif %}
+            {% if contract.last_audit_submitted_at %}
+            <div>
+                <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Last Audit</p>
+                <p class="font-semibold text-sm text-emerald-700">{{ contract.last_audit_submitted_at.strftime('%b %d,
+                    %Y') }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if contract.message %}
+        <div class="px-6 pb-5">
+            <p class="text-xs font-semibold uppercase text-neutral-400 mb-1">Proposal Message</p>
+            <blockquote class="border-l-4 border-primary/30 pl-4 text-sm text-neutral-600 dark:text-neutral-400 italic">
+                "{{ contract.message }}"
+            </blockquote>
+        </div>
+        {% endif %}
+
+        {% if contract.status.value in ['pending', 'trial', 'active'] %}
+        <div class="px-6 pb-5 flex gap-3">
+            <a href="{{ url_for('dashboard_messages.chat', other_id=contract.auditor.id) }}"
+                class="flex items-center gap-2 px-4 py-2 border border-neutral-200 dark:border-[#2a4035] text-sm font-medium rounded-lg hover:bg-neutral-50 dark:hover:bg-[#15251d] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">mail</span> Message Auditor
+            </a>
+            <form action="{{ url_for('dashboard_org_admin.cancel_contract', contract_id=contract.id) }}" method="POST"
+                onsubmit="return confirm('Cancel this audit contract? This cannot be undone.');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit"
+                    class="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium rounded-lg transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">cancel</span> Cancel Contract
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

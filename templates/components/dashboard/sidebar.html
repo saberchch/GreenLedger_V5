@@ -1,7 +1,7 @@
 <aside
     class="w-64 flex-shrink-0 flex flex-col bg-white dark:bg-[#1a2c24] border-r border-[#f0f4f2] dark:border-[#2a4035] h-full overflow-y-auto z-20">
     <div class="p-6">
-        <a href="{{ url_for('main.landing') }}" class="flex items-center gap-3">
+        <a href="{{ url_for('main.index') }}" class="flex items-center gap-3">
             {% include "components/ui/logo.html" %}
             <div class="flex flex-col">
                 <h1 class="text-[#111814] dark:text-white text-base font-bold leading-normal">GreenLedger</h1>
@@ -25,6 +25,30 @@
             <p
                 class="{% if 'dashboard/admin' in current_page and current_page == url_for('dashboard_admin.admin_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
                 Dashboard</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/analytics' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.analytics') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/analytics' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">monitoring</span>
+            <p
+                class="{% if 'dashboard/admin/analytics' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Platform Insights</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/bot' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.bot_management') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/bot' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">smart_toy</span>
+            <p
+                class="{% if 'dashboard/admin/bot' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                AI Bot Monitoring</p>
         </a>
 
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
@@ -53,8 +77,7 @@
 
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
             {% if 'dashboard/admin/contracts' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
-            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
-            href="{{ url_for('dashboard_admin.smart_contracts') }}">
+            {% else %}border border-transparent{% endif %}" href="{{ url_for('dashboard_admin.smart_contracts') }}">
             <span
                 class="material-symbols-outlined {% if 'dashboard/admin/contracts' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
                 style="font-size: 24px;">smart_toy</span>
@@ -62,6 +85,43 @@
                 class="{% if 'dashboard/admin/contracts' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
                 Smart Contracts</p>
         </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/auditors' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}border border-transparent{% endif %}" href="{{ url_for('dashboard_admin.auditor_management') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/auditors' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">engineering</span>
+            <p
+                class="{% if 'dashboard/admin/auditors' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Auditor Management</p>
+        </a>
+
+        {# ── Audit Sign-off Queue ── #}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/admin/audit-queue' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.audit_queue') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/audit-queue' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">verified</span>
+            <p
+                class="{% if 'dashboard/admin/audit-queue' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Audit Sign-off</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/admin/users' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_admin.user_management') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/admin/users' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">group</span>
+            <p
+                class="{% if 'dashboard/admin/users' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                All Users</p>
+        </a>
+
         {% elif current_user.has_role('org_admin') %}
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
                 {% if 'dashboard/org_admin' in current_page and current_page == url_for('dashboard_org_admin.org_admin_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
@@ -79,6 +139,18 @@
 
         <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Management
         </p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/org-admin/emissions' in current_page or 'dashboard/org-admin/emission/' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_org_admin.emissions') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/org-admin/emissions' in current_page or 'dashboard/org-admin/emission/' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">list_alt</span>
+            <p
+                class="{% if 'dashboard/org-admin/emissions' in current_page or 'dashboard/org-admin/emission/' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                All Emissions</p>
+        </a>
 
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
             href="{{ url_for('dashboard_org_admin.users') }}">
@@ -109,6 +181,30 @@
                 class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
                 Reports</p>
         </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/org-admin/analytics' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_org_admin.analytics') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/org-admin/analytics' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">monitoring</span>
+            <p
+                class="{% if 'dashboard/org-admin/analytics' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Analytics & Insights</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/chat' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_chat.team_chat') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/chat' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">forum</span>
+            <p
+                class="{% if 'dashboard/chat' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Team Chat</p>
+        </a>
         {% elif current_user.has_role('auditor') %}
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
                   {% if 'dashboard/auditor' in current_page and current_page == url_for('dashboard_auditor.auditor_index') %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
@@ -120,6 +216,20 @@
             <p
                 class="{% if 'dashboard/auditor' in current_page and current_page == url_for('dashboard_auditor.auditor_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
                 Dashboard</p>
+        </a>
+
+
+        {# ── Review Queue — primary auditor action ── #}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'auditor/org' in current_page or 'auditor/emission' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{% if current_user.organization_id %}{{ url_for('dashboard_auditor.review_queue', org_id=current_user.organization_id) }}{% else %}#{% endif %}">
+            <span
+                class="material-symbols-outlined {% if 'auditor/org' in current_page or 'auditor/emission' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">rate_review</span>
+            <p
+                class="{% if 'auditor/org' in current_page or 'auditor/emission' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Review Queue</p>
         </a>
 
         <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
@@ -207,40 +317,13 @@
                 New Emission Entry</p>
         </a>
 
-        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
 
-        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Emissions by
-            Scope</p>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
-            href="{{ url_for('dashboard_worker.new_emission') }}?scope=1">
-            <span
-                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
-                style="font-size: 24px;">factory</span>
-            <p
-                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
-                Add Scope 1</p>
-        </a>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
-            href="{{ url_for('dashboard_worker.new_emission') }}?scope=2">
-            <span
-                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
-                style="font-size: 24px;">bolt</span>
-            <p
-                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
-                Add Scope 2</p>
-        </a>
 
-        <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] transition-colors group"
-            href="{{ url_for('dashboard_worker.new_emission') }}?scope=3">
-            <span
-                class="material-symbols-outlined text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white"
-                style="font-size: 24px;">public</span>
-            <p
-                class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
-                Add Scope 3</p>
-        </a>
+
+
+
 
         <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
 
@@ -267,6 +350,30 @@
                 Submission Status</p>
         </a>
 
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/org-admin/emissions' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_org_admin.emissions') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/org-admin/emissions' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">list_alt</span>
+            <p
+                class="{% if 'dashboard/org-admin/emissions' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                All Emissions</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/worker/analytics' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_worker.analytics') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/worker/analytics' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">monitoring</span>
+            <p
+                class="{% if 'dashboard/worker/analytics' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Analytics & Insights</p>
+        </a>
+
         <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
 
         <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Documents</p>
@@ -289,6 +396,23 @@
             <p
                 class="text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white text-sm font-medium leading-normal">
                 My Documents</p>
+        </a>
+
+        <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        <p class="px-3 py-2 text-xs font-bold text-[#618975] dark:text-[#8baaa0] uppercase tracking-wider">Collaboration
+        </p>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+            {% if 'dashboard/chat' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+            {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_chat.team_chat') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/chat' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">forum</span>
+            <p
+                class="{% if 'dashboard/chat' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Team Chat</p>
         </a>
 
         <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
@@ -324,12 +448,37 @@
                 class="material-symbols-outlined {% if 'dashboard/viewer' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
                 style="font-size: 24px;">dashboard</span>
             <p
-                class="{% if 'dashboard/viewer' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                class="{% if 'dashboard/viewer' in current_page and current_page == url_for('dashboard_viewer.viewer_index') %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
                 Dashboard</p>
+        </a>
+
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/viewer/analytics' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard_viewer.analytics') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/viewer/analytics' in current_page %}text-[#111814] dark:text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">monitoring</span>
+            <p
+                class="{% if 'dashboard/viewer/analytics' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Live Insights</p>
         </a>
         {% endif %}
 
         <div class="my-2 border-t border-[#f0f4f2] dark:border-[#2a4035]"></div>
+
+        {# Factor Explorer — accessible to ALL roles #}
+        <a class="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors group
+                  {% if 'dashboard/factors' in current_page %}bg-primary/20 dark:bg-primary/10 border border-primary/10 dark:border-primary/5
+                  {% else %}hover:bg-[#f0f4f2] dark:hover:bg-[#23352c]{% endif %}"
+            href="{{ url_for('dashboard.factor_explorer') }}">
+            <span
+                class="material-symbols-outlined {% if 'dashboard/factors' in current_page %}text-primary{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %}"
+                style="font-size: 24px;">database</span>
+            <p
+                class="{% if 'dashboard/factors' in current_page %}text-[#111814] dark:text-white{% else %}text-[#618975] dark:text-[#8baaa0] group-hover:text-[#111814] dark:group-hover:text-white{% endif %} text-sm font-medium leading-normal">
+                Factor Explorer</p>
+        </a>
     </nav>
 
     {# Settings at bottom #}

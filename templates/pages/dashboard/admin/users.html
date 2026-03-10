@@ -1,0 +1,189 @@
+{% extends "layouts/dashboard_base.html" %}
+{% block title %}User Management{% endblock %}
+{% block dashboard_content %}
+<div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+
+    <!-- Header -->
+    <div
+        class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/40 dark:bg-[#111814]/40 backdrop-blur-xl shadow-lg p-6">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+                <h1
+                    class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-400 dark:to-teal-300">
+                    User Directory
+                </h1>
+                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">View, filter, and manage all registered
+                    platform users.</p>
+            </div>
+            <!-- Filters -->
+            <form method="GET" class="flex flex-wrap items-end gap-3">
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 uppercase tracking-wider">Search</label>
+                    <input type="text" name="q" value="{{ search }}" placeholder="Name or email…"
+                        class="text-sm rounded-lg border border-white/30 bg-white/50 dark:bg-black/20 dark:border-white/10 dark:text-white px-3 py-1.5 focus:ring-emerald-500 focus:border-emerald-500 w-48">
+                </div>
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 uppercase tracking-wider">Role</label>
+                    <select name="role"
+                        class="text-sm rounded-lg border border-white/30 bg-white/50 dark:bg-black/20 dark:border-white/10 dark:text-white px-3 py-1.5 focus:ring-emerald-500">
+                        <option value="">All Roles</option>
+                        {% for r in UserRole %}
+                        {% if r.value != 'bot' and r.value != 'platform_admin' %}
+                        <option value="{{ r.value }}" {% if role_filter==r.value %}selected{% endif %}>{{ r.value |
+                            replace('_', ' ') | title }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 uppercase tracking-wider">Status</label>
+                    <select name="status"
+                        class="text-sm rounded-lg border border-white/30 bg-white/50 dark:bg-black/20 dark:border-white/10 dark:text-white px-3 py-1.5 focus:ring-emerald-500">
+                        <option value="">All</option>
+                        <option value="active" {% if status_filter=='active' %}selected{% endif %}>Active</option>
+                        <option value="inactive" {% if status_filter=='inactive' %}selected{% endif %}>Inactive</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">search</span> Filter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div
+        class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/40 dark:bg-[#111814]/40 backdrop-blur-xl shadow-sm">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-neutral-200/50 dark:border-white/5">
+                        <th
+                            class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            User</th>
+                        <th
+                            class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            Role</th>
+                        <th
+                            class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            Organization</th>
+                        <th
+                            class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            Verified</th>
+                        <th
+                            class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            Joined</th>
+                        <th
+                            class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            Status</th>
+                        <th
+                            class="text-right px-5 py-3 text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100/50 dark:divide-white/5">
+                    {% for user in users.items %}
+                    <tr class="hover:bg-emerald-500/5 transition-colors">
+                        <td class="px-5 py-3">
+                            <div>
+                                <div class="font-semibold text-neutral-900 dark:text-white">{{ user.first_name }} {{
+                                    user.last_name }}</div>
+                                <div class="text-xs text-neutral-500 dark:text-neutral-400">{{ user.email }}</div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-3">
+                            {% set role_colors = {
+                            'platform_admin': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30
+                            dark:text-purple-300',
+                            'org_admin': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+                            'auditor': 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
+                            'worker': 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300',
+                            'viewer': 'bg-neutral-100 text-neutral-700 dark:bg-white/10 dark:text-neutral-300'
+                            } %}
+                            <span
+                                class="px-2 py-0.5 rounded-full text-[11px] font-bold {{ role_colors.get(user.role.value, '') }}">
+                                {{ user.role.value | replace('_', ' ') | title }}
+                            </span>
+                        </td>
+                        <td class="px-5 py-3 text-neutral-600 dark:text-neutral-400">
+                            {{ user.organization.name if user.organization else '—' }}
+                        </td>
+                        <td class="px-5 py-3">
+                            {% if user.role.value == 'auditor' %}
+                            {% if user.is_verified %}
+                            <span
+                                class="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+                                <span class="material-symbols-outlined text-[14px]">verified</span> Verified
+                            </span>
+                            {% else %}
+                            <span
+                                class="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400 text-xs font-semibold">
+                                <span class="material-symbols-outlined text-[14px]">pending</span> Pending
+                            </span>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-neutral-400 text-xs">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-5 py-3 text-neutral-500 dark:text-neutral-400 text-xs">{{
+                            user.created_at.strftime('%b %d, %Y') }}</td>
+                        <td class="px-5 py-3">
+                            <span
+                                class="px-2 py-0.5 rounded-full text-[11px] font-bold {% if user.status == 'active' %}bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300{% else %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300{% endif %}">
+                                {{ user.status | title }}
+                            </span>
+                        </td>
+                        <td class="px-5 py-3 text-right">
+                            {% if not user.is_platform_admin %}
+                            <form method="POST"
+                                action="{{ url_for('dashboard_admin.toggle_user_status', user_id=user.id) }}"
+                                class="inline">
+                                <button type="submit"
+                                    class="text-xs font-semibold px-3 py-1 rounded-lg transition-all
+                                    {% if user.status == 'active' %}bg-red-100 hover:bg-red-200 text-red-700 dark:bg-red-900/20 dark:hover:bg-red-900/30 dark:text-red-400{% else %}bg-emerald-100 hover:bg-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:hover:bg-emerald-900/30 dark:text-emerald-400{% endif %}">
+                                    {% if user.status == 'active' %}Deactivate{% else %}Activate{% endif %}
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-12 text-neutral-500 dark:text-neutral-400">No users found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if users.pages > 1 %}
+        <div class="px-5 py-3 border-t border-neutral-100/50 dark:border-white/5 flex items-center justify-between">
+            <span class="text-xs text-neutral-500 dark:text-neutral-400">
+                Showing {{ ((users.page - 1) * users.per_page) + 1 }}–{{ [users.page * users.per_page, users.total] |
+                min }} of {{ users.total }}
+            </span>
+            <div class="flex gap-2">
+                {% if users.has_prev %}
+                <a href="{{ url_for('dashboard_admin.user_management', page=users.prev_num, role=role_filter, status=status_filter, q=search) }}"
+                    class="px-3 py-1 text-xs rounded-lg bg-white/50 dark:bg-white/5 border border-neutral-200/50 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors">←
+                    Prev</a>
+                {% endif %}
+                {% if users.has_next %}
+                <a href="{{ url_for('dashboard_admin.user_management', page=users.next_num, role=role_filter, status=status_filter, q=search) }}"
+                    class="px-3 py-1 text-xs rounded-lg bg-white/50 dark:bg-white/5 border border-neutral-200/50 dark:border-white/10 hover:bg-white dark:hover:bg-white/10 transition-colors">Next
+                    →</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

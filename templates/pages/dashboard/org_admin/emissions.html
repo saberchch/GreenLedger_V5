@@ -1,4 +1,5 @@
 {% extends "pages/dashboard/org_admin/index.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block dashboard_content %}
 <div class="space-y-5">
@@ -11,8 +12,8 @@
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ url_for('dashboard_org_admin.new_emission') }}"
-               class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 whitespace-nowrap">
-                <span class="material-icons text-sm">add</span> Add Activity
+                class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 whitespace-nowrap">
+                <span class="material-symbols-outlined text-sm">add</span> Add Activity
             </a>
         </div>
         <div class="flex items-center gap-4 text-center">
@@ -65,12 +66,12 @@
         </div>
         <button type="submit"
             class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-            <span class="material-icons text-sm">filter_list</span> Filter
+            <span class="material-symbols-outlined text-sm">filter_list</span> Filter
         </button>
         {% if filters.status or filters.scope or filters.date_from or filters.date_to %}
         <a href="{{ url_for('dashboard_org_admin.emissions') }}"
             class="px-4 py-2 border border-neutral-300 text-sm font-medium rounded-lg text-neutral-600 hover:bg-neutral-50 transition-colors flex items-center gap-2">
-            <span class="material-icons text-sm">close</span> Clear
+            <span class="material-symbols-outlined text-sm">close</span> Clear
         </a>
         {% endif %}
     </form>
@@ -99,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-100">
-                    {% for activity in activities %}
+                    {% for activity in activities.items %}
                     <tr class="hover:bg-neutral-50/50 transition-colors">
                         <td class="px-4 py-3">
                             <div class="font-medium text-neutral-800">{{ activity.category }}</div>
@@ -141,11 +142,16 @@
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">
+                                <a href="{{ url_for('dashboard_org_admin.duplicate_emission', id=activity.id) }}"
+                                    title="Duplicate this activity"
+                                    class="text-xs px-2 py-1 border border-emerald-300 rounded-lg text-emerald-700 hover:bg-emerald-50 transition-colors flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">content_copy</span>
+                                </a>
                                 <a href="{{ url_for('dashboard_org_admin.emission_detail', id=activity.id) }}"
                                     class="text-xs px-3 py-1 border border-neutral-300 rounded-lg text-neutral-600 hover:bg-neutral-50 transition-colors">
                                     View
                                 </a>
-                                {% if activity.status.value == 'submitted' %}
+                                {% if activity.status.value == 'submitted' and current_user.has_role('org_admin') %}
                                 <form method="POST"
                                     action="{{ url_for('dashboard_org_admin.approve_emission', id=activity.id) }}"
                                     class="inline">
@@ -155,7 +161,7 @@
                                         Approve
                                     </button>
                                 </form>
-                                <button type="button" onclick="openRejectModal({{ activity.id }})"
+                                <button type="button" onclick="openRejectModal('{{ activity.id }}')"
                                     class="text-xs px-3 py-1 bg-red-50 text-red-600 border border-red-200 rounded-lg hover:bg-red-100 transition-colors">
                                     Reject
                                 </button>
@@ -167,9 +173,11 @@
                 </tbody>
             </table>
         </div>
+        {{ render_pagination(activities, 'dashboard_org_admin.emissions', status=filters.status, scope=filters.scope,
+        date_from=filters.date_from, date_to=filters.date_to) }}
         {% else %}
         <div class="text-center py-16 text-neutral-400">
-            <span class="material-icons text-5xl mb-2 block">inbox</span>
+            <span class="material-symbols-outlined text-5xl mb-2 block">inbox</span>
             <div class="font-medium">No emission activities found</div>
             <div class="text-sm mt-1">Adjust your filters or wait for workers to submit activities</div>
         </div>
@@ -181,7 +189,7 @@
 <div id="reject-modal" class="fixed inset-0 z-50 hidden bg-black/50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
         <h3 class="font-bold text-neutral-800 mb-2 flex items-center gap-2">
-            <span class="material-icons text-red-500">cancel</span> Reject Activity
+            <span class="material-symbols-outlined text-red-500">cancel</span> Reject Activity
         </h3>
         <p class="text-sm text-neutral-600 mb-4">Please provide a reason so the worker can correct and resubmit.</p>
         <form id="reject-form" method="POST">

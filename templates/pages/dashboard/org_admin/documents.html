@@ -1,4 +1,5 @@
 {% extends "layouts/dashboard_base.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block title %}Documents - Organization Admin{% endblock %}
 
@@ -103,8 +104,8 @@
         class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm overflow-hidden">
         <div class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035]">
             <h3 class="text-lg font-bold text-[#111814] dark:text-white">Evidence Files</h3>
-            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">{{ documents|length }} document{{ 's' if
-                documents|length != 1 else '' }}</p>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">{{ documents.total }} document{{ 's' if
+                documents.total != 1 else '' }}</p>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left">
@@ -121,7 +122,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
-                    {% for doc in documents %}
+                    {% for doc in documents.items %}
                     <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
@@ -172,6 +173,7 @@
                 </tbody>
             </table>
         </div>
+        {{ render_pagination(documents, 'dashboard_org_admin.documents') }}
     </div>
 </div>
 

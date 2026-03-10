@@ -1,4 +1,5 @@
 {% extends "pages/dashboard/org_admin/index.html" %}
+{% from "components/dashboard/pagination.html" import render_pagination %}
 
 {% block dashboard_content %}
 <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
@@ -8,7 +9,7 @@
         <div>
             <h1 class="text-2xl font-bold text-[#111814] dark:text-white flex items-center gap-3">
                 <span class="material-symbols-outlined text-emerald-500" style="font-size:28px">verified</span>
-                Completed Data
+                <span class="text-[#618975] dark:text-[#8baaa0]">Completed Data</span>
             </h1>
             <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">
                 Validated and audited emission records
@@ -28,10 +29,10 @@
 
     <!-- Stats row -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {% set validated = activities | selectattr('status.value', 'equalto', 'validated') | list %}
-        {% set audited = activities | selectattr('status.value', 'equalto', 'audited') | list %}
+        {% set validated = activities.items | selectattr('status.value', 'equalto', 'validated') | list %}
+        {% set audited = activities.items | selectattr('status.value', 'equalto', 'audited') | list %}
         {% for label, count, color, icon in [
-        ('Total', activities|length, 'neutral', 'checklist'),
+        ('Total', activities.total, 'neutral', 'checklist'),
         ('Validated', validated|length, 'emerald', 'verified'),
         ('Audited', audited|length, 'purple', 'gavel'),
         ('tCO₂e', "%.2f"|format(total_t), 'blue', 'eco'),
@@ -69,7 +70,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
-                    {% for a in activities %}
+                    {% for a in activities.items %}
                     <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
                         <td class="px-5 py-4">
                             <a href="{{ url_for('dashboard_org_admin.emission_detail', id=a.id) }}"
@@ -119,6 +120,7 @@
                 </tbody>
             </table>
         </div>
+        {{ render_pagination(activities, 'dashboard_org_admin.completed_emissions') }}
     </div>
 </div>
 {% endblock %}

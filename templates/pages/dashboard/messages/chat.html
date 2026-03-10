@@ -1,0 +1,252 @@
+{% extends "layouts/dashboard_base.html" %}
+{% block title %}Chat with {{ other.first_name or other.email }}{% endblock %}
+{% block dashboard_content %}
+<div class="max-w-[800px] mx-auto flex flex-col gap-4" style="height: calc(100vh - 120px);">
+
+    <!-- Header -->
+    <div class="flex items-center gap-4 shrink-0">
+        <a href="{{ url_for('dashboard_messages.inbox') }}"
+            class="p-2 rounded-lg border border-neutral-200 dark:border-[#2a4035] hover:bg-neutral-50 transition-colors">
+            <span class="material-symbols-outlined text-[20px] text-neutral-600">arrow_back</span>
+        </a>
+        <div class="flex items-center gap-3">
+            <div
+                class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-base">
+                {{ (other.first_name or other.email)[0]|upper }}
+            </div>
+            <div>
+                <p class="font-bold text-neutral-900 dark:text-white">
+                    {{ other.first_name or '' }} {{ other.last_name or '' }}
+                </p>
+                <p class="text-xs text-neutral-500">
+                    {{ other.role.value|replace('_',' ')|title }}
+                    {% if org %} · {{ org.name }}{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages container -->
+    <div id="chat-messages" data-api-get="{{ api_url }}" data-api-post="{{ post_url }}"
+        data-me-id="{{ current_user_id }}" data-me-name="{{ current_user_name }}"
+        class="flex-1 overflow-y-auto flex flex-col gap-3 bg-neutral-50 dark:bg-[#12201a] rounded-xl border border-neutral-200/60 dark:border-[#2a4035] p-5 min-h-0">
+        <div class="flex items-center justify-center py-8" id="chat-loading">
+            <span class="material-symbols-outlined animate-spin text-neutral-300 text-3xl">progress_activity</span>
+        </div>
+    </div>
+
+    <!-- Input -->
+    <form id="chat-form" class="flex gap-3 items-end shrink-0
+         bg-white dark:bg-[#1a2e25] rounded-xl border border-neutral-200/60 dark:border-[#2a4035] p-4 shadow-sm">
+        <textarea id="chat-input" rows="2" placeholder="Type a message…" class="flex-1 resize-none rounded-xl border border-neutral-200 dark:border-[#2a4035]
+                   bg-neutral-50 dark:bg-[#12201a] text-sm text-neutral-900 dark:text-white
+                   placeholder-neutral-400 px-4 py-3 focus:outline-none focus:border-primary
+                   focus:ring-1 focus:ring-primary transition"></textarea>
+        <button type="submit" class="px-5 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90
+                   transition-colors flex items-center gap-2 text-sm">
+            <span class="material-symbols-outlined text-[18px]">send</span> Send
+        </button>
+    </form>
+
+</div>
+
+<script>
+    (function () {
+        const container = document.getElementById('chat-messages');
+        const API_GET = container.dataset.apiGet;
+        const API_POST = container.dataset.apiPost;
+        const ME_ID = parseInt(container.dataset.meId, 10);
+        const ME_NAME = container.dataset.meName;
+        const loadingEl = document.getElementById('chat-loading');
+        let lastId = 0;
+
+        function formatTime(iso) {
+            const d = new Date(iso);
+            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+                ' · ' + d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+        }
+
+        function renderMessage(m) {
+            const mine = m.author_id === ME_ID;
+            const isAiBot = m.author_name && m.author_name.includes('GreenLedger');
+            const bubble = document.createElement('div');
+            bubble.dataset.msgId = m.id;
+
+            if (isAiBot && !mine) {
+                // ── AI Bot message ───────────────────────────────────────────
+                bubble.className = 'flex justify-start items-start gap-3';
+                bubble.innerHTML = `
+                  <div class="size-8 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-500 shrink-0 mt-1">
+                    <span class="material-symbols-outlined text-[16px]">auto_awesome</span>
+                  </div>
+                  <div class="max-w-[80%]">
+                    <div class="px-4 py-3 rounded-2xl rounded-bl-sm text-sm bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 text-neutral-800 dark:text-neutral-200">
+                      ${renderBotMarkdown(m.message)}
+                    </div>
+                    <p class="text-[10px] text-neutral-400 mt-1">
+                      ${escHtml(m.author_name)} · ${formatTime(m.created_at)}
+                    </p>
+                  </div>`;
+            } else {
+                // ── Standard user message ────────────────────────────────────
+                bubble.className = `flex ${mine ? 'justify-end' : 'justify-start'}`;
+                bubble.innerHTML = `
+                  <div class="max-w-[75%]">
+                    <div class="px-4 py-3 rounded-2xl text-sm
+                      ${mine
+                        ? 'bg-primary text-white rounded-br-sm'
+                        : 'bg-white dark:bg-[#1a2e25] border border-neutral-200 dark:border-[#2a4035] text-neutral-800 dark:text-neutral-200 rounded-bl-sm'
+                    }">
+                      ${escHtml(m.message)}
+                    </div>
+                    <p class="text-[10px] text-neutral-400 mt-1 ${mine ? 'text-right' : ''}">
+                      ${escHtml(m.author_name)} · ${formatTime(m.created_at)}
+                    </p>
+                  </div>`;
+            }
+            return bubble;
+        }
+
+        function escHtml(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function renderBotMarkdown(s) {
+            // Light markdown: Bold (**text**), line breaks, emoji pass-through
+            return String(s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+        }
+
+        async function loadMessages() {
+            try {
+                const r = await fetch(API_GET, { credentials: 'same-origin' });
+                if (!r.ok) return;
+                const msgs = await r.json();
+                loadingEl && loadingEl.remove();
+
+                if (msgs.length === 0 && container.children.length === 0) {
+                    container.innerHTML = `
+                  <div class="flex flex-col items-center justify-center flex-1 text-center py-8">
+                    <span class="material-symbols-outlined text-3xl text-neutral-300 mb-2">chat_bubble_outline</span>
+                    <p class="text-sm text-neutral-400">No messages yet. Start the conversation!</p>
+                  </div>`;
+                }
+
+                msgs.forEach(m => {
+                    if (m.id > lastId) {
+                        if (msgs.length === 1 || lastId === 0) {
+                            // First load — clear placeholder
+                            if (container.querySelector('[data-placeholder]')) container.innerHTML = '';
+                        }
+                        container.querySelector('[data-placeholder]') && (container.innerHTML = '');
+                        container.appendChild(renderMessage(m));
+                        lastId = m.id;
+                    }
+                });
+                container.scrollTop = container.scrollHeight;
+            } catch (e) {
+                console.error('Failed to load messages', e);
+            }
+        }
+
+        document.getElementById('chat-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+            input.disabled = true;
+
+            try {
+                const r = await fetch(API_POST, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                    },
+                    body: JSON.stringify({ message: text })
+                });
+                if (r.ok) {
+                    let data = await r.json();
+                    let msgs_to_render = [];
+                    if (data.messages && Array.isArray(data.messages)) {
+                        msgs_to_render = data.messages;
+                    } else {
+                        msgs_to_render = [data];
+                    }
+
+                    const ph = container.querySelector('[data-placeholder]');
+                    if (ph) container.innerHTML = '';
+                    const noMsg = container.querySelector('div.flex-col.items-center');
+                    if (noMsg) noMsg.remove();
+
+                    msgs_to_render.forEach(m => {
+                        container.appendChild(renderMessage(m));
+                        lastId = Math.max(lastId, m.id);
+                    });
+                    container.scrollTop = container.scrollHeight;
+                } else {
+                    alert('Failed to send message.');
+                }
+            } catch (err) {
+                alert('Network error.');
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        });
+
+        // Enter to send (Shift+Enter for newline)
+        document.getElementById('chat-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('chat-form').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Derive channel_id from URL to mark read
+        let channelId = null;
+        if (window.location.pathname.includes('/team/')) {
+            // Team chat — assume other_id is team/X
+            const parts = window.location.pathname.split('/');
+            const memberId = parts[parts.length - 1];
+            // actually for team chat the channel flag is team_{org_id}
+            // we let the server figure it out by just doing an optimistic fetch later
+        }
+
+        async function markReadOpt() {
+            // Use current URL to deduce the channel id if possible
+            const parts = window.location.pathname.split('/');
+            const lastPart = parts[parts.length - 1];
+            let cId = null;
+            if (window.location.pathname.includes('/team/')) {
+                // Not ideal, but the recent endpoint handles team marking slightly differently
+                return;
+            } else if (window.location.pathname.includes('/chat/')) {
+                // If I am org member, chatting with auditor -> dm_{auditor_id}
+                // If I am auditor, chatting with org -> dm_{org_id}
+                // Since `other_id` represents the target, in both cases it's dm_{lastPart}
+                cId = 'dm_' + lastPart;
+            }
+            if (cId) {
+                fetch('/api/v1/messages/read/' + cId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }).catch(e => console.log('ignore read err'));
+            }
+        }
+
+        loadMessages();
+        markReadOpt(); // mark read right away
+
+        // Poll for new messages every 8 seconds
+        setInterval(() => {
+            loadMessages();
+            markReadOpt();
+        }, 8000);
+    })();
+</script>
+{% endblock %}

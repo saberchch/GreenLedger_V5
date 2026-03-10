@@ -1,18 +1,16 @@
 """
 API v1 — Emission Factor Search
 Exposes the ADEME Base Carbone search engine over HTTP as JSON endpoints.
-Used by the new-emission wizard frontend (Step 2 factor picker).
+Used by the new-emission wizard and the public Factor Explorer.
 """
 
 from flask import Blueprint, jsonify, request
-from flask_login import login_required
 from app.services.emission_factor_loader import get_loader
 
 bp = Blueprint("api_factors", __name__, url_prefix="/api/v1/factors")
 
 
 @bp.route("/search")
-@login_required
 def search():
     """
     GET /api/v1/factors/search?q=<query>&lang=fr&limit=20&valid_only=1
@@ -59,7 +57,6 @@ def search():
 
 
 @bp.route("/<factor_id>")
-@login_required
 def get_factor(factor_id: str):
     """
     GET /api/v1/factors/<id>

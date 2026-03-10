@@ -7,7 +7,7 @@
     <div class="flex items-center gap-4">
         <a href="{{ url_for('dashboard_org_admin.emissions') }}"
             class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-500 hover:text-neutral-700 transition-colors">
-            <span class="material-icons text-xl">arrow_back</span>
+            <span class="material-symbols-outlined text-xl">arrow_back</span>
         </a>
         <div class="flex-1">
             <h1 class="text-xl font-bold text-neutral-900">Activity #{{ activity.id }}</h1>
@@ -15,12 +15,23 @@
                 if activity.created_by else '?' }}</p>
         </div>
         <div class="flex items-center gap-2">
-            {% if activity.status.value != 'audited' %}
+            {% if current_user.has_role('org_admin') and activity.status.value != 'audited' %}
             <a href="{{ url_for('dashboard_org_admin.edit_emission', id=activity.id) }}"
                 class="px-3 py-1.5 text-sm font-medium border border-emerald-300 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors flex items-center gap-1">
-                <span class="material-icons text-sm">edit</span> Edit
+                <span class="material-symbols-outlined text-sm">edit</span> Edit
+            </a>
+            {% elif current_user.has_role('worker') and current_user.id == activity.created_by_id and
+            activity.status.value != 'audited' %}
+            <a href="{{ url_for('dashboard_worker.edit_emission', id=activity.id) }}"
+                class="px-3 py-1.5 text-sm font-medium border border-emerald-300 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">edit</span> Edit
             </a>
             {% endif %}
+            <a href="{{ url_for('dashboard_org_admin.duplicate_emission', id=activity.id) }}"
+                title="Start a new activity pre-filled with the same emission factor"
+                class="px-3 py-1.5 text-sm font-medium border border-teal-300 text-teal-700 rounded-lg hover:bg-teal-50 transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">content_copy</span> Duplicate
+            </a>
             <span class="px-3 py-1 rounded-full text-sm font-semibold
           {% if activity.status.value == 'validated' %}bg-emerald-100 text-emerald-700
           {% elif activity.status.value == 'submitted' %}bg-blue-100 text-blue-700
@@ -60,7 +71,7 @@
     {% if activity.ademe_factor_name %}
     <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
         <h2 class="font-semibold text-neutral-800 mb-3 flex items-center gap-2">
-            <span class="material-icons text-emerald-500">verified</span> ADEME Factor (Snapshot)
+            <span class="material-symbols-outlined text-emerald-500">verified</span> ADEME Factor (Snapshot)
         </h2>
         <dl class="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
             <div>
@@ -98,7 +109,7 @@
     <!-- Details -->
     <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
         <h2 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-            <span class="material-icons text-neutral-400">info</span> Activity Details
+            <span class="material-symbols-outlined text-neutral-400">info</span> Activity Details
         </h2>
         <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">
             <div>
@@ -132,18 +143,26 @@
     </div>
 
     <!-- Rejection note (read) -->
-    {% if activity.rejection_reason %}
+    {% if activity.status.value == 'rejected' and activity.rejection_reason %}
     <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
-        <span class="material-icons text-red-500 mt-0.5">cancel</span>
+        <span class="material-symbols-outlined text-red-500 mt-0.5">cancel</span>
         <div>
-            <div class="font-semibold text-red-700 text-sm">Previous Rejection Reason</div>
+            <div class="font-semibold text-red-700 text-sm">Rejected</div>
             <div class="text-sm text-red-600 mt-0.5">{{ activity.rejection_reason }}</div>
+        </div>
+    </div>
+    {% elif activity.proof_requested and activity.auditor_notes %}
+    <div class="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <span class="material-symbols-outlined text-amber-500 mt-0.5">warning</span>
+        <div>
+            <div class="font-semibold text-amber-700 text-sm">Auditor Requested Proof</div>
+            <div class="text-sm text-amber-600 mt-0.5">{{ activity.auditor_notes }}</div>
         </div>
     </div>
     {% endif %}
 
     <!-- Actions -->
-    {% if activity.status.value == 'submitted' %}
+    {% if activity.status.value == 'submitted' and current_user.has_role('org_admin') %}
     <div class="bg-white rounded-xl border border-neutral-200/60 p-5">
         <h2 class="font-semibold text-neutral-800 mb-4">Validation</h2>
         <div class="flex gap-3 flex-wrap">
@@ -151,12 +170,12 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <button type="submit"
                     class="px-6 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2">
-                    <span class="material-icons text-sm">check_circle</span> Approve
+                    <span class="material-symbols-outlined text-sm">check_circle</span> Approve
                 </button>
             </form>
             <button type="button" onclick="document.getElementById('reject-section').classList.toggle('hidden')"
                 class="px-6 py-2 border border-red-300 text-red-600 text-sm font-semibold rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2">
-                <span class="material-icons text-sm">cancel</span> Reject
+                <span class="material-symbols-outlined text-sm">cancel</span> Reject
             </button>
         </div>
         <div id="reject-section" class="hidden mt-4 pt-4 border-t border-neutral-100">
@@ -179,9 +198,84 @@
     {% if activity.status.value == 'audited' %}
     <div
         class="bg-purple-50 border border-purple-200 rounded-xl p-4 text-sm text-purple-700 font-medium flex items-center gap-2">
-        <span class="material-icons">lock</span>
+        <span class="material-symbols-outlined">lock</span>
         This activity has been finalised by an auditor and is locked.
     </div>
     {% endif %}
+
+    <!-- Discussion Thread -->
+    <div class="bg-white rounded-xl border border-neutral-200/60 overflow-hidden">
+        <div class="p-5 border-b border-neutral-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-emerald-600">chat</span>
+            <h2 class="font-semibold text-neutral-800">Discussion</h2>
+            <span class="text-xs text-neutral-400 ml-auto">Messages are visible to all team members</span>
+        </div>
+        <div id="message-thread" class="px-5 py-4 space-y-3 max-h-72 overflow-y-auto"
+            data-activity-id="{{ activity.id }}" data-current-user-id="{{ current_user.id }}">
+            <div class="text-center text-sm text-neutral-400 py-4">Loading messages…</div>
+        </div>
+        <div class="px-5 py-4 border-t border-neutral-100">
+            <div class="flex gap-2">
+                <input type="text" id="msg-input" placeholder="Write a message to your team…"
+                    class="flex-1 rounded-lg border border-neutral-300 text-sm focus:border-emerald-500 focus:ring-emerald-500 px-3 py-2" />
+                <button onclick="sendMessage()"
+                    class="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors">
+                    <span class="material-symbols-outlined text-sm">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    const _thread = document.getElementById('message-thread');
+    const activityId = parseInt(_thread.dataset.activityId, 10);
+    const currentUserId = parseInt(_thread.dataset.currentUserId, 10);
+    function escHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+    function formatTime(iso) { if (!iso) return ''; return new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+
+    function renderMessages(messages) {
+        const cont = document.getElementById('message-thread');
+        if (!messages.length) {
+            cont.innerHTML = '<div class="text-center text-sm text-neutral-400 py-6">No messages yet. Start the conversation!</div>';
+            return;
+        }
+        cont.innerHTML = messages.map(m => {
+            const mine = m.author_id === currentUserId;
+            return `<div class="flex gap-3 ${mine ? 'flex-row-reverse' : ''}">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${mine ? 'bg-emerald-600 text-white' : 'bg-neutral-200 text-neutral-600'}">${escHtml(m.author_name[0])}</div>
+                <div class="max-w-[75%]">
+                    <div class="text-xs text-neutral-400 mb-1 ${mine ? 'text-right' : ''}">${escHtml(m.author_name)} · ${escHtml(m.author_role)} · ${formatTime(m.created_at)}</div>
+                    <div class="rounded-xl px-4 py-2.5 text-sm ${mine ? 'bg-emerald-600 text-white rounded-tr-sm' : 'bg-neutral-100 text-neutral-800 rounded-tl-sm'}">${escHtml(m.message)}</div>
+                </div>
+            </div>`;
+        }).join('');
+        cont.scrollTop = cont.scrollHeight;
+    }
+
+    function fetchMessages() {
+        fetch(`/api/v1/messages/activity/${activityId}`)
+            .then(r => r.json()).then(renderMessages)
+            .catch(() => { document.getElementById('message-thread').innerHTML = '<div class="text-center text-sm text-red-400 py-4">Could not load messages.</div>'; });
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('msg-input');
+        const text = input.value.trim();
+        if (!text) return;
+        input.disabled = true;
+        fetch(`/api/v1/messages/activity/${activityId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token() }}' },
+            body: JSON.stringify({ message: text })
+        }).then(() => { input.value = ''; input.disabled = false; fetchMessages(); })
+            .catch(() => { input.disabled = false; });
+    }
+
+    document.getElementById('msg-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+    fetchMessages();
+    setInterval(fetchMessages, 15000);
+</script>
 {% endblock %}

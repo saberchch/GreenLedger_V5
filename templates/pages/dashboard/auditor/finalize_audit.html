@@ -1,0 +1,213 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Finalize Audit — {{ org.name }}{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-[900px] mx-auto space-y-6">
+
+    <div class="flex items-center gap-4">
+        <a href="{{ url_for('dashboard_auditor.review_queue', org_id=org.id, status='validated') }}"
+            class="px-4 py-2 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Review Queue
+        </a>
+        <div>
+            <h1 class="text-xl font-bold text-neutral-900 dark:text-white">Finalize Audit</h1>
+            <p class="text-sm text-neutral-500">{{ org.name }}</p>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}
+    <div>{% for cat, msg in messages %}
+        <div class="p-3 rounded-lg text-sm mb-2
+            {% if cat=='error' %}bg-red-50 text-red-800 border border-red-200
+            {% else %}bg-emerald-50 text-emerald-800 border border-emerald-200{% endif %}">{{ msg }}</div>
+        {% endfor %}
+    </div>{% endif %}{% endwith %}
+
+    {# Warning if no validated activities #}
+    {% if not validated_activities %}
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 flex items-center gap-3">
+        <span class="material-symbols-outlined text-amber-600 text-2xl">warning</span>
+        <div>
+            <div class="font-semibold text-amber-800">No validated activities</div>
+            <p class="text-sm text-amber-700 mt-1">You must validate at least one emission activity before finalizing
+                the audit.</p>
+        </div>
+    </div>
+    {% else %}
+
+    {# Scope summary #}
+    <div
+        class="relative bg-white/70 dark:bg-[#1a2e25]/70 backdrop-blur-md rounded-2xl border border-neutral-200/50 dark:border-[#2a4035]/50 overflow-hidden shadow-sm">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 pointer-events-none"></div>
+        <div class="p-6 space-y-5 relative z-10">
+            <h2 class="font-bold text-neutral-800 dark:text-white flex items-center gap-2 text-lg">
+                <span
+                    class="material-symbols-outlined text-emerald-600 bg-emerald-100 dark:bg-emerald-900/50 p-1.5 rounded-lg">bar_chart</span>
+                Emissions Summary
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {% for scope, kg in scope_totals.items() %}
+                <div
+                    class="text-center p-5 rounded-2xl bg-white/60 dark:bg-black/20 border border-neutral-200/50 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="text-[11px] font-bold text-neutral-500 uppercase tracking-widest mb-2">{{ scope }}</div>
+                    <div class="text-3xl font-black text-emerald-700 dark:text-emerald-400">{{ '%.3f'|format(kg/1000) }}
+                    </div>
+                    <div
+                        class="text-xs font-bold text-emerald-600/70 dark:text-emerald-500 uppercase tracking-wider mt-1">
+                        tCO₂e</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div
+                class="border-t border-neutral-200/60 dark:border-white/5 pt-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <span class="text-sm font-semibold text-neutral-600 dark:text-neutral-400 uppercase tracking-wide">Total
+                    footprint across all scopes</span>
+                <div
+                    class="flex items-baseline gap-1.5 bg-emerald-100/80 dark:bg-emerald-900/40 px-5 py-2 rounded-xl border border-emerald-200/50 dark:border-emerald-700/50 shadow-inner">
+                    <span class="text-4xl font-black text-emerald-800 dark:text-emerald-400">{{
+                        '%.4f'|format(total_kg/1000) }}</span>
+                    <span
+                        class="text-sm font-bold text-emerald-700 dark:text-emerald-500 uppercase tracking-widest">tCO₂e</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Validated activity list #}
+    <div
+        class="bg-white/80 dark:bg-[#1a2e25]/80 backdrop-blur-md rounded-2xl border border-neutral-200/60 dark:border-white/5 shadow-sm overflow-hidden">
+        <div
+            class="p-5 border-b border-neutral-200/50 dark:border-white/5 flex items-center gap-3 bg-neutral-50/50 dark:bg-black/10">
+            <span
+                class="material-symbols-outlined text-emerald-600 bg-white dark:bg-[#2a4035] p-1.5 rounded-lg shadow-sm border border-neutral-200/50 dark:border-white/5 text-[18px]">checklist</span>
+            <span class="font-bold text-neutral-800 dark:text-white text-base">Validated Activities <span
+                    class="text-neutral-500 font-normal ml-1">({{ validated_activities|length }} records will be
+                    locked)</span></span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead
+                    class="bg-neutral-50/80 dark:bg-[#162620]/80 border-b border-neutral-200/60 dark:border-[#2a4035]">
+                    <tr>
+                        <th class="text-left px-5 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+                            ID</th>
+                        <th class="text-left px-5 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+                            Scope / Category</th>
+                        <th
+                            class="text-left px-5 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider hidden sm:table-cell">
+                            Factor Used</th>
+                        <th
+                            class="text-right px-5 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+                            Emissions (tCO₂e)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-100/80 dark:divide-white/5">
+                    {% for a in validated_activities %}
+                    <tr class="hover:bg-neutral-50/50 dark:hover:bg-white/5 transition-colors group">
+                        <td class="px-5 py-4 text-neutral-400 font-mono text-xs">#{{ a.id }}</td>
+                        <td class="px-5 py-4">
+                            <span
+                                class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide
+                                {% if '1' in a.scope.value %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400
+                                {% elif '2' in a.scope.value %}bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400
+                                {% else %}bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400{% endif %}">
+                                {{ a.scope.value }}
+                            </span>
+                            <div class="text-xs text-neutral-600 dark:text-neutral-300 mt-1.5 font-medium">{{ a.category
+                                }}</div>
+                        </td>
+                        <td class="px-5 py-4 text-xs text-neutral-500 truncate max-w-[200px] hidden sm:table-cell">{{
+                            a.ademe_factor_name or '—' }}</td>
+                        <td
+                            class="px-5 py-4 text-right font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50/30 dark:bg-emerald-900/10">
+                            {{ '%.4f'|format((a.co2e_result or 0)/1000) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# Finalize form #}
+    <div
+        class="bg-emerald-50/50 dark:bg-emerald-900/10 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/50 p-6 space-y-5 shadow-lg relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-black/10 pointer-events-none">
+        </div>
+        <div class="relative z-10">
+            <h2 class="font-bold text-emerald-900 dark:text-emerald-100 flex items-center gap-2 text-xl">
+                <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-2xl">verified</span>
+                Finalize & Submit Report
+            </h2>
+            <p class="text-sm text-emerald-800/80 dark:text-emerald-200/80 font-medium">
+                This action will lock all {{ validated_activities|length }} validated activities into an immutable audit
+                report, routing it to the GreenLedger platform admin for ultimate sign-off before potential blockchain
+                notarization.
+            </p>
+
+            <form method="POST" class="space-y-5 mt-6">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="md:col-span-1">
+                        <label
+                            class="block text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1.5 ml-1">Period
+                            Type <span class="text-red-500">*</span></label>
+                        <select name="period_type" required
+                            class="w-full rounded-xl border border-emerald-200 dark:border-emerald-700/50 dark:bg-[#12201a]/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 text-sm px-4 py-3 shadow-sm transition-all appearance-none font-medium text-emerald-900 dark:text-emerald-100">
+                            <option value="">Select review cycle...</option>
+                            <option value="Monthly">Monthly Review</option>
+                            <option value="Quarterly">Quarterly Review</option>
+                            <option value="Yearly">Yearly Complete Audit</option>
+                            <option value="Other">Other / Custom</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label
+                            class="block text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1.5 ml-1">Period
+                            Label <span class="text-red-500">*</span></label>
+                        <input type="text" name="period_label" required placeholder="e.g. 2025 Full Year, Q1 2025…"
+                            class="w-full rounded-xl border border-emerald-200 dark:border-emerald-700/50 dark:bg-[#12201a]/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 text-sm px-4 py-3 shadow-sm transition-all" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label
+                            class="block text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1.5 ml-1">Auditor
+                            Overall Notes (Optional)</label>
+                        <textarea name="audit_notes" rows="3"
+                            placeholder="Provide a summary of the audit methodology, key observations, or compliance assessment…"
+                            class="w-full rounded-xl border border-emerald-200 dark:border-emerald-700/50 dark:bg-[#12201a]/50 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 text-sm resize-none px-4 py-3 shadow-sm transition-all"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <div
+                            class="bg-gradient-to-br from-emerald-100/50 to-teal-100/50 dark:from-emerald-900/20 dark:to-teal-900/20 p-5 rounded-xl border border-emerald-200/60 dark:border-emerald-700/50 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 text-emerald-500/10 dark:text-emerald-500/5">
+                                <span class="material-symbols-outlined text-9xl">lightbulb</span>
+                            </div>
+                            <label
+                                class="relative z-10 flex items-center gap-2 text-xs font-bold text-teal-800 dark:text-teal-300 uppercase tracking-wider mb-1.5 ml-1">
+                                <span class="material-symbols-outlined text-[18px]">campaign</span>
+                                Strategic Recommendations for the Organization
+                            </label>
+                            <p
+                                class="relative z-10 text-xs font-semibold text-teal-700/80 dark:text-teal-400/80 mb-3 ml-1">
+                                Especially critical for Yearly Audits. Provide actionable advice for reducing the carbon
+                                footprint in the next reporting period.</p>
+                            <textarea name="recommendations" rows="5"
+                                placeholder="E.g., Transitioning 20% of the delivery fleet to EVs could reduce Scope 1 emissions by an estimated 15 tCO₂e annually. Consider switching to a renewable energy provider for the main office..."
+                                class="relative z-10 w-full rounded-xl border border-teal-200/60 dark:border-teal-700/50 bg-white/60 dark:bg-[#12201a]/80 backdrop-blur-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30 text-sm resize-none px-4 py-3 shadow-inner transition-all placeholder-teal-800/40 dark:placeholder-teal-200/30"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-500/30 flex items-center justify-center gap-2 text-base transform hover:-translate-y-0.5"
+                    onclick="return confirm('Finalize audit? This will lock {{ validated_activities|length }} activities and submit the report for sign-off.')">
+                    <span class="material-symbols-outlined">publish</span>
+                    Create Audit Report &amp; Request Sign-off
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,14 +1,29 @@
 """Main routes for the application."""
 
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask import send_file
 
 bp = Blueprint('main', __name__)
 
 
+@bp.route('/orgs/search')
+def orgs_search():
+    """Public JSON endpoint: search active organizations by name for worker registration."""
+    from app.models.organization import Organization, OrganizationStatus
+    q = request.args.get('q', '').strip()
+    if not q or len(q) < 2:
+        return jsonify([])
+    results = Organization.query.filter(
+        Organization.name.ilike(f'%{q}%'),
+        Organization.status == OrganizationStatus.ACTIVE
+    ).limit(10).all()
+    return jsonify([{'id': o.id, 'name': o.name, 'industry': o.industry or ''} for o in results])
+
+
+
+
 @bp.route('/')
-def landing():
+def index():
     """Landing page route."""
     return render_template('pages/landing.html')
 
@@ -20,7 +35,7 @@ def request_access():
         # TODO: Implement actual access request logic
         # For now, just flash a message and redirect
         flash('Access request submitted successfully! You will receive an email within 24 hours.', 'success')
-        return redirect(url_for('main.landing'))
+        return redirect(url_for('main.index'))
     
     return render_template('pages/request_access.html')
 

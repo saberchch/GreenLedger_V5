@@ -37,11 +37,11 @@
                                 <span>Generate PDF</span>
                             </button>
                         </form>
-                        <button onclick="alert('Excel export coming soon!')"
+                        <a href="{{ url_for('dashboard_org_admin.download_latest_report', format='xlsx') }}"
                             class="h-9 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
                             <span class="material-symbols-outlined" style="font-size: 16px;">table_chart</span>
                             <span>Export Excel</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -59,11 +59,11 @@
                     <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Detailed report with all evidence and
                         documentation for external auditors</p>
                     <div class="flex gap-2">
-                        <button onclick="alert('Audit report generation coming soon!')"
+                        <a href="{{ url_for('dashboard_org_admin.download_latest_report', format='pdf') }}"
                             class="h-9 px-4 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 text-green-700 dark:text-green-400 font-medium text-sm transition-colors flex items-center gap-2">
                             <span class="material-symbols-outlined" style="font-size: 16px;">task_alt</span>
                             <span>Prepare Audit</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -81,11 +81,11 @@
                     <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Detailed analysis of emissions by scope
                         with category-level breakdown</p>
                     <div class="flex gap-2">
-                        <button onclick="alert('Scope breakdown report coming soon!')"
+                        <a href="{{ url_for('dashboard_org_admin.download_latest_report', format='xlsx') }}"
                             class="h-9 px-4 rounded-lg border border-[#dbe6e0] dark:border-[#3d5348] hover:bg-[#f0f4f2] dark:hover:bg-[#23352c] text-[#111814] dark:text-white font-medium text-sm transition-colors flex items-center gap-2">
                             <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
-                            <span>Download Report</span>
-                        </button>
+                            <span>Download Scope Report</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -121,13 +121,80 @@
             <h3 class="text-lg font-bold text-[#111814] dark:text-white">Recent Reports</h3>
             <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Previously generated reports</p>
         </div>
+
+        {% if reports %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr
+                        class="bg-[#f9fafb] dark:bg-[#23352c] border-b border-[#f0f4f2] dark:border-[#2a4035] text-xs uppercase text-[#618975] dark:text-[#8baaa0] font-semibold tracking-wider">
+                        <th class="p-4 rounded-tl-xl whitespace-nowrap">Report ID</th>
+                        <th class="p-4 whitespace-nowrap">Period</th>
+                        <th class="p-4 whitespace-nowrap">Status</th>
+                        <th class="p-4 whitespace-nowrap">Created</th>
+                        <th class="p-4 rounded-tr-xl whitespace-nowrap text-right">Downloads</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                    {% for r in reports %}
+                    <tr class="hover:bg-[#f9fafb] dark:hover:bg-[#23352c] transition-colors">
+                        <td class="p-4 font-medium text-[#111814] dark:text-white whitespace-nowrap">
+                            REF-{{ "%04d" | format(r.id) }}
+                        </td>
+                        <td class="p-4 text-[#618975] dark:text-[#8baaa0] whitespace-nowrap">
+                            {{ r.period_label or 'N/A' }}
+                        </td>
+                        <td class="p-4 whitespace-nowrap">
+                            {% set status_colors = {
+                            'draft': 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
+                            'pending_audit': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+                            'audited': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+                            'notarized': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                            } %}
+                            <span
+                                class="px-2.5 py-1 rounded-full text-xs font-semibold {{ status_colors.get(r.status.value, 'bg-gray-100 text-gray-800') }}">
+                                {{ r.status.value.replace('_', ' ').title() }}
+                            </span>
+                        </td>
+                        <td class="p-4 text-[#618975] dark:text-[#8baaa0] whitespace-nowrap">
+                            {{ r.created_at.strftime('%Y-%m-%d') }}
+                        </td>
+                        <td class="p-4 text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{{ url_for('dashboard_org_admin.download_report', report_id=r.id, format='pdf') }}"
+                                    class="h-8 px-3 inline-flex items-center justify-center gap-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 font-medium transition-colors"
+                                    title="Download PDF">
+                                    <span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                                    <span>PDF</span>
+                                </a>
+                                <a href="{{ url_for('dashboard_org_admin.download_report', report_id=r.id, format='docx') }}"
+                                    class="h-8 px-3 inline-flex items-center justify-center gap-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40 font-medium transition-colors"
+                                    title="Download Word">
+                                    <span class="material-symbols-outlined text-[18px]">description</span>
+                                    <span>DOCX</span>
+                                </a>
+                                <a href="{{ url_for('dashboard_org_admin.download_report', report_id=r.id, format='xlsx') }}"
+                                    class="h-8 px-3 inline-flex items-center justify-center gap-1.5 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40 font-medium transition-colors"
+                                    title="Download Excel">
+                                    <span class="material-symbols-outlined text-[18px]">table_chart</span>
+                                    <span>XLSX</span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
         <div class="p-6">
             <div class="text-center py-8 text-[#618975] dark:text-[#8baaa0]">
                 <span class="material-symbols-outlined text-4xl mb-2">description</span>
                 <p class="font-medium">No reports generated yet</p>
-                <p class="text-sm mt-1">Generate your first carbon report to get started</p>
+                <p class="text-sm mt-1">Click "Generate PDF" above to trigger a new report.</p>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 

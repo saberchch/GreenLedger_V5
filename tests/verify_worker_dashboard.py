@@ -35,11 +35,12 @@ def verify_worker_dashboard():
             print(f"DEBUG: First 500 chars: {content[:500]}")
             
             checks = [
-                "Executive Overview",
-                "Total Carbon Footprint",
-                "Est. CBAM Liability",
-                "Action Center",
-                "Recent Data Uploads"
+                "Company-wide carbon overview",
+                "Total Emissions",
+                "Scope 1 — Direct",
+                "Scope 2 — Energy",
+                "Scope 3 — Value Chain",
+                "My Recent Activities"
             ]
             
             for check in checks:

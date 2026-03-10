@@ -46,19 +46,87 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <form method="POST"
-                            action="{{ url_for('dashboard_admin.notarize_report', report_id=report.id) }}">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                            <button type="submit"
-                                class="px-3 py-1.5 bg-[#13ec80]/10 hover:bg-[#13ec80]/20 text-[#0a1f14] dark:text-[#13ec80] text-xs font-bold rounded-lg transition-colors border border-[#13ec80]/50">
-                                Notarize
-                            </button>
-                        </form>
+                        <button type="button" data-report-id="{{ report.id }}"
+                            data-report-summary="{{ report.summary|escape }}" onclick="notarizeToBlockchain(this)"
+                            class="px-3 py-1.5 bg-[#13ec80]/10 hover:bg-[#13ec80]/20 text-[#0a1f14] dark:text-[#13ec80] text-xs font-bold rounded-lg transition-colors border border-[#13ec80]/50"
+                            id="btn-notarize-{{ report.id }}">
+                            <span class="btn-text">Notarize</span>
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <script>
+            async function notarizeToBlockchain(buttonElement) {
+                if (!window.connectedWallet) {
+                    alert('Please connect your Web3 Wallet first using the button at the top of the page.');
+                    return;
+                }
+
+                const reportId = buttonElement.getAttribute('data-report-id');
+                const summaryText = buttonElement.getAttribute('data-report-summary');
+
+                const btnText = buttonElement.querySelector('.btn-text');
+                const originalText = btnText.innerText;
+
+                try {
+                    btnText.innerText = 'Signing...';
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                    // Setup Ethers provider
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const signer = await provider.getSigner();
+
+                    // Convert summary into Hex Data so it can be stored immutably in the TX payload
+                    const hexData = ethers.hexlify(ethers.toUtf8Bytes(summaryText));
+
+                    // Create a 0-ETH transaction to oneself just to store the data
+                    const tx = await signer.sendTransaction({
+                        to: window.connectedWallet,
+                        value: 0,
+                        data: hexData
+                    });
+
+                    btnText.innerText = 'Mining...';
+
+                    // Wait for the transaction to be mined
+                    const receipt = await tx.wait();
+
+                    // POST the real transaction hash to the backend
+                    const response = await fetch(`/dashboard/admin/report/${reportId}/notarize`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ tx_hash: receipt.hash })
+                    });
+
+                    if (response.ok) {
+                        btnText.innerText = 'Notarized ✓';
+                        buttonElement.classList.replace('bg-[#13ec80]/10', 'bg-gray-100');
+                        buttonElement.classList.replace('text-[#13ec80]', 'text-gray-500');
+                        buttonElement.classList.replace('border-[#13ec80]/50', 'border-gray-200');
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        throw new Error('Backend failed to record the notarization.');
+                    }
+
+                } catch (error) {
+                    console.error('Notarization failed:', error);
+                    alert('Notarization failed. Check the console for details or ensure you approved the transaction in MetaMask.');
+                    btnText.innerText = originalText;
+                    buttonElement.disabled = false;
+                    buttonElement.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        </script>
         {% else %}
         <div class="p-12 text-center text-[#618975] dark:text-[#8baaa0] flex flex-col items-center gap-2">
             <span class="material-symbols-outlined text-4xl opacity-50">fact_check</span>
