@@ -1,0 +1,722 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0% Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 12: Advanced LCA</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header
+        class="relative p-12 rounded-[3rem] bg-[#1a2c24] text-white overflow-hidden shadow-2xl border border-[#2a4035]">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+        <!-- Blueprint Background Pattern -->
+        <div class="absolute inset-0 opacity-20"
+            style="background-image: linear-gradient(#2a4035 1px, transparent 1px), linear-gradient(90deg, #2a4035 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-blue-300 text-xs font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                Product Accounting
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
+                Advanced <span class="text-primary italic">LCA</span>
+            </h1>
+            <p class="text-lg text-slate-300 leading-relaxed font-medium">
+                Move beyond the corporation. Learn how to calculate the environmental impact of a single product over
+                its entire lifespan using Life Cycle Assessment.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: Corporate vs Product -->
+            <section id="corporate-vs-product" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        Corporate vs. Product Level
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Until now, we've measured the **GHG Corporate Standard**: the emissions of a company over one
+                        year. LCA uses the **Product Standard**: the emissions of a specific item over its entire
+                        biological life.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                        <!-- Corporate Box -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-white dark:bg-[#111814] border-2 border-dashed border-gray-300 dark:border-gray-700 space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-gray-500">domain</span>
+                            </div>
+                            <h3 class="font-black text-xl text-[#111814] dark:text-white">Corporate Footprint</h3>
+                            <ul class="space-y-2 text-sm text-[#618975] dark:text-[#8baaa0]">
+                                <li class="flex items-center gap-2"><span
+                                        class="material-symbols-outlined text-[16px] text-primary">check</span> Temporal
+                                    Boundary: 1 Calendar Year</li>
+                                <li class="flex items-center gap-2"><span
+                                        class="material-symbols-outlined text-[16px] text-primary">check</span> Subject:
+                                    "Acme Corp"</li>
+                                <li class="flex items-center gap-2"><span
+                                        class="material-symbols-outlined text-[16px] text-primary">check</span> Metric:
+                                    Scopes 1, 2, 3</li>
+                            </ul>
+                        </div>
+
+                        <!-- Product Box -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-blue-50 dark:bg-blue-900/10 border-2 border-blue-500/30 space-y-4 relative overflow-hidden group">
+                            <div
+                                class="absolute inset-0 bg-blue-500/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            </div>
+                            <div
+                                class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-800/50 flex items-center justify-center relative z-10">
+                                <span
+                                    class="material-symbols-outlined text-blue-600 dark:text-blue-400">inventory_2</span>
+                            </div>
+                            <h3 class="font-black text-xl text-blue-900 dark:text-blue-100 relative z-10">Product
+                                Footprint (LCA)</h3>
+                            <ul class="space-y-2 text-sm text-blue-800 dark:text-blue-300 relative z-10">
+                                <li class="flex items-center gap-2"><span
+                                        class="material-symbols-outlined text-[16px] text-blue-500">check</span>
+                                    Temporal Boundary: Biological Life (Years/Decades)</li>
+                                <li class="flex items-center gap-2"><span
+                                        class="material-symbols-outlined text-[16px] text-blue-500">check</span>
+                                    Subject: "Model X Sneaker"</li>
+                                <li class="flex items-center gap-2"><span
+                                        class="material-symbols-outlined text-[16px] text-blue-500">check</span> Metric:
+                                    Cradle-to-Grave Phases</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: The Functional Unit -->
+            <section id="functional-unit" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        The Functional Unit
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        The most critical step in an LCA is defining the <strong>Functional Unit</strong>. You don't
+                        measure the item itself; you measure the <em>service</em> it provides. This ensures fair
+                        comparisons.
+                    </p>
+
+                    <div class="p-8 rounded-[2rem] bg-[#111814] text-white border border-[#2a4035] shadow-xl">
+                        <h3 class="font-black text-xl mb-6 text-center text-primary">Which is more carbon efficient?
+                        </h3>
+
+                        <div class="flex flex-col md:flex-row gap-8 items-center justify-center">
+                            <!-- Bulb A -->
+                            <div
+                                class="flex-1 text-center space-y-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-red-500/50 transition-colors">
+                                <span class="material-symbols-outlined text-6xl text-gray-400">lightbulb</span>
+                                <div>
+                                    <h4 class="font-bold">Incandescent Bulb</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Manufacturing Footprint: <strong
+                                            class="text-white">0.5 kg CO₂</strong></p>
+                                    <p class="text-xs text-red-400 mt-1">Lifespan: 1,000 hours</p>
+                                </div>
+                            </div>
+
+                            <div class="text-2xl font-black text-gray-600">VS</div>
+
+                            <!-- Bulb B -->
+                            <div
+                                class="flex-1 text-center space-y-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-primary/50 transition-colors">
+                                <span class="material-symbols-outlined text-6xl text-primary">lightbulb</span>
+                                <div>
+                                    <h4 class="font-bold">LED Bulb</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Manufacturing Footprint: <strong
+                                            class="text-red-400">1.5 kg CO₂</strong></p>
+                                    <p class="text-xs text-primary mt-1">Lifespan: 25,000 hours</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-6 bg-blue-900/20 border border-blue-500/30 rounded-xl">
+                            <p class="text-sm leading-relaxed">
+                                If we measured "1 Bulb" (the object), the LED looks worse (1.5kg vs 0.5kg). <br><br>
+                                But the <strong>Functional Unit</strong> should be <span
+                                    class="text-blue-300 font-black">"Providing 1,000 hours of light."</span><br>
+                                To get 25,000 hours of light, you need <strong>25 Incandescent bulbs (12.5 kg
+                                    CO₂)</strong> or just <strong>1 LED bulb (1.5 kg CO₂)</strong>. The Functional Unit
+                                reveals the true winner.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Cradle-to-Grave -->
+            <section id="cradle-to-grave" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        Cradle-to-Grave Timeline
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        An LCA tracks a product through 5 distinct life stages.
+                    </p>
+
+                    <!-- Interactive Timeline -->
+                    <div class="relative max-w-2xl mx-auto py-8">
+                        <!-- Vertical Line -->
+                        <div
+                            class="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-1 bg-gray-200 dark:bg-gray-800 rounded-full transform md:-translate-x-1/2">
+                        </div>
+
+                        <div class="space-y-12">
+                            <!-- Stage 1 -->
+                            <div
+                                class="relative flex flex-col md:flex-row items-center md:justify-between group cursor-default">
+                                <div
+                                    class="w-full md:w-5/12 ml-16 md:ml-0 md:text-right pr-0 md:pr-8 mb-2 md:mb-0 order-2 md:order-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <h4 class="font-black text-sm text-[#111814] dark:text-white">1. Raw Material
+                                        Extraction</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Mining, harvesting agriculture, pumping oil.
+                                    </p>
+                                </div>
+                                <div
+                                    class="absolute left-0 md:left-1/2 w-14 h-14 bg-white dark:bg-[#111814] rounded-full border-4 border-gray-200 dark:border-gray-800 flex items-center justify-center z-10 transform md:-translate-x-1/2 group-hover:border-primary group-hover:scale-110 transition-all text-gray-400 group-hover:text-primary order-1 md:order-2">
+                                    <span class="material-symbols-outlined">agriculture</span>
+                                </div>
+                                <div class="hidden md:block w-5/12 pl-8 order-3"></div>
+                            </div>
+
+                            <!-- Stage 2 -->
+                            <div
+                                class="relative flex flex-col md:flex-row items-center md:justify-between group cursor-default">
+                                <div class="hidden md:block w-5/12 pr-8 text-right order-1"></div>
+                                <div
+                                    class="absolute left-0 md:left-1/2 w-14 h-14 bg-white dark:bg-[#111814] rounded-full border-4 border-gray-200 dark:border-gray-800 flex items-center justify-center z-10 transform md:-translate-x-1/2 group-hover:border-primary group-hover:scale-110 transition-all text-gray-400 group-hover:text-primary order-1 md:order-2">
+                                    <span class="material-symbols-outlined">factory</span>
+                                </div>
+                                <div
+                                    class="w-full md:w-5/12 ml-16 md:ml-0 pl-0 md:pl-8 mt-2 md:mt-0 order-2 md:order-3 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <h4 class="font-black text-sm text-[#111814] dark:text-white">2. Manufacturing</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Energy used to process materials into the
+                                        final product.</p>
+                                </div>
+                            </div>
+
+                            <!-- Stage 3 -->
+                            <div
+                                class="relative flex flex-col md:flex-row items-center md:justify-between group cursor-default">
+                                <div
+                                    class="w-full md:w-5/12 ml-16 md:ml-0 md:text-right pr-0 md:pr-8 mb-2 md:mb-0 order-2 md:order-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <h4 class="font-black text-sm text-[#111814] dark:text-white">3. Distribution</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Freight from factory to warehouse to retail to
+                                        customer.</p>
+                                </div>
+                                <div
+                                    class="absolute left-0 md:left-1/2 w-14 h-14 bg-white dark:bg-[#111814] rounded-full border-4 border-gray-200 dark:border-gray-800 flex items-center justify-center z-10 transform md:-translate-x-1/2 group-hover:border-primary group-hover:scale-110 transition-all text-gray-400 group-hover:text-primary order-1 md:order-2">
+                                    <span class="material-symbols-outlined">local_shipping</span>
+                                </div>
+                                <div class="hidden md:block w-5/12 pl-8 order-3"></div>
+                            </div>
+
+                            <!-- Stage 4 -->
+                            <div
+                                class="relative flex flex-col md:flex-row items-center md:justify-between group cursor-default">
+                                <div class="hidden md:block w-5/12 pr-8 text-right order-1"></div>
+                                <div
+                                    class="absolute left-0 md:left-1/2 w-14 h-14 bg-white dark:bg-[#111814] rounded-full border-4 border-gray-200 dark:border-gray-800 flex items-center justify-center z-10 transform md:-translate-x-1/2 group-hover:border-primary group-hover:scale-110 transition-all text-gray-400 group-hover:text-primary order-1 md:order-2">
+                                    <span class="material-symbols-outlined">power</span>
+                                </div>
+                                <div
+                                    class="w-full md:w-5/12 ml-16 md:ml-0 pl-0 md:pl-8 mt-2 md:mt-0 order-2 md:order-3 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <h4 class="font-black text-sm text-[#111814] dark:text-white">4. Usage Phase</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Energy/water consumed by the product while
+                                        owned (e.g., washing a shirt, charging a phone).</p>
+                                </div>
+                            </div>
+
+                            <!-- Stage 5 -->
+                            <div
+                                class="relative flex flex-col md:flex-row items-center md:justify-between group cursor-default">
+                                <div
+                                    class="w-full md:w-5/12 ml-16 md:ml-0 md:text-right pr-0 md:pr-8 mb-2 md:mb-0 order-2 md:order-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    <h4 class="font-black text-sm text-[#111814] dark:text-white">5. End of Life</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Landfill emissions, incineration, or
+                                        recycling.</p>
+                                </div>
+                                <div
+                                    class="absolute left-0 md:left-1/2 w-14 h-14 bg-white dark:bg-[#111814] rounded-full border-4 border-gray-200 dark:border-gray-800 flex items-center justify-center z-10 transform md:-translate-x-1/2 group-hover:border-primary group-hover:scale-110 transition-all text-gray-400 group-hover:text-primary order-1 md:order-2">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </div>
+                                <div class="hidden md:block w-5/12 pl-8 order-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: System Boundaries -->
+            <section id="system-boundaries" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        System Boundaries
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Not all LCAs measure the full timeline. Companies must explicitly state their <strong>System
+                            Boundary</strong> so comparisons are fair.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <div
+                            class="bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] p-6 rounded-2xl relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-bl-full"></div>
+                            <h3 class="font-black text-blue-600 dark:text-blue-400 mb-2">Cradle-to-Gate</h3>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-4 h-12">Measures only Extraction and
+                                Manufacturing. It stops the moment the product leaves the factory "gate".</p>
+
+                            <!-- Visual Bars -->
+                            <div class="flex h-4 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                                <div class="flex-1 bg-blue-500 border-r border-white/20"></div>
+                                <div class="flex-1 bg-blue-500"></div>
+                                <div class="flex-1 opacity-20 border-l border-white/20"></div>
+                                <div class="flex-1 opacity-20 border-l border-white/20"></div>
+                                <div class="flex-1 opacity-20 border-l border-white/20"></div>
+                            </div>
+                            <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-2 flex justify-between">
+                                <span>1</span><span>2</span><span class="opacity-30">3</span><span
+                                    class="opacity-30">4</span><span class="opacity-30">5</span>
+                            </p>
+                        </div>
+
+                        <div
+                            class="bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] p-6 rounded-2xl relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full"></div>
+                            <h3 class="font-black text-primary mb-2">Cradle-to-Grave</h3>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-4 h-12">The gold standard. Measures
+                                all 5 stages from raw extraction completely through to final disposal.</p>
+
+                            <!-- Visual Bars -->
+                            <div class="flex h-4 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+                                <div class="flex-1 bg-primary border-r border-white/20"></div>
+                                <div class="flex-1 bg-primary border-r border-white/20"></div>
+                                <div class="flex-1 bg-primary border-r border-white/20"></div>
+                                <div class="flex-1 bg-primary border-r border-white/20"></div>
+                                <div class="flex-1 bg-primary"></div>
+                            </div>
+                            <p class="text-[9px] text-gray-400 uppercase tracking-widest mt-2 flex justify-between">
+                                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: LCA Sandbox (Build a Product) -->
+            <section id="lca-sandbox" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">06</span>
+                        LCA Sandbox: The T-Shirt
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Configure the supply chain parameters for a basic T-Shirt. Watch how your decisions shift the
+                        carbon burden across the 5 lifecycle stages.
+                    </p>
+
+                    <div
+                        class="bg-[#111814] border border-[#2a4035] rounded-[2rem] p-8 shadow-2xl flex flex-col md:flex-row gap-8">
+
+                        <!-- Controls -->
+                        <div class="w-full md:w-1/3 space-y-6">
+
+                            <!-- Material -->
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest">1.
+                                    Material</label>
+                                <select id="sandbox-material" onchange="updateLCASandbox()"
+                                    class="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl p-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors">
+                                    <option value="cotton" class="text-black">Organic Cotton</option>
+                                    <option value="polyester" class="text-black">Virgin Polyester</option>
+                                    <option value="recycled_poly" class="text-black">Recycled Polyester</option>
+                                </select>
+                            </div>
+
+                            <!-- Manufacturing Location -->
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest">2.
+                                    Manufacturing Grid</label>
+                                <select id="sandbox-grid" onchange="updateLCASandbox()"
+                                    class="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl p-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors">
+                                    <option value="coal" class="text-black">Coal-Heavy Grid (e.g., China/India)</option>
+                                    <option value="mixed" class="text-black">Mixed Grid (e.g., USA/EU)</option>
+                                    <option value="renewable" class="text-black">Renewable Grid (e.g., Norway/France)
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Care (Usage) -->
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase text-gray-400 tracking-widest">3.
+                                    Consumer Care (Usage)</label>
+                                <select id="sandbox-care" onchange="updateLCASandbox()"
+                                    class="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl p-3 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors">
+                                    <option value="hot" class="text-black">Hot Wash + Tumble Dry</option>
+                                    <option value="cold" class="text-black">Cold Wash + Line Dry</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- Visualization -->
+                        <div class="w-full md:w-2/3 bg-white/5 border border-white/10 rounded-xl p-6 relative">
+                            <h3 class="text-white font-black mb-4">Lifecycle Footprint Profile</h3>
+
+                            <!-- Total Display -->
+                            <div class="absolute top-6 right-6 text-right">
+                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black">Total / Shirt
+                                </p>
+                                <p id="sandbox-total" class="text-3xl font-black text-primary transition-all">4.5 <span
+                                        class="text-sm">kg CO₂e</span></p>
+                            </div>
+
+                            <!-- Bar Charts -->
+                            <div class="mt-12 space-y-4">
+
+                                <!-- Bar 1 -->
+                                <div class="relative">
+                                    <div class="flex justify-between text-[10px] font-black text-gray-400 mb-1">
+                                        <span>1. Raw Material</span>
+                                        <span id="val-1">1.2 kg</span>
+                                    </div>
+                                    <div class="h-4 bg-gray-800 rounded-full overflow-hidden">
+                                        <div id="bar-1" class="h-full bg-blue-500 transition-all duration-500"
+                                            style="width: 20%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Bar 2 -->
+                                <div class="relative">
+                                    <div class="flex justify-between text-[10px] font-black text-gray-400 mb-1">
+                                        <span>2. Manufacturing (Energy)</span>
+                                        <span id="val-2">2.5 kg</span>
+                                    </div>
+                                    <div class="h-4 bg-gray-800 rounded-full overflow-hidden">
+                                        <div id="bar-2" class="h-full bg-orange-500 transition-all duration-500"
+                                            style="width: 40%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Bar 3 -->
+                                <div class="relative">
+                                    <div class="flex justify-between text-[10px] font-black text-gray-400 mb-1">
+                                        <span>3. Distribution</span>
+                                        <span id="val-3">0.3 kg</span>
+                                    </div>
+                                    <div class="h-4 bg-gray-800 rounded-full overflow-hidden">
+                                        <div id="bar-3" class="h-full bg-yellow-500 transition-all duration-500"
+                                            style="width: 5%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Bar 4 -->
+                                <div class="relative">
+                                    <div class="flex justify-between text-[10px] font-black text-gray-400 mb-1">
+                                        <span>4. Usage (Washing/Drying)</span>
+                                        <span id="val-4">2.0 kg</span>
+                                    </div>
+                                    <div class="h-4 bg-gray-800 rounded-full overflow-hidden">
+                                        <div id="bar-4" class="h-full bg-primary transition-all duration-500"
+                                            style="width: 30%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Bar 5 -->
+                                <div class="relative">
+                                    <div class="flex justify-between text-[10px] font-black text-gray-400 mb-1">
+                                        <span>5. End of Life</span>
+                                        <span id="val-5">0.5 kg</span>
+                                    </div>
+                                    <div class="h-4 bg-gray-800 rounded-full overflow-hidden">
+                                        <div id="bar-5" class="h-full bg-red-500 transition-all duration-500"
+                                            style="width: 8%"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">07</span>
+                        Mastery Check
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl relative overflow-hidden text-center">
+                        <div class="relative z-10 mx-auto max-w-xl space-y-8">
+                            <h3 class="text-3xl font-black">What is the main purpose of defining a "Functional Unit" in
+                                an LCA?</h3>
+
+                            <div class="space-y-3 font-bold text-sm">
+                                <button onclick="checkFinalMastery(this, false)"
+                                    class="mastery-opt w-full p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    A. To isolate the factory emissions from supply chain emissions.
+                                </button>
+                                <button onclick="checkFinalMastery(this, true)"
+                                    class="mastery-opt w-full p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    B. To allow fair comparison based on the service provided (e.g., hours of light),
+                                    rather than just weight or unit count.
+                                </button>
+                                <button onclick="checkFinalMastery(this, false)"
+                                    class="mastery-opt w-full p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    C. To determine the Cradle-to-Gate boundary.
+                                </button>
+                            </div>
+
+                            <button id="next-module-btn"
+                                class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6 shadow-[0_0_15px_rgba(19,236,128,0.3)]">
+                                Proceed to Module 13
+                            </button>
+                            <div id="mastery-feedback"
+                                class="hidden p-6 rounded-2xl bg-primary text-black font-black italic shadow-lg">
+                                ACHIEVEMENT UNLOCKED: Product Architect!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">inventory_2</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#corporate-vs-product"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Scope Transition</a>
+                        </li>
+                        <li><a href="#functional-unit"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Functional Unit</a></li>
+                        <li><a href="#cradle-to-grave"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — Timeline Phases</a></li>
+                        <li><a href="#system-boundaries"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Boundaries</a></li>
+                        <li><a href="#lca-sandbox"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — LCA SandboxLab</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — Mastery Check</a></li>
+                    </ul>
+                </div>
+
+                <!-- Info Card -->
+                <div class="p-8 rounded-[2rem] bg-[#111814] text-white border border-[#2a4035] shadow-xl">
+                    <h3 class="text-sm font-black italic text-gray-400 uppercase tracking-widest mb-2">Scope 3 Overlap
+                    </h3>
+                    <p class="text-xs font-bold leading-relaxed text-gray-300">
+                        Corporate and Product footrpints intersect. If you map the LCAs of every product you sell in a
+                        year, you have effectively mapped your Corporate Scope 3 (Category 1: Purchased Goods & Category
+                        11: Use of Sold Products).
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=11) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 11 — Reduction
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=13) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                13 — Case Study <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- LCA Sandbox Logic ---
+    function updateLCASandbox() {
+        // Values dict
+        const db = {
+            material: {
+                cotton: { val: 2.0 },
+                polyester: { val: 4.5 },
+                recycled_poly: { val: 1.5 }
+            },
+            grid: {
+                coal: { val: 4.0 },
+                mixed: { val: 2.0 },
+                renewable: { val: 0.2 }
+            },
+            care: {
+                hot: { val: 3.5 },
+                cold: { val: 0.5 }
+            }
+        };
+
+        const matKey = document.getElementById('sandbox-material').value;
+        const gridKey = document.getElementById('sandbox-grid').value;
+        const careKey = document.getElementById('sandbox-care').value;
+
+        // Static values for demo distribution & end-of-life
+        const distVal = 0.5;
+        let eolVal = (matKey === 'polyester') ? 1.0 : 0.3; // Polyester harder to breakdown
+
+        const s1 = db.material[matKey].val;
+        const s2 = db.grid[gridKey].val;
+        const s3 = distVal;
+        const s4 = db.care[careKey].val;
+        const s5 = eolVal;
+
+        const total = s1 + s2 + s3 + s4 + s5;
+
+        // Update DOM numbers
+        document.getElementById('sandbox-total').innerHTML = total.toFixed(1) + ' <span class="text-sm">kg CO₂e</span>';
+        document.getElementById('val-1').innerText = s1.toFixed(1) + ' kg';
+        document.getElementById('val-2').innerText = s2.toFixed(1) + ' kg';
+        document.getElementById('val-3').innerText = s3.toFixed(1) + ' kg';
+        document.getElementById('val-4').innerText = s4.toFixed(1) + ' kg';
+        document.getElementById('val-5').innerText = s5.toFixed(1) + ' kg';
+
+        // Update DOM Bars (Max scale ~10kg)
+        const scale = 10;
+        document.getElementById('bar-1').style.width = ((s1 / scale) * 100) + '%';
+        document.getElementById('bar-2').style.width = ((s2 / scale) * 100) + '%';
+        document.getElementById('bar-3').style.width = ((s3 / scale) * 100) + '%';
+        document.getElementById('bar-4').style.width = ((s4 / scale) * 100) + '%';
+        document.getElementById('bar-5').style.width = ((s5 / scale) * 100) + '%';
+    }
+
+    // Initialize sandbox on load
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLCASandbox();
+    });
+
+    // --- Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:border-primary/50');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.add('text-black');
+            btn.classList.replace('opacity-50', 'opacity-100');
+
+            // Mark module as completed
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=13) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.replace('border-white/10', 'border-red-500');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is B. Functional Units allow comparison across different products that serve the same purpose.");
+            }, 500);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=13) }}";
+    }
+    });
+
+</script>
+
+{% endblock %}

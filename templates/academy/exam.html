@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenLedger Certification Exam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .opt-btn {
+            transition: all .15s ease;
+            border: 2px solid transparent;
+        }
+
+        .opt-btn:hover {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, .07);
+        }
+
+        .opt-btn.selected {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, .12);
+        }
+
+        .opt-btn.correct {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, .1);
+        }
+
+        .opt-btn.wrong {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, .1);
+        }
+
+        #progress-fill {
+            transition: width .4s ease;
+        }
+
+        .fade-in {
+            animation: fadeIn .3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="h-full flex flex-col bg-[#0d1310] text-white overflow-hidden">
+
+    <!-- ── Top bar ───────────────────────────────────────────────────────────── -->
+    <header class="flex-none flex items-center justify-between px-6 py-3 bg-[#111814] border-b border-[#2a4035]">
+        <!-- Left: logo + attempt badge -->
+        <div class="flex items-center gap-3">
+            <span class="text-primary font-black tracking-tight text-lg">GreenLedger</span>
+            <span
+                class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md bg-[#1a2c24] text-[#8baaa0]">
+                Attempt {{ attempt_number }}/{{ max_attempts }}
+            </span>
+        </div>
+
+        <!-- Centre: progress bar -->
+        <div class="flex-1 mx-8 max-w-md">
+            <div class="h-1.5 rounded-full bg-[#2a4035] overflow-hidden">
+                <div id="progress-fill" class="h-full bg-amber-500 rounded-full" style="width:0%"></div>
+            </div>
+            <p class="text-center text-[10px] text-[#8baaa0] mt-1 font-medium" id="progress-label">Question 1 of 60</p>
+        </div>
+
+        <!-- Right: timer -->
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-500 text-xl">timer</span>
+            <span id="timer" class="font-mono font-black text-xl text-amber-400 tabular-nums">120:00</span>
+        </div>
+    </header>
+
+    <!-- ── Main exam card ─────────────────────────────────────────────────────── -->
+    <main class="flex-1 flex items-center justify-center overflow-hidden p-4">
+        <div class="w-full max-w-2xl flex flex-col gap-5 fade-in" id="question-view">
+
+            <!-- Category + counter -->
+            <div class="flex items-center justify-between">
+                <span id="q-cat"
+                    class="px-3 py-1 bg-amber-500/10 text-amber-400 rounded-full text-xs font-black uppercase tracking-widest border border-amber-500/20">Category</span>
+                <span id="q-num" class="text-[#8baaa0] text-xs font-bold">1 / 60</span>
+            </div>
+
+            <!-- Question text -->
+            <h2 id="q-text" class="text-xl font-black leading-snug text-white min-h-[56px]">Loading…</h2>
+
+            <!-- Options — 2 columns on wider viewports -->
+            <div id="q-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+            <!-- Navigation row -->
+            <div class="flex items-center justify-between pt-2">
+                <button id="btn-prev" disabled
+                    class="flex items-center gap-1 px-4 py-2 rounded-xl text-[#8baaa0] hover:text-white hover:bg-[#1a2c24] disabled:opacity-30 disabled:cursor-not-allowed text-sm font-bold transition-colors">
+                    <span class="material-symbols-outlined text-base">west</span> Prev
+                </button>
+
+                <button id="btn-next"
+                    class="flex items-center gap-1 px-6 py-2.5 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-sm font-black transition-colors active:scale-95 shadow-lg shadow-amber-500/20">
+                    Next <span class="material-symbols-outlined text-base">east</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Review view (hidden) ──────────────────────────────────────────── -->
+        <div class="hidden w-full max-w-2xl flex flex-col gap-4 fade-in" id="review-view">
+            <div class="text-center space-y-1 mb-2">
+                <h2 class="text-2xl font-black">Review Answers</h2>
+                <p id="review-summary" class="text-[#8baaa0] text-sm font-medium"></p>
+            </div>
+
+            <div id="review-list" class="overflow-y-auto max-h-[54vh] pr-1 space-y-2"></div>
+
+            <div class="flex gap-3 pt-2">
+                <button id="btn-back-to-exam"
+                    class="flex-1 py-3 rounded-xl border border-[#2a4035] text-[#8baaa0] hover:bg-[#1a2c24] font-black text-sm transition-colors">
+                    ← Keep reviewing
+                </button>
+                <button id="btn-submit"
+                    class="flex-1 py-3 rounded-xl bg-green-500 hover:bg-green-400 text-black font-black text-sm transition-colors shadow-lg shadow-green-500/20 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-base">publish</span> Submit Exam
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- ── Warn do not refresh ──────────────────────────────────────────────── -->
+    <footer class="flex-none text-center py-2 bg-[#111814] border-t border-[#2a4035]">
+        <p class="text-[10px] text-red-400 font-bold flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-xs">warning</span>
+            Do NOT refresh this page — your progress will be lost.
+        </p>
+    </footer>
+
+    <!-- ── DATA injected from Flask ─────────────────────────────────────────── -->
+    <script>
+        const QUESTIONS = {{ questions | tojson | safe }};
+        const SUBMIT_URL = "{{ url_for('academy.certification_submit') }}";
+        const RETURN_URL = "{{ url_for('academy.certification') }}";
+    </script>
+
+    <script>
+        /* ── State ─────────────────────────────────────────────────────────────── */
+        const answers = {};   // { qId: optionIndex }
+        let current = 0;
+        let timerSec = 120 * 60;
+
+        /* ── Elements ───────────────────────────────────────────────────────────── */
+        const qView = document.getElementById('question-view');
+        const rView = document.getElementById('review-view');
+        const qCat = document.getElementById('q-cat');
+        const qNum = document.getElementById('q-num');
+        const qText = document.getElementById('q-text');
+        const qOptions = document.getElementById('q-options');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnSubmit = document.getElementById('btn-submit');
+        const btnBack = document.getElementById('btn-back-to-exam');
+        const progressFill = document.getElementById('progress-fill');
+        const progressLabel = document.getElementById('progress-label');
+        const timerEl = document.getElementById('timer');
+        const reviewList = document.getElementById('review-list');
+        const reviewSum = document.getElementById('review-summary');
+
+        /* ── Timer ──────────────────────────────────────────────────────────────── */
+        const interval = setInterval(() => {
+            timerSec--;
+            const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
+            const s = String(timerSec % 60).padStart(2, '0');
+            timerEl.textContent = `${m}:${s}`;
+            if (timerSec <= 300) timerEl.classList.add('text-red-400', 'animate-pulse');
+            if (timerSec <= 0) { clearInterval(interval); submitExam(); }
+        }, 1000);
+
+        /* ── Render question ────────────────────────────────────────────────────── */
+        function renderQuestion() {
+            qView.classList.remove('hidden');
+            rView.classList.add('hidden');
+
+            const q = QUESTIONS[current];
+            const pct = (current / QUESTIONS.length) * 100;
+
+            qCat.textContent = q.category || 'General';
+            qNum.textContent = `${current + 1} / ${QUESTIONS.length}`;
+            qText.textContent = q.question;
+            progressFill.style.width = `${pct}%`;
+            progressLabel.textContent = `Question ${current + 1} of ${QUESTIONS.length}`;
+
+            qOptions.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const letter = String.fromCharCode(65 + idx);
+                const btn = document.createElement('button');
+                btn.className = `opt-btn w-full text-left rounded-xl px-4 py-3 bg-[#1a2c24] text-sm font-semibold text-white flex items-center gap-3${answers[q.id] === idx ? ' selected' : ''}`;
+                btn.innerHTML = `<span class="w-6 h-6 shrink-0 flex items-center justify-center rounded-lg bg-[#2a4035] text-[#8baaa0] text-xs font-black">${letter}</span><span>${opt}</span>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    answers[q.id] = idx;
+                };
+                qOptions.appendChild(btn);
+            });
+
+            btnPrev.disabled = current === 0;
+            if (current === QUESTIONS.length - 1) {
+                btnNext.innerHTML = 'Review <span class="material-symbols-outlined text-base">checklist</span>';
+            } else {
+                btnNext.innerHTML = 'Next <span class="material-symbols-outlined text-base">east</span>';
+            }
+        }
+
+        /* ── Render review ──────────────────────────────────────────────────────── */
+        function renderReview() {
+            qView.classList.add('hidden');
+            rView.classList.remove('hidden');
+
+            progressFill.style.width = '100%';
+            progressLabel.textContent = 'Review your answers';
+
+            const answered = Object.keys(answers).length;
+            const total = QUESTIONS.length;
+            reviewSum.innerHTML = `<span class="${answered < total ? 'text-amber-400' : 'text-green-400'} font-black">${answered}</span> of ${total} answered.${answered < total ? ' <span class="text-amber-400">Unanswered = 0 marks.</span>' : ''}`;
+
+            reviewList.innerHTML = '';
+            QUESTIONS.forEach((q, idx) => {
+                const done = answers[q.id] !== undefined;
+                const item = document.createElement('button');
+                item.className = `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-colors ${done ? 'bg-[#1a2c24] hover:bg-[#23352c]' : 'bg-amber-900/20 border border-amber-500/30 hover:bg-amber-900/30'}`;
+                item.innerHTML = `
+            <span class="w-7 h-7 shrink-0 flex items-center justify-center rounded-full font-black text-xs ${done ? 'bg-green-500/20 text-green-400' : 'bg-amber-500 text-black'}">${idx + 1}</span>
+            <span class="flex-1 text-sm font-medium truncate">${q.question}</span>
+            <span class="material-symbols-outlined text-base ${done ? 'text-green-500' : 'text-amber-400'}">${done ? 'check_circle' : 'error'}</span>`;
+                item.onclick = () => { current = idx; renderQuestion(); };
+                reviewList.appendChild(item);
+            });
+        }
+
+        /* ── Navigation listeners ───────────────────────────────────────────────── */
+        btnPrev.onclick = () => { current--; renderQuestion(); };
+        btnNext.onclick = () => {
+            if (current < QUESTIONS.length - 1) { current++; renderQuestion(); }
+            else renderReview();
+        };
+        btnBack.onclick = () => renderQuestion();
+        btnSubmit.onclick = submitExam;
+
+        /* ── Submit ─────────────────────────────────────────────────────────────── */
+        function submitExam() {
+            clearInterval(interval);
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-base">autorenew</span> Grading…';
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch(SUBMIT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ answers })
+            })
+                .then(r => r.json())
+                .then((res) => {
+                    if (res.cert_id) {
+                        window.location.href = `/academy/certification/results/${res.cert_id}`;
+                    } else {
+                        window.location.href = RETURN_URL;
+                    }
+                })
+                .catch(() => {
+                    alert('Network error. Please try again.');
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = '<span class="material-symbols-outlined text-base">publish</span> Submit Exam';
+                });
+        }
+
+        /* ── Init ───────────────────────────────────────────────────────────────── */
+        renderQuestion();
+    </script>
+</body>
+
+</html>

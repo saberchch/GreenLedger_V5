@@ -14,6 +14,7 @@ from app.models.auditor_contract import AuditorContract, ContractStatus, Auditor
 from app.models.auditor_point_log import AuditorPointLog
 from app.models.secure_message import SecureMessage, MessageChannel
 from app.models.system_setting import SystemSetting
+from app.models.academy import AcademyProgress, Achievement
 
 __all__ = [
     "BaseModel",
@@ -35,4 +36,6 @@ __all__ = [
     "SecureMessage",
     "MessageChannel",
     "SystemSetting",
+    "AcademyProgress",
+    "Achievement",
 ]

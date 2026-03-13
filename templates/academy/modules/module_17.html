@@ -1,0 +1,446 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-amber-500 transition-all duration-500 shadow-[0_0_8px_rgba(245,158,11,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0% Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-amber-500 transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 17: Capstone and Certification</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header
+        class="relative p-12 rounded-[3rem] bg-gradient-to-br from-amber-600 to-amber-900 text-amber-50 overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.2)]">
+        <!-- Grid overlay -->
+        <div class="absolute inset-0 opacity-10"
+            style="background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .5) 25%, rgba(255, 255, 255, .5) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .5) 75%, rgba(255, 255, 255, .5) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .5) 25%, rgba(255, 255, 255, .5) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .5) 75%, rgba(255, 255, 255, .5) 76%, transparent 77%, transparent); background-size: 50px 50px;">
+        </div>
+
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-black uppercase tracking-widest">
+                <span class="material-symbols-outlined text-[14px]">workspace_premium</span>
+                Final Certification
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-lg">
+                <span class="text-amber-300">Capstone</span> Project
+            </h1>
+            <p class="text-lg text-amber-100/90 leading-relaxed font-medium">
+                This is it. The final challenge to prove you are ready to operate a real-world Carbon Ledger. Complete
+                the tasks below to earn your GreenLedger Certification.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: The Build Challenge -->
+            <section id="the-challenge" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg font-black">01</span>
+                        System Architecture Challenge
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        A multinational manufacturing firm has hired you to design their carbon accounting software
+                        architecture. Drag and drop the tools below to define a robust, auditable system.
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-gray-50 dark:bg-[#111814] border border-gray-200 dark:border-gray-800 shadow-sm">
+
+                        <div class="mb-8 text-center text-sm font-bold text-gray-500 dark:text-gray-400">
+                            Build the pipeline in the correct order: Data Source → Processing → Output
+                        </div>
+
+                        <!-- Drop Zones (Pipeline) -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                            <!-- Slot 1 -->
+                            <div class="arch-slot p-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-3xl min-h-[150px] flex flex-col items-center justify-center gap-2 transition-colors"
+                                data-expected="source">
+                                <span class="material-symbols-outlined text-gray-400 text-4xl">database</span>
+                                <span class="text-xs font-black uppercase tracking-widest text-gray-500">1. Data
+                                    Ingestion</span>
+                            </div>
+                            <!-- Slot 2 -->
+                            <div class="arch-slot p-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-3xl min-h-[150px] flex flex-col items-center justify-center gap-2 transition-colors"
+                                data-expected="process">
+                                <span class="material-symbols-outlined text-gray-400 text-4xl">memory</span>
+                                <span class="text-xs font-black uppercase tracking-widest text-gray-500">2. Calculation
+                                    Engine</span>
+                            </div>
+                            <!-- Slot 3 -->
+                            <div class="arch-slot p-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-3xl min-h-[150px] flex flex-col items-center justify-center gap-2 transition-colors"
+                                data-expected="output">
+                                <span class="material-symbols-outlined text-gray-400 text-4xl">assured_workload</span>
+                                <span class="text-xs font-black uppercase tracking-widest text-gray-500">3. Immutable
+                                    Ledger</span>
+                            </div>
+                        </div>
+
+                        <!-- Draggable Items -->
+                        <div class="flex flex-wrap gap-4 justify-center" id="draggable-tools">
+                            <div class="arch-tool cursor-grab p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md hover:border-amber-500 transition-all text-sm font-bold flex items-center gap-2"
+                                draggable="true" data-type="output">
+                                <span class="material-symbols-outlined text-indigo-500">link</span> Blockchain / Web3
+                            </div>
+                            <div class="arch-tool cursor-grab p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md hover:border-amber-500 transition-all text-sm font-bold flex items-center gap-2"
+                                draggable="true" data-type="process">
+                                <span class="material-symbols-outlined text-cyan-500">api</span> GHG Protocol Matching
+                                API
+                            </div>
+                            <div class="arch-tool cursor-grab p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md hover:border-amber-500 transition-all text-sm font-bold flex items-center gap-2"
+                                draggable="true" data-type="invalid">
+                                <span class="material-symbols-outlined text-red-500">table_view</span> Manual Excel
+                                Spreadsheets
+                            </div>
+                            <div class="arch-tool cursor-grab p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md hover:border-amber-500 transition-all text-sm font-bold flex items-center gap-2"
+                                draggable="true" data-type="source">
+                                <span class="material-symbols-outlined text-emerald-500">account_tree</span> Utility ERP
+                                Integrations
+                            </div>
+                        </div>
+
+                        <!-- Verification Button -->
+                        <div class="mt-12 text-center">
+                            <button onclick="verifyArchitecture()"
+                                class="px-8 py-4 bg-amber-500 text-white font-black uppercase tracking-widest rounded-xl hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30">Verify
+                                Architecture</button>
+                            <div id="arch-feedback" class="hidden mt-4 text-sm font-bold p-4 rounded-xl border"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Final Report Exam -->
+            <section id="final-exam" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg font-black">02</span>
+                        Final Certification Exam
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Pass the final assessment to complete the GreenLedger Academy and unlock your platform
+                        capabilities.
+                    </p>
+
+                    <!-- The Exam UI -->
+                    <div class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl relative overflow-hidden border-t-4 border-amber-500"
+                        id="exam-container">
+
+                        <!-- Question 1 -->
+                        <div class="exam-q active space-y-8" id="q1">
+                            <div class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Question 1 of 3
+                            </div>
+                            <h3 class="text-2xl font-black">A factory emitted 500 tons of CO2. They bought 500 tons of
+                                voluntary carbon offsets. Are their emissions legally "zero"?</h3>
+                            <div class="space-y-3 font-bold text-sm">
+                                <button onclick="answerQ(1, false)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    Yes, they are carbon neutral and can report zero gross emissions.
+                                </button>
+                                <button onclick="answerQ(1, true)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    No. Gross emissions remain 500 tons. Offsets mitigate the impact, but do not erase
+                                    the physical footprint.
+                                </button>
+                                <button onclick="answerQ(1, false)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    Yes, as long as the offsets were bought in a Compliance Market.
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="exam-q hidden space-y-8" id="q2">
+                            <div class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Question 2 of 3
+                            </div>
+                            <h3 class="text-2xl font-black">Why is an API data pull superior to spend-based data for
+                                Scope 3 estimation?</h3>
+                            <div class="space-y-3 font-bold text-sm">
+                                <button onclick="answerQ(2, true)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    APIs can fetch physical activity data (e.g., kWh or miles driven) which is far more
+                                    accurate than converting dollars spent to CO2e.
+                                </button>
+                                <button onclick="answerQ(2, false)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    APIs apply a higher emission factor, making the report look more conservative.
+                                </button>
+                                <button onclick="answerQ(2, false)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    APIs automatically buy carbon offsets to cancel out the errors in the supply chain
+                                    data.
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="exam-q hidden space-y-8" id="q3">
+                            <div class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Question 3 of 3
+                            </div>
+                            <h3 class="text-2xl font-black">What is the primary purpose of writing audited emissions
+                                data to a blockchain (Web3)?</h3>
+                            <div class="space-y-3 font-bold text-sm">
+                                <button onclick="answerQ(3, false)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    To hide the emissions data from competitors using cryptography.
+                                </button>
+                                <button onclick="answerQ(3, false)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    To generate cryptocurrency rewards for the organization.
+                                </button>
+                                <button onclick="answerQ(3, true)"
+                                    class="exam-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all">
+                                    To provide an immutable, cryptographic proof that the data existed in exactly that
+                                    state at that point in time, preventing retroactive tampering.
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Success State -->
+                        <div id="exam-success" class="hidden text-center space-y-6 py-12">
+                            <div
+                                class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-[0_0_50px_rgba(245,158,11,0.5)] flex items-center justify-center border-4 border-[#111814]">
+                                <span class="material-symbols-outlined text-white text-6xl">workspace_premium</span>
+                            </div>
+                            <h3 class="text-4xl font-black text-amber-400">Academy Completed!</h3>
+                            <p class="text-gray-300">You have successfully mastered the fundamentals of Carbon
+                                Accounting, LCA, Green Finance, and Web3 Sustainability.</p>
+
+                            <a href="{{ url_for('dashboard.index') }}"
+                                class="inline-block px-8 py-4 bg-amber-500 text-white font-black uppercase tracking-widest rounded-xl hover:bg-amber-400 transition-colors shadow-lg mt-8">
+                                Enter the Platform Platform
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-amber-500 text-lg">workspace_premium</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#the-challenge"
+                                class="flex items-center gap-3 hover:text-amber-500 transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-amber-500/40"></span> 01 — Architecture Lab</a>
+                        </li>
+                        <li><a href="#final-exam"
+                                class="flex items-center gap-3 hover:text-amber-500 transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-amber-500/40"></span> 02 — Final Exam</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-start items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=16) }}"
+                class="font-black hover:text-amber-500 flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 16 — Case Study
+            </a>
+        </div>
+        <!-- No Next button, this is the final module -->
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+
+    .drag-over {
+        border-color: #f59e0b !important;
+        /* amber-500 */
+        background-color: rgba(245, 158, 11, 0.05);
+    }
+</style>
+
+<script>
+    // --- Architecture Lab JS (Drag and Drop) ---
+    const draggables = document.querySelectorAll('.arch-tool');
+    const slots = document.querySelectorAll('.arch-slot');
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('dragging');
+            draggable.style.opacity = '0.5';
+        });
+
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+            draggable.style.opacity = '1';
+            // If dropped outside, return to container
+            if (draggable.parentElement.classList.contains('arch-slot') === false) {
+                document.getElementById('draggable-tools').appendChild(draggable);
+            }
+        });
+    });
+
+    slots.forEach(slot => {
+        slot.addEventListener('dragover', e => {
+            e.preventDefault();
+            slot.classList.add('drag-over');
+        });
+
+        slot.addEventListener('dragleave', () => {
+            slot.classList.remove('drag-over');
+        });
+
+        slot.addEventListener('drop', e => {
+            e.preventDefault();
+            slot.classList.remove('drag-over');
+            const draggable = document.querySelector('.dragging');
+
+            // Only allow 1 item per slot
+            const existingItem = slot.querySelector('.arch-tool');
+            if (existingItem) {
+                document.getElementById('draggable-tools').appendChild(existingItem);
+            }
+
+            slot.appendChild(draggable);
+            // reset positioning
+            draggable.style.margin = '0';
+        });
+    });
+
+    // Drop anywhere outside to return
+    document.getElementById('draggable-tools').addEventListener('dragover', e => e.preventDefault());
+    document.getElementById('draggable-tools').addEventListener('drop', e => {
+        const draggable = document.querySelector('.dragging');
+        document.getElementById('draggable-tools').appendChild(draggable);
+    });
+
+    window.verifyArchitecture = function () {
+        let correctCount = 0;
+        let excelInSlot = false;
+
+        document.querySelectorAll('.arch-slot').forEach(slot => {
+            const item = slot.querySelector('.arch-tool');
+            if (item) {
+                if (item.dataset.type === slot.dataset.expected) correctCount++;
+                if (item.dataset.type === 'invalid') excelInSlot = true;
+            }
+        });
+
+        const feedback = document.getElementById('arch-feedback');
+        feedback.classList.remove('hidden');
+
+        if (excelInSlot) {
+            feedback.innerHTML = `❌ <strong>Architectural Failure!</strong> Manual Excel spreadsheets are not an acceptable component of a modern, auditable Enterprise software pipeline. They are prone to human error and tampering.`;
+            feedback.className = 'mt-4 text-sm font-bold p-4 rounded-xl border border-red-500 bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300';
+        } else if (correctCount === 3) {
+            feedback.innerHTML = `✅ <strong>System Architecture Validated!</strong> You correctly mapped Source (ERP) to Processing (API) to Output (Ledger).`;
+            feedback.className = 'mt-4 text-sm font-bold p-4 rounded-xl border border-green-500 bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300';
+
+            // Track progress block
+            if (window.tracker) window.tracker.markSectionViewed('the-challenge');
+
+        } else {
+            feedback.innerHTML = `⚠️ <strong>Incorrect Pipeline Order.</strong> Ensure the flow goes from raw data ingestion, to methodology calculation, to final immutable storage.`;
+            feedback.className = 'mt-4 text-sm font-bold p-4 rounded-xl border border-orange-500 bg-orange-50 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300';
+        }
+    }
+
+
+    // --- Final Exam JS ---
+    let archPassed = false; // Optional gate to enforce linear flow
+
+    window.answerQ = function (qNum, isCorrect) {
+        if (isCorrect) {
+            document.getElementById(`q${qNum}`).classList.add('hidden');
+            if (qNum < 3) {
+                document.getElementById(`q${qNum + 1}`).classList.remove('hidden');
+            } else {
+                // Exam Finished!
+                if (window.tracker) window.tracker.markModuleCompleted(100);
+                document.getElementById('exam-success').classList.remove('hidden');
+                confettiEffect();
+            }
+        } else {
+            alert("Incorrect. Review the material and try again. Precision is mandatory for auditors.");
+        }
+    }
+
+    function confettiEffect() {
+        const duration = 3 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        const interval = setInterval(function () {
+            const timeLeft = animationEnd - Date.now();
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+            const particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Load Confetti JS
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js";
+        document.head.appendChild(script);
+
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('q1').classList.add('hidden');
+        document.getElementById('exam-success').classList.remove('hidden');
+    }
+    });
+</script>
+
+{% endblock %}

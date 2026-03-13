@@ -1,11 +1,13 @@
 """Authentication routes."""
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_user, logout_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
-from app.extensions import db
-from app.models.user import User
+from app.extensions import db, csrf
+from app.models.user import User, UserRole
 from app.models.organization import Organization
 from app.models.role import Role
 from app.utils.redirects import redirect_to_dashboard
@@ -206,3 +208,71 @@ def logout():
     logout_user()
     flash('You have been logged out successfully', 'info')
     return redirect(url_for('main.index'))
+
+
+# ---------------------------------------------------------------------------
+# Google Identity Services (GSI) - ID Token flow
+# ---------------------------------------------------------------------------
+
+@bp.route('/google/callback', methods=['POST'])
+@csrf.exempt
+def google_callback():
+    """
+    Handle the callback from Google GSI.
+    Google sends a POST request with a 'credential' field containing a JWT ID token.
+    """
+    token = request.form.get('credential')
+    if not token:
+        flash('No credential received from Google.', 'error')
+        return redirect(url_for('auth.login'))
+
+    try:
+        # Verify the ID token
+        idinfo = id_token.verify_oauth2_token(
+            token,
+            google_requests.Request(),
+            current_app.config['GOOGLE_CLIENT_ID']
+        )
+
+        # ID token is valid. Get the user's Google ID, email, and name.
+        email = idinfo.get('email', '').strip().lower()
+        if not email:
+            flash('Could not retrieve email from Google token.', 'error')
+            return redirect(url_for('auth.login'))
+
+        # Look up existing user
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            # Auto-create a new account for first-time Google users
+            first_name = idinfo.get('given_name', '')
+            last_name = idinfo.get('family_name', '')
+
+            user = User(
+                email=email,
+                # Placeholder hash — Google users cannot log in with a password
+                password_hash=generate_password_hash(f'__gsi_oauth_{email}__'),
+                first_name=first_name,
+                last_name=last_name,
+                status='active',
+                role=UserRole.VIEWER,
+            )
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Welcome to GreenLedger, {first_name or email}! Your account has been created.', 'success')
+        else:
+            if user.status != 'active':
+                flash('Your account is suspended. Please contact support.', 'error')
+                return redirect(url_for('auth.login'))
+            flash(f'Welcome back, {user.first_name or user.email}!', 'success')
+
+        login_user(user, remember=True)
+        return redirect_to_dashboard(user)
+
+    except ValueError:
+        # Invalid token
+        flash('Invalid Google ID token.', 'error')
+        return redirect(url_for('auth.login'))
+    except Exception as e:
+        flash(f'Authentication error: {str(e)}', 'error')
+        return redirect(url_for('auth.login'))

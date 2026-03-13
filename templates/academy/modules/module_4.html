@@ -1,0 +1,667 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0%
+            Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 04: Scope 1</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="relative p-12 rounded-[3rem] bg-[#111814] text-white overflow-hidden shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Scope 1 Accounting
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
+                The Direct <span class="text-primary italic">Perimeter</span>
+            </h1>
+            <p class="text-lg text-slate-400 leading-relaxed font-medium">
+                Deep-dive into accounting for direct emissions. Master the four pillars: stationary combustion, mobile
+                combustion, fugitive emissions, and process emissions.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: The Direct Perimeter -->
+            <section id="direct-perimeter" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        The Direct Perimeter
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Scope 1 encompasses all <strong>direct GHG emissions</strong> originating from sources that are
+                        owned or controlled by your organization. If you literally burn the fuel, or if the refrigerant
+                        leaks from equipment you own, it is Scope 1.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                        <div
+                            class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:shadow-xl transition-shadow group relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform">
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-4xl text-primary mb-4 block relative z-10">factory</span>
+                            <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2 relative z-10">Stationary
+                                & Process</h3>
+                            <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed relative z-10">Boilers,
+                                furnaces, burners, turbines, heaters, incinerators, and physical/chemical processing.
+                            </p>
+                        </div>
+                        <div
+                            class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:shadow-xl transition-shadow group relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform">
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-4xl text-primary mb-4 block relative z-10">local_shipping</span>
+                            <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2 relative z-10">Mobile &
+                                Fugitive</h3>
+                            <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed relative z-10">
+                                Automobiles, trucks, ships, airplanes, refrigerant leaks, wastewater treatment, and
+                                cooling towers.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Stationary Combustion -->
+            <section id="stationary-combustion" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        Stationary Combustion
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed">
+                        Combustion of fuels in stationary equipment. The most common pitfall here is mismatching the
+                        units of your activity data with your emission factor.
+                    </p>
+
+                    <!-- Interactive NCV/GCV Explainer -->
+                    <div class="p-8 rounded-[2rem] bg-[#111814] text-white shadow-xl mt-8">
+                        <div class="flex items-center justify-between mb-8">
+                            <h3 class="text-xl font-black italic text-primary">The Calorific Reality Check</h3>
+                            <span class="material-symbols-outlined text-primary text-3xl">local_fire_department</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-primary/80">GCV (Gross or
+                                    Higher)</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">Includes the latent heat of
+                                    vaporization of water in the combustion products. Used primarily in the US and UK.
+                                </p>
+                                <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                    <span class="text-xs font-bold text-slate-400">Natural Gas GCV EF:</span>
+                                    <span class="block text-xl font-black mt-1">0.183 kgCO2e / kWh</span>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="font-black text-sm uppercase tracking-widest text-[#618975]">NCV (Net or
+                                    Lower)</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">Excludes latent heat. Standard across
+                                    most of the world and international frameworks (e.g., IPCC, EU ETS).</p>
+                                <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                    <span class="text-xs font-bold text-slate-400">Natural Gas NCV EF:</span>
+                                    <span class="block text-xl font-black mt-1">0.202 kgCO2e / kWh</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 p-4 rounded-xl bg-orange-500/20 border border-orange-500/30">
+                            <p class="text-xs font-bold text-orange-400"><strong>Rule of thumb:</strong> NCV is ~10%
+                                lower than GCV for natural gas. If you use a GCV factor on NCV data, you will
+                                under-report your emissions by ~10%.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Mobile Combustion -->
+            <section id="mobile-combustion" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        Mobile Combustion
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed">
+                        Emissions from the transportation of materials, products, waste, and employees in vehicles
+                        <strong>owned or controlled</strong> by the company.
+                    </p>
+
+                    <!-- Interactive Data Selection Tool -->
+                    <div
+                        class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-xl mt-8 space-y-8">
+                        <h3 class="text-xl font-black text-[#111814] dark:text-white">Data Quality Hierarchy for Fleet
+                            Operations</h3>
+                        <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Select your available data source to
+                            determine the calculation method.</p>
+
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="showFleetData('fuel')" id="btn-fuel"
+                                class="px-6 py-3 rounded-2xl bg-[#111814] dark:bg-white text-primary dark:text-black font-black text-sm transition-all focus:outline-none ring-2 ring-primary ring-offset-2 ring-offset-white dark:ring-offset-[#0d1310]">Fuel
+                                Receipts (Liters/Gallons)</button>
+                            <button onclick="showFleetData('spend')" id="btn-spend"
+                                class="px-6 py-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-bold text-sm transition-all hover:bg-gray-200 dark:hover:bg-gray-700">Financial
+                                Spend ($)</button>
+                            <button onclick="showFleetData('distance')" id="btn-distance"
+                                class="px-6 py-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-bold text-sm transition-all hover:bg-gray-200 dark:hover:bg-gray-700">Distance
+                                Traveled (km/miles)</button>
+                        </div>
+
+                        <div id="fleet-content"
+                            class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#23352c] border-l-4 border-primary">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Fugitive Emissions -->
+            <section id="fugitive-emissions" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        Fugitive Emissions
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed">
+                        Intentional or unintentional releases of GHGs. The most common and impactful are
+                        hydrofluorocarbons (HFCs) from refrigeration and air conditioning equipment.
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white shadow-xl relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -mr-20 -mt-20">
+                        </div>
+                        <h3 class="text-xl font-black mb-6 relative z-10">The Asymmetric Impact of Refrigerants</h3>
+                        <p class="text-sm text-slate-300 leading-relaxed mb-8 relative z-10">A single kilogram of leaked
+                            refrigerant can wipe out years of energy efficiency initiatives due to their massive Global
+                            Warming Potential (GWP).</p>
+
+                        <div class="space-y-2 relative z-10">
+                            <!-- R-410A -->
+                            <div class="group">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-white">1 kg of R-410A (AC unit leak)</span>
+                                    <span class="text-primary font-black">≈ 2,088 kg CO₂e</span>
+                                </div>
+                                <div class="h-4 w-full bg-white/10 rounded-full overflow-hidden">
+                                    <div
+                                        class="h-full bg-red-500 w-[80%] transition-transform origin-left group-hover:scale-x-105">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- SF6 -->
+                            <div class="group pt-4">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-white">1 kg of SF₆ (Electrical switchgear)</span>
+                                    <span class="text-primary font-black">≈ 23,500 kg CO₂e</span>
+                                </div>
+                                <div class="h-4 w-full bg-white/10 rounded-full overflow-hidden">
+                                    <div
+                                        class="h-full bg-purple-500 w-[100%] transition-transform origin-left group-hover:scale-x-105">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- CO2 -->
+                            <div class="group pt-4">
+                                <div class="flex justify-between text-xs font-bold mb-1">
+                                    <span class="text-white">1 kg of CO₂</span>
+                                    <span class="text-primary font-black">1 kg CO₂e</span>
+                                </div>
+                                <div class="h-4 w-full bg-white/10 rounded-full overflow-hidden">
+                                    <div class="h-full bg-white/30 w-[1%]"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Process Direct Emissions -->
+            <section id="process-emissions" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">05</span>
+                        Process Direct Emissions
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Emissions from physical or chemical processes. For most service and technology companies, this
+                        is zero. If you manufacture cement, steel, or aluminum, this might be your largest emission
+                        source.
+                    </p>
+                    <div
+                        class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] flex items-center gap-4">
+                        <span class="material-symbols-outlined text-3xl text-[#618975]">science</span>
+                        <div>
+                            <h4 class="font-black text-[#111814] dark:text-white">The Calcination Process</h4>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0] mt-1">In cement manufacturing, heating
+                                limestone (CaCO₃) releases CO₂ to form lime (CaO). This is a purely chemical release,
+                                separate from the fuel burned to heat the kiln.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: The Boundary Trap -->
+            <section id="boundary-trap" class="scroll-mt-32">
+                <div class="space-y-8">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">06</span>
+                        The Boundary Trap
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white space-y-8 shadow-2xl relative overflow-hidden text-center">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 blur-2xl">
+                        </div>
+
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-black">Is it Scope 1 or Scope 3?</h3>
+                            <p class="text-sm font-bold text-slate-400">Read the scenario and assign it to the correct
+                                scope based on financial and operational control.</p>
+                        </div>
+
+                        <div id="boundary-scenario"
+                            class="p-8 rounded-3xl bg-white/5 border border-white/10 text-xl font-bold italic text-white min-h-[140px] flex items-center justify-center relative z-10 transition-all duration-300">
+                            <!-- Scenario injected by JS -->
+                        </div>
+
+                        <div id="boundary-controls" class="flex gap-4 justify-center relative z-10">
+                            <button onclick="checkBoundaryAnswer('Scope 1')"
+                                class="px-8 py-4 bg-[#23352c] hover:bg-[#2a4035] hover:text-primary transition-colors text-white font-black rounded-2xl w-48 border border-white/5">Scope
+                                1</button>
+                            <button onclick="checkBoundaryAnswer('Scope 3')"
+                                class="px-8 py-4 bg-[#23352c] hover:bg-[#2a4035] hover:text-primary transition-colors text-white font-black rounded-2xl w-48 border border-white/5">Scope
+                                3</button>
+                        </div>
+
+                        <div id="boundary-feedback"
+                            class="h-12 flex items-center justify-center text-sm font-black transition-opacity duration-300 opacity-0 relative z-10">
+                            <!-- Feedback injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Calculation Lab -->
+            <section id="calculation-lab" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">07</span>
+                        Calculation Lab: Fleet
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-xl space-y-6">
+                        <p class="text-sm font-bold text-[#618975] dark:text-[#8baaa0]">Calculate the Scope 1 emissions
+                            for a delivery van that consumed 5,000 Liters of Diesel in a year.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Activity Data -->
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Activity
+                                    Data (Liters)</label>
+                                <input type="number" id="calc-activity" value="5000"
+                                    class="w-full bg-[#f6f8f7] dark:bg-[#0d1310] border-none rounded-xl text-[#111814] dark:text-white font-bold p-4 focus:ring-2 focus:ring-primary"
+                                    readonly>
+                            </div>
+
+                            <!-- Emission Factor -->
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Emission
+                                    Factor (kgCO2e/L)</label>
+                                <input type="number" id="calc-ef" value="2.68"
+                                    class="w-full bg-[#f6f8f7] dark:bg-[#0d1310] border-none rounded-xl text-[#111814] dark:text-white font-bold p-4 focus:ring-2 focus:ring-primary">
+                            </div>
+
+                            <!-- Result -->
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black uppercase tracking-widest text-primary">Result
+                                    (tCO2e)</label>
+                                <div id="calc-result"
+                                    class="w-full bg-primary/10 border-none rounded-xl text-primary font-black p-4 flex items-center">
+                                    13.40
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="text-[10px] text-[#618975] font-bold text-right pt-2 border-t border-[#f0f4f2] dark:border-[#2a4035]">
+                            Calculation: (5000 × 2.68) / 1000 = 13.4 tCO2e
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 8: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">08</span>
+                        Mastery Check
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl space-y-8 relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32">
+                        </div>
+                        <div class="relative z-10 space-y-4">
+                            <div
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest">
+                                Final Assessment
+                            </div>
+                            <h3 class="text-3xl font-black">Which of the following is an example of Scope 1 emissions?
+                            </h3>
+                        </div>
+
+                        <div class="space-y-3 relative z-10 font-bold text-sm">
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                A. Electricity purchased from the grid to power your office.
+                            </button>
+                            <button onclick="checkFinalMastery(this, true)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                B. Natural gas burned in a boiler owned by your company.
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                C. Employee commuting to work in their personal cars.
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                D. Extraction of raw materials by your suppliers.
+                            </button>
+                        </div>
+
+                        <button id="next-module-btn"
+                            class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6">
+                            Proceed to Module 05
+                        </button>
+                        <div id="mastery-feedback"
+                            class="hidden p-6 rounded-2xl bg-primary text-black font-black italic text-center animate-bounce relative z-10">
+                            ACHIEVEMENT UNLOCKED: Direct Perimeter Cleared!
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">list_alt</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#direct-perimeter"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Perimeter</a></li>
+                        <li><a href="#stationary-combustion"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Stationary</a></li>
+                        <li><a href="#mobile-combustion"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — Mobile</a></li>
+                        <li><a href="#fugitive-emissions"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Fugitive</a></li>
+                        <li><a href="#process-emissions"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — Process</a></li>
+                        <li><a href="#boundary-trap"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — The Trap</a></li>
+                        <li><a href="#calculation-lab"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 07 — Calc Lab</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 08 — Mastery</a></li>
+                    </ul>
+                </div>
+
+                <!-- Key Takeaway Card -->
+                <div
+                    class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white space-y-4 shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-125 duration-500">
+                    </div>
+                    <h3 class="text-xl font-black italic text-primary relative z-10 drop-shadow-md">Academy Insight</h3>
+                    <p class="text-xs font-bold leading-relaxed relative z-10 text-slate-300">
+                        Scope 1 is where you have the highest operational control, and therefore the highest level of
+                        data quality expectations. Never settle for estimates here.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=3) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 03 — Corp Footprint
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=5) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                05 — Scope 2 <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- Section 3: Fleet Data Toggle ---
+    const fleetData = {
+        'fuel': {
+            title: "Volumetric Data (GOLD STANDARD)",
+            desc: "The highest quality activity data. You know exactly how many liters or gallons of fuel were purchased. Multiply directly by the fuel's emission factor.",
+            icon: "local_gas_station"
+        },
+        'distance': {
+            title: "Distance Data (ACCEPTABLE)",
+            desc: "If fuel data is unavailable, track distance and use an emission factor based on vehicle type and age (e.g., kgCO2e/km for a diesel van). Less precise than fuel volume.",
+            icon: "map"
+        },
+        'spend': {
+            title: "Spend Data (LAST RESORT)",
+            desc: "Highly inaccurate due to fuel price volatility. Calculate estimated volume using average fuel prices, then apply emission factors. Avoid for Scope 1 if possible.",
+            icon: "monetization_on"
+        }
+    };
+
+    function showFleetData(type) {
+        // Reset buttons
+        document.querySelectorAll('#btn-fuel, #btn-spend, #btn-distance').forEach(btn => {
+            btn.className = "px-6 py-3 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-500 font-bold text-sm transition-all hover:bg-gray-200 dark:hover:bg-gray-700";
+        });
+
+        // Active button
+        const activeBtn = document.getElementById(`btn-${type}`);
+        activeBtn.className = "px-6 py-3 rounded-2xl bg-[#111814] dark:bg-white text-primary dark:text-black font-black text-sm transition-all focus:outline-none ring-2 ring-primary ring-offset-2 ring-offset-white dark:ring-offset-[#0d1310]";
+
+        // Content
+        const content = document.getElementById('fleet-content');
+        const data = fleetData[type];
+        content.innerHTML = `
+            <div class="flex items-center gap-3 mb-2">
+                <span class="material-symbols-outlined text-primary">${data.icon}</span>
+                <h4 class="font-black text-[#111814] dark:text-white uppercase tracking-widest text-xs">${data.title}</h4>
+            </div>
+            <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed pl-9">${data.desc}</p>
+        `;
+    }
+    // Init fleet
+    showFleetData('fuel');
+
+    // --- Section 6: Boundary Trap ---
+    const boundaryScenarios = [
+        { text: "Fuel burned in a forklift owned and operated at your warehouse.", answer: "Scope 1", exp: "You own it and control it." },
+        { text: "Fuel burned in a delivery truck owned by FedEx, shipping your goods.", answer: "Scope 3", exp: "You don't own the truck. That's Scope 3, Category 4 or 9." },
+        { text: "Refrigerant leak from an HVAC system in a building you own.", answer: "Scope 1", exp: "You own the equipment, so the fugitive emissions are Scope 1." },
+        { text: "Emissions from the generation of electricity purchased to run your server room.", answer: "Scope 2", exp: "Tricky! Purchased electricity is Scope 2." }
+    ];
+
+    let currentScenario = 0;
+
+    function loadScenario() {
+        if (currentScenario < boundaryScenarios.length) {
+            document.getElementById('boundary-scenario').innerText = `"${boundaryScenarios[currentScenario].text}"`;
+            document.getElementById('boundary-feedback').style.opacity = '0';
+        } else {
+            document.getElementById('boundary-scenario').innerHTML = '<span class="text-primary text-3xl">Excellent boundary mapping!</span>';
+            document.getElementById('boundary-controls').style.display = 'none';
+            document.getElementById('boundary-feedback').style.opacity = '0';
+        }
+    }
+
+    window.checkBoundaryAnswer = function (guess) {
+        if (currentScenario >= boundaryScenarios.length) return;
+
+        const correct = boundaryScenarios[currentScenario].answer;
+        const feedback = document.getElementById('boundary-feedback');
+
+        if (guess === correct || (correct === "Scope 2" && guess != correct)) {
+            if (correct === "Scope 2") {
+                feedback.innerHTML = `<span class="text-yellow-400">Actually... it's Scope 2! ${boundaryScenarios[currentScenario].exp}</span>`;
+            } else {
+                feedback.innerHTML = `<span class="text-primary">Correct! ${boundaryScenarios[currentScenario].exp}</span>`;
+            }
+            feedback.style.opacity = '1';
+            currentScenario++;
+            setTimeout(loadScenario, 2500);
+        } else {
+            feedback.innerHTML = `<span class="text-red-400">Incorrect. ${boundaryScenarios[currentScenario].exp}</span>`;
+            feedback.style.opacity = '1';
+        }
+    }
+    loadScenario();
+
+
+    // --- Section 7: Calc Lab ---
+    const efInput = document.getElementById('calc-ef');
+    const actInput = document.getElementById('calc-activity');
+    const resultDiv = document.getElementById('calc-result');
+
+    function updateCalc() {
+        const ef = parseFloat(efInput.value) || 0;
+        const act = parseFloat(actInput.value) || 0;
+        const result = (ef * act) / 1000;
+        resultDiv.innerText = result.toFixed(2);
+    }
+    efInput.addEventListener('input', updateCalc);
+    actInput.addEventListener('input', updateCalc);
+
+
+    // --- Section 8: Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:bg-white/10');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('text-black');
+
+            // Mark module as completed in the tracker
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=5) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('border-red-500');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is B. Natural gas burned in a boiler owned by your company.");
+            }, 500);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=5) }}";
+    }
+    });
+
+</script>
+
+{% endblock %}

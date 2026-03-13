@@ -1,0 +1,610 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0%
+            Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 05: Scope 2</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="relative p-12 rounded-[3rem] bg-[#111814] text-white overflow-hidden shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Scope 2 Accounting
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
+                The Indirect <span class="text-primary italic">Perimeter</span>
+            </h1>
+            <p class="text-lg text-slate-400 leading-relaxed font-medium">
+                Master the complexities of purchased energy. Understand the dual-reporting requirement, energy attribute
+                certificates (EACs), and how to avoid greenwashing.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: The Indirect Perimeter -->
+            <section id="indirect-perimeter" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        The Indirect Perimeter
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Scope 2 accounts for GHG emissions from the generation of <strong>purchased electricity, steam,
+                            heating, and cooling</strong> consumed by your company. It is "indirect" because the actual
+                        emissions occur at the facility where the energy is generated, not where it is used.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                        <div
+                            class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:shadow-xl transition-shadow group relative overflow-hidden flex flex-col items-center text-center">
+                            <span class="material-symbols-outlined text-4xl text-primary mb-4">bolt</span>
+                            <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2">Electricity</h3>
+                            <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Power purchased from the grid for
+                                lighting, machinery, servers, and HVAC operations.</p>
+                        </div>
+                        <div
+                            class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:shadow-xl transition-shadow group relative overflow-hidden flex flex-col items-center text-center">
+                            <span class="material-symbols-outlined text-4xl text-orange-500 mb-4">heat_pump</span>
+                            <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2">Thermal Energy</h3>
+                            <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Purchased steam, heat, or cooling
+                                sourced from district heating/cooling systems or co-generation plants.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: The Two Methods -->
+            <section id="two-methods" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        The Dual Reporting Requirement
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-8">
+                        The GHG Protocol requires companies operating in markets with contractual instruments (like the
+                        US, Europe, and Australia) to report Scope 2 emissions using <strong>two distinct
+                            methods</strong>.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div
+                            class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white space-y-4 shadow-xl relative overflow-hidden group">
+                            <div
+                                class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc2MCcgaGVpZ2h0PSc2MCc+CgkJPHBhdGggZD0nTTU0LjYyNyAwdjU0LjYyN0gwVjBoNTQuNjI3em0tNS40NjMgNS40NjNoLTQzLjA0djQzLjA0aDQzLjA0VjUuNDYzem0tNS40NjMgNS40NjNIMTAuOTI2djMyLjExNEg0My43djMyLjExNEg0My43VjEwLjkyNnptLTUuNDYzIDUuNDYzSDE2LjM4OXYyMS4xODloMjEuODQ4VjE2LjM4OXonIGZpbGw9JyMxM2VjODAnIGZpbGwtb3BhY2l0eT0nMC4wNScgZmlsbC1ydWxlPSdldmVub2RkJy8+Cjwvc3ZnPg==')] opacity-50 group-hover:scale-110 transition-transform duration-1000">
+                            </div>
+                            <div class="relative z-10">
+                                <span
+                                    class="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest mb-4">The
+                                    Physical Reality</span>
+                                <h3 class="text-2xl font-black mb-2">Location-Based</h3>
+                                <p class="text-sm text-slate-300 leading-relaxed mb-6">Reflects the average emissions
+                                    intensity of grids on which energy consumption occurs.</p>
+                                <ul class="space-y-2 text-xs font-bold text-slate-400">
+                                    <li class="flex items-center gap-2"><span class="text-primary">✓</span> Uses
+                                        regional/national grid average factors</li>
+                                    <li class="flex items-center gap-2"><span class="text-primary">✓</span> Excludes
+                                        company-specific green energy contracts</li>
+                                    <li class="flex items-center gap-2"><span class="text-primary">✓</span> Shows what
+                                        your physical facilities are actually drawing</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-8 rounded-[2rem] bg-gradient-to-br from-[#111814] to-[#0d1310] text-white space-y-4 shadow-xl border border-primary/20 relative overflow-hidden group">
+                            <div
+                                class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0MScgaGVpZ2h0PSc0MSc+Cgk8cGF0aCBkPSJNMjAuNSAwQTEwLjUgMTAuNSAwIDEwMjAuNSAyMUExMC41IDEwLjUgMCAwMDIwLjUgMHoiIGZpbGw9IiMxM2VjODAiIGZpbGwtb3BhY2l0eT0iMC4wNSIgZmlsbC1ydWxlPSJldmVub2RkIi8+Cjwvc3ZnPg==')] opacity-50 group-hover:scale-110 transition-transform duration-1000">
+                            </div>
+                            <div class="relative z-10">
+                                <span
+                                    class="inline-block px-3 py-1 rounded-full bg-primary text-black text-[10px] font-black uppercase tracking-widest mb-4">The
+                                    Financial Reality</span>
+                                <h3 class="text-2xl font-black mb-2 flex items-center gap-2">Market-Based <span
+                                        class="material-symbols-outlined text-primary text-lg">verified</span></h3>
+                                <p class="text-sm text-slate-300 leading-relaxed mb-6">Reflects emissions from
+                                    electricity that companies have purposefully chosen regarding its origin.</p>
+                                <ul class="space-y-2 text-xs font-bold text-slate-400">
+                                    <li class="flex items-center gap-2"><span class="text-primary">✓</span> Uses
+                                        supplier-specific factors or certificates (RECs)</li>
+                                    <li class="flex items-center gap-2"><span class="text-primary">✓</span> Allows
+                                        companies to claim zero-emissions power</li>
+                                    <li class="flex items-center gap-2"><span class="text-primary">✓</span> Drives
+                                        market demand for renewable energy</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Location-Based Interactive -->
+            <section id="location-based" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        The Grid Intensity Matrix
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed">
+                        Under the location-based method, identical facilities consuming identical kW of power will have
+                        wildly different emissions depending entirely on where they are plugged in.
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-xl space-y-8 mt-8">
+                        <h3 class="font-black text-center text-[#111814] dark:text-white mb-6">Emissions for 100,000 kWh
+                            of Electricity (Location-Based)</h3>
+
+                        <div class="space-y-6">
+                            <!-- France -->
+                            <div class="group">
+                                <div class="flex justify-between items-end mb-2">
+                                    <div>
+                                        <h4 class="font-black text-[#111814] dark:text-white">France <span
+                                                class="text-xs font-bold text-[#618975] font-normal ml-2">(Nuclear-heavy
+                                                grid)</span></h4>
+                                        <p class="text-xs text-[#618975]">EF: ~0.052 kgCO2e/kWh</p>
+                                    </div>
+                                    <span class="font-black text-primary">5.2 tCO₂e</span>
+                                </div>
+                                <div class="h-6 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-primary w-[5%] transition-all duration-1000 origin-left">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- USA -->
+                            <div class="group">
+                                <div class="flex justify-between items-end mb-2">
+                                    <div>
+                                        <h4 class="font-black text-[#111814] dark:text-white">USA (Average) <span
+                                                class="text-xs font-bold text-[#618975] font-normal ml-2">(Mixed
+                                                grid)</span></h4>
+                                        <p class="text-xs text-[#618975]">EF: ~0.380 kgCO2e/kWh</p>
+                                    </div>
+                                    <span class="font-black text-orange-500">38.0 tCO₂e</span>
+                                </div>
+                                <div class="h-6 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-orange-500 w-[38%] transition-all duration-1000 origin-left">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Poland -->
+                            <div class="group">
+                                <div class="flex justify-between items-end mb-2">
+                                    <div>
+                                        <h4 class="font-black text-[#111814] dark:text-white">Poland <span
+                                                class="text-xs font-bold text-[#618975] font-normal ml-2">(Coal-heavy
+                                                grid)</span></h4>
+                                        <p class="text-xs text-[#618975]">EF: ~0.650 kgCO2e/kWh</p>
+                                    </div>
+                                    <span class="font-black text-red-500">65.0 tCO₂e</span>
+                                </div>
+                                <div class="h-6 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 w-[65%] transition-all duration-1000 origin-left">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Market-Based Explainer (EACs) -->
+            <section id="market-based" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        Instruments of the Market
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed">
+                        To claim zero-emission electricity under the market-based method, companies must purchase and
+                        retire <strong>Energy Attribute Certificates (EACs)</strong>.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                        <div class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#23352c]">
+                            <h4 class="font-black text-[#111814] dark:text-white mb-1">RECs</h4>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#618975] mb-4">North America
+                            </p>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Renewable Energy Certificates.
+                                Represents 1 MWh of renewable energy generated and delivered to the grid.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#23352c]">
+                            <h4 class="font-black text-[#111814] dark:text-white mb-1">GOs</h4>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#618975] mb-4">Europe</p>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Guarantees of Origin. The standard
+                                tracking instrument required by the EU Renewable Energy Directive.</p>
+                        </div>
+                        <div class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#23352c]">
+                            <h4 class="font-black text-[#111814] dark:text-white mb-1">I-RECs</h4>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-[#618975] mb-4">Rest of World
+                            </p>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">International RECs. Used in regions
+                                without national tracking systems (Asia, LatAm, Africa).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: The Quality Criteria -->
+            <section id="quality-criteria" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">05</span>
+                        The Protocol Quality Criteria
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        You can't just buy any certificate from anywhere. The GHG Protocol mandates strict <strong>Scope
+                            2 Quality Criteria</strong> to prevent double-counting and ensure legitimacy.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div
+                            class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] flex items-start gap-4 hover:border-primary transition-colors">
+                            <span class="material-symbols-outlined text-3xl text-primary shrink-0 mt-1">public</span>
+                            <div>
+                                <h4 class="font-black text-[#111814] dark:text-white text-lg">1. Market Boundaries</h4>
+                                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Certificates must be sourced
+                                    from the same geographic market as the consuming facility. You cannot buy cheap
+                                    Texas solar RECs to cover emissions for an office in London.</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] flex items-start gap-4 hover:border-primary transition-colors">
+                            <span class="material-symbols-outlined text-3xl text-primary shrink-0 mt-1">event</span>
+                            <div>
+                                <h4 class="font-black text-[#111814] dark:text-white text-lg">2. Vintage Alignment</h4>
+                                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Certificates must be produced
+                                    as close as possible to the period of energy consumption, reasonably within the same
+                                    calendar year.</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] flex items-start gap-4 hover:border-primary transition-colors">
+                            <span class="material-symbols-outlined text-3xl text-primary shrink-0 mt-1">block</span>
+                            <div>
+                                <h4 class="font-black text-[#111814] dark:text-white text-lg">3. Unique Claim &
+                                    Retirement</h4>
+                                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">Certificates must be tracked
+                                    and permanently "retired" in a public registry on behalf of the reporting company to
+                                    ensure no one else can claim that green megawatt.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: Calculation Lab -->
+            <section id="calculation-lab" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">06</span>
+                        Calculation Lab: Dual Reporting
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-xl space-y-8">
+                        <p class="text-sm font-bold text-[#618975] dark:text-[#8baaa0]">Calculate the dual-method
+                            footprint for a facility using 500 MWh of electricity, which has purchased 300 MWh of wind
+                            RECs.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Input Data -->
+                            <div class="space-y-4 bg-[#f6f8f7] dark:bg-[#0d1310] p-6 rounded-2xl">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Total
+                                        Consumption (MWh)</label>
+                                    <input type="number" id="calc-consumption" value="500"
+                                        class="w-full bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-xl text-[#111814] dark:text-white font-bold p-3 focus:ring-2 focus:ring-primary">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Local
+                                        Grid EF (kgCO2/MWh)</label>
+                                    <input type="number" id="calc-grid-ef" value="400"
+                                        class="w-full bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-xl text-[#111814] dark:text-white font-bold p-3 focus:ring-2 focus:ring-primary">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black uppercase tracking-widest text-primary">RECs
+                                        Purchased (MWh)</label>
+                                    <input type="number" id="calc-recs" value="300"
+                                        class="w-full bg-white dark:bg-[#1a2c24] border border-primary/20 rounded-xl text-[#111814] dark:text-white font-bold p-3 focus:ring-2 focus:ring-primary">
+                                </div>
+                            </div>
+
+                            <!-- Outputs -->
+                            <div class="space-y-6">
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Location-Based
+                                        Result (tCO₂e)</label>
+                                    <div
+                                        class="w-full bg-gray-100 dark:bg-gray-800 border-none rounded-xl text-gray-600 dark:text-gray-300 font-black p-4 flex items-center justify-between">
+                                        <span id="calc-loc-res">200.00</span>
+                                        <span class="material-symbols-outlined text-sm opacity-50">factory</span>
+                                    </div>
+                                    <p class="text-[9px] text-gray-500">Ignores RECs: 500 MWh × 400 kg</p>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-black uppercase tracking-widest text-primary">Market-Based
+                                        Result (tCO₂e)</label>
+                                    <div
+                                        class="w-full bg-primary/10 border border-primary/30 rounded-xl text-primary font-black p-4 flex items-center justify-between shadow-[0_0_15px_rgba(19,236,128,0.15)]">
+                                        <span id="calc-mkt-res" class="text-2xl">80.00</span>
+                                        <span class="material-symbols-outlined text-xl">verified</span>
+                                    </div>
+                                    <p class="text-[9px] text-[#618975]">Accounts for RECs: (300×0) + (200×400)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">07</span>
+                        Mastery Check
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl space-y-8 relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32">
+                        </div>
+                        <div class="relative z-10 space-y-4">
+                            <div
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest">
+                                Final Assessment
+                            </div>
+                            <h3 class="text-3xl font-black">Why does the GHG Protocol require Dual Reporting for Scope
+                                2?</h3>
+                        </div>
+
+                        <div class="space-y-3 relative z-10 font-bold text-sm">
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                A. To mathematically penalize companies that operate in coal-heavy regions.
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                B. Because the location-based method is outdated and will be phased out soon.
+                            </button>
+                            <button onclick="checkFinalMastery(this, true)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                C. To show the physical grid reality while also reflecting voluntary green energy
+                                purchases.
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                D. So companies can choose the method that gives them the lowest emission number to
+                                report.
+                            </button>
+                        </div>
+
+                        <button id="next-module-btn"
+                            class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6">
+                            Proceed to Module 06
+                        </button>
+                        <div id="mastery-feedback"
+                            class="hidden p-6 rounded-2xl bg-primary text-black font-black italic text-center animate-bounce relative z-10">
+                            ACHIEVEMENT UNLOCKED: Dual Reporting Master!
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">list_alt</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#indirect-perimeter"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Perimeter</a></li>
+                        <li><a href="#two-methods"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Two Methods</a></li>
+                        <li><a href="#location-based"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — Grid Matrix</a></li>
+                        <li><a href="#market-based"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Instruments</a></li>
+                        <li><a href="#quality-criteria"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — Quality Criteria</a>
+                        </li>
+                        <li><a href="#calculation-lab"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — Calc Lab</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 07 — Mastery</a></li>
+                    </ul>
+                </div>
+
+                <!-- Key Takeaway Card -->
+                <div
+                    class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white space-y-4 shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-125 duration-500">
+                    </div>
+                    <h3 class="text-xl font-black italic text-primary relative z-10 drop-shadow-md">Academy Insight</h3>
+                    <p class="text-xs font-bold leading-relaxed relative z-10 text-slate-300">
+                        Buying RECs is an accounting entry, not a physical wire moving green electrons to your server.
+                        This is why dual reporting is strictly enforced.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=4) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 04 — Scope 1
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=6) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                06 — Scope 3 <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- Section 6: Calc Lab ---
+    const consInput = document.getElementById('calc-consumption');
+    const gridEfInput = document.getElementById('calc-grid-ef');
+    const recsInput = document.getElementById('calc-recs');
+    const locResDiv = document.getElementById('calc-loc-res');
+    const mktResDiv = document.getElementById('calc-mkt-res');
+
+    function updateDualCalc() {
+        const consumption = parseFloat(consInput.value) || 0;
+        const gridEf = parseFloat(gridEfInput.value) || 0;
+        const recs = parseFloat(recsInput.value) || 0;
+
+        // Location Based: Ignore RECs entirely
+        const locResult = (consumption * gridEf) / 1000;
+        locResDiv.innerText = locResult.toFixed(2);
+
+        // Market Based: Apply 0 EF to REC volume, Grid EF to remainder
+        const validRecs = Math.min(recs, consumption); // Cap RECs to total consumption
+        const remainder = consumption - validRecs;
+
+        let mktResult = (remainder * gridEf) / 1000;
+        // Assume REC EF is 0 kg/MWh
+
+        mktResDiv.innerText = mktResult.toFixed(2);
+    }
+
+    consInput.addEventListener('input', updateDualCalc);
+    gridEfInput.addEventListener('input', updateDualCalc);
+    recsInput.addEventListener('input', updateDualCalc);
+
+    // Initial calculation
+    updateDualCalc();
+
+
+    // --- Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:bg-white/10');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('text-black');
+
+            // Mark module as completed in the tracker
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=6) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('border-red-500');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is C. To show physical grids and voluntary market choices.");
+            }, 500);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=6) }}";
+    }
+    });
+
+</script>
+
+{% endblock %}

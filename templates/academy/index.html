@@ -1,0 +1,197 @@
+{% extends "academy/base.html" %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-16">
+    <!-- Hero Section -->
+    <div class="relative p-12 rounded-[4rem] bg-[#111814] text-white overflow-hidden shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-80 h-80 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div class="space-y-6 max-w-2xl">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-black uppercase tracking-widest leading-none">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                    Professional Certification
+                </div>
+                <h1 class="text-6xl font-black tracking-tight leading-[0.9]">
+                    GreenLedger <br><span class="text-primary italic">Academy</span>
+                </h1>
+                <p class="text-slate-400 text-lg leading-relaxed">
+                    The complete professional training program on carbon accounting using the GHG Protocol. 14 modules
+                    from fundamentals to expert blockchain implementation.
+                </p>
+                <div class="flex gap-4">
+                    <a href="{{ url_for('academy.module', module_id=resume_module_id) }}"
+                        class="inline-flex items-center justify-center px-8 py-4 bg-primary text-black font-black rounded-2xl hover:scale-105 transition-transform">
+                        Resume My Progress
+                    </a>
+                    <a href="#curriculum"
+                        class="px-8 py-4 bg-white/5 border border-white/10 text-white font-black rounded-2xl hover:bg-white/10 transition-colors">
+                        View Curriculum
+                    </a>
+                </div>
+            </div>
+            <div
+                class="hidden lg:block w-72 h-72 rounded-3xl bg-gradient-to-br from-primary to-orange-500 p-1 rotate-3 shadow-2xl">
+                <div
+                    class="w-full h-full rounded-[1.4rem] bg-[#111814] flex flex-col items-center justify-center text-center p-6 space-y-4">
+                    <span class="material-symbols-outlined text-primary text-6xl">workspace_premium</span>
+                    <p class="text-xs font-black uppercase tracking-tighter">Carbon Expert <br> Certification</p>
+
+                    {% set completed_count = progress_map.values() | selectattr('is_completed') | list | length %}
+                    {% set total_modules = 17 %}
+                    {% set overall_progress = (completed_count / total_modules * 100) | round | int %}
+
+                    <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary" style="width: {{ overall_progress | default(0) }}%;"></div>
+                    </div>
+                    <p class="text-[10px] font-bold text-primary/60">{{ completed_count }}/{{ total_modules }} Modules
+                        Completed</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Section -->
+        {% if current_user.achievements %}
+        <div class="space-y-6">
+            <h2 class="text-2xl font-black text-[#111814] dark:text-white flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary text-3xl">workspace_premium</span>
+                Your Achievements
+            </h2>
+            <div class="flex flex-wrap gap-4">
+                {% for ach in current_user.achievements %}
+                <div
+                    class="group relative px-6 py-4 bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-3xl flex items-center gap-4 hover:border-primary transition-all shadow-sm">
+                    <div class="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">military_tech</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-black text-[#111814] dark:text-white">{{ ach.name }}</span>
+                        <span class="text-[10px] uppercase font-bold text-[#618975] whitespace-nowrap italic">{{
+                            ach.earned_at.strftime('%b %d, %Y') }}</span>
+                    </div>
+
+                    <!-- Tooltip on hover -->
+                    <div
+                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-48 p-4 bg-black text-white text-[11px] rounded-2xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none shadow-2xl z-50">
+                        <p class="font-bold leading-relaxed">{{ ach.description }}</p>
+                        <div
+                            class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-black">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Curriculum Grid -->
+    <div id="curriculum" class="space-y-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div class="space-y-2">
+                <h2 class="text-3xl font-black text-[#111814] dark:text-white">Professional Curriculum</h2>
+                <p class="text-[#618975] dark:text-[#8baaa0]">Structured progressively from foundations to
+                    implementation.</p>
+            </div>
+            <div
+                class="flex items-center gap-2 text-xs font-bold px-3 py-1.5 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-lg border border-[#f0f4f2] dark:border-[#2a4035]">
+                <span class="material-symbols-outlined text-[16px]">menu_book</span> 17 Modules
+                <span class="w-1 h-1 rounded-full bg-[#618975] mx-1"></span>
+                <span class="material-symbols-outlined text-[16px]">timer</span> 45 Hours
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Module Card Template -->
+            {% set modules = [
+            {'id': 1, 'title': 'Climate Fundamentals', 'desc': 'Understand the mechanisms of global warming and
+            greenhouse gases.'},
+            {'id': 2, 'title': 'Accounting Logic', 'desc': 'Master the Activity Data × Emission Factor formula.'},
+            {'id': 3, 'title': 'Organizational Boundaries', 'desc': 'Deciding what belongs in your corporate
+            footprint.'},
+            {'id': 4, 'title': 'Scope 1 Deep-Dive', 'desc': 'Direct emissions: fuel, vehicles, and fugitive leaks.'},
+            {'id': 5, 'title': 'Scope 2 Deep-Dive', 'desc': 'Purchased energy: Location vs Market based methods.'},
+            {'id': 6, 'title': 'Scope 3 Complexity', 'desc': 'The 15 value chain categories of indirect emissions.'},
+            {'id': 7, 'title': 'Database Mastery', 'desc': 'Navigating ADEME, DEFRA, and IPCC factor sets.'},
+            {'id': 8, 'title': 'Data Collection Strategy', 'desc': 'Moving from industry averages to primary supplier
+            data.'},
+            {'id': 9, 'title': 'Carbon Software Arch', 'desc': 'How automation and AI power modern accounting tools.'},
+            {'id': 10, 'title': 'Reporting & Disclosure', 'desc': 'CDP, TCFD, and SBTi compliance frameworks.'},
+            {'id': 11, 'title': 'Reduction Strategies', 'desc': 'Abatement curves and science-based reduction plans.'},
+            {'id': 12, 'title': 'Advanced LCA', 'desc': 'Life Cycle Assessment of products and materials.'},
+            {'id': 13, 'title': 'Carbon Markets & Pricing', 'desc': 'Cap & Trade, VCM, and Carbon Taxes.'},
+            {'id': 14, 'title': 'Blockchain in Sustainability', 'desc': 'Solving double-counting with dMRV and
+            Tokenization.'},
+            {'id': 15, 'title': 'Green Finance & ESG', 'desc': 'Green Bonds, SDRs, and navigating ESG Ratings.'},
+            {'id': 16, 'title': 'Expert Case Study', 'desc': 'Complete carbon footprint analysis for construction.'},
+            {'id': 17, 'title': 'Capstone Project', 'desc': 'Building your first audit-ready carbon inventory.'}
+            ] %}
+
+            {% for module in modules %}
+            <a href="{{ url_for('academy.module', module_id=module.id) }}"
+                class="group academy-card bg-white dark:bg-[#1a2c24] border rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-primary transition-all">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-[#f6f8f7] dark:bg-[#23352c] flex items-center justify-center text-xl font-black transition-colors group-hover:bg-primary group-hover:text-black">
+                            {{ "%02d" % module.id }}
+                        </div>
+                        {% set p = progress_map.get(module.id) %}
+                        {% if p and p.is_completed %}
+                        <span class="material-symbols-outlined text-primary"
+                            title="Module Completed">check_circle</span>
+                        {% endif %}
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-black leading-tight text-[#111814] dark:text-white">{{ module.title
+                            }}
+                        </h3>
+                        <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed italic">{{ module.desc
+                            }}
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-8 flex items-center justify-between">
+                    <span class="text-[10px] font-black uppercase tracking-widest opacity-50">3 hours</span>
+                    <span
+                        class="material-symbols-outlined text-primary translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all">arrow_forward_ios</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Certification CTA -->
+    <div
+        class="p-12 rounded-[3.5rem] bg-gradient-to-br from-primary to-[#0ca85a] flex flex-col items-center text-center space-y-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-black/5 rounded-full blur-3xl"></div>
+
+        <div class="w-20 h-20 rounded-3xl bg-black flex items-center justify-center shadow-xl">
+            <span class="material-symbols-outlined text-primary text-4xl">workspace_premium</span>
+        </div>
+
+        <div class="space-y-4 max-w-2xl">
+            <h3 class="text-4xl font-black text-black">Get Your Professional Certificate</h3>
+            <p class="text-black/80 font-bold leading-relaxed">
+                Complete all modules and pass the final assessment to receive a cryptographic certificate notarized
+                on
+                the GreenLedger network. Recognized by top ESG consultancy firms.
+            </p>
+        </div>
+
+        <a href="{{ url_for('academy.certification') }}"
+            class="px-10 py-5 bg-black text-primary font-black rounded-[2rem] hover:scale-105 transition-transform flex items-center gap-2">
+            View Certification Details <span class="material-symbols-outlined">payments</span>
+        </a>
+        <p class="text-[10px] text-black/60 font-black uppercase tracking-widest">Small processing fee applies for
+            public certification</p>
+    </div>
+</div>
+{% endblock %}

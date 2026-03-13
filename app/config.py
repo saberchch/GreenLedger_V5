@@ -28,6 +28,10 @@ class Config:
     if not SQLALCHEMY_DATABASE_URI:
         SQLALCHEMY_DATABASE_URI = f'sqlite:///{basedir / "greenledger.db"}'
     
+    # Google OAuth
+    GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
+
     # Application settings
     DEBUG = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
 

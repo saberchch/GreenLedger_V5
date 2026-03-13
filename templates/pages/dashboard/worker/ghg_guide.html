@@ -1,15 +1,250 @@
 {% extends "layouts/dashboard_base.html" %}
 
-{% block title %}GHG Protocol Guide{% endblock %}
-{% block page_title %}GHG Protocol Guide{% endblock %}
+{% block title %}GHG Protocol Training - GreenLedger{% endblock %}
 
 {% block dashboard_content %}
-<div class="max-w-4xl mx-auto">
+<div class="max-w-5xl mx-auto space-y-10 pb-20">
+    <!-- Training Header & Progress -->
+    <div class="bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-3xl p-8 shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div class="space-y-2">
+                <span
+                    class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">Worker
+                    Training Series</span>
+                <h1 class="text-4xl font-black text-[#111814] dark:text-white">GHG Protocol Foundations</h1>
+                <p class="text-[#618975] dark:text-[#8baaa0] text-lg">Master the international standard for carbon
+                    accounting.</p>
+            </div>
+            <div class="w-full md:w-64 space-y-3">
+                <div class="flex justify-between text-sm font-bold">
+                    <span>Course Progress</span>
+                    <span class="text-primary">65%</span>
+                </div>
+                <div class="h-2 w-full bg-[#f0f4f2] dark:bg-[#2a4035] rounded-full overflow-hidden">
+                    <div class="h-full bg-primary rounded-full" style="width: 65%"></div>
+                </div>
+                <p class="text-[10px] text-[#618975] dark:text-[#8baaa0] text-center italic">Complete all modules to
+                    earn your internal Auditor-Ready badge.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module 1: Foundations -->
+    <section class="space-y-6">
+        <div class="flex items-center gap-4">
+            <div
+                class="w-12 h-12 rounded-2xl bg-[#111814] dark:bg-white flex items-center justify-center text-white dark:text-[#111814] font-black text-xl shadow-lg">
+                01</div>
+            <div>
+                <h2 class="text-2xl font-bold">Protocol Foundations</h2>
+                <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Accounting principles and organizational
+                    boundaries.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+                class="bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-2xl p-6 space-y-4">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">account_tree</span>
+                    Defining Boundaries
+                </h3>
+                <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                    Before calculating, we must decide what "counts." GreenLedger uses the <strong>Operational
+                        Control</strong> approach. If your company makes the decisions, the emissions belong in your
+                    report.
+                </p>
+                <div class="p-4 rounded-xl bg-[#f6f8f7] dark:bg-[#23352c] border-l-4 border-primary italic text-xs">
+                    "If you pay the utility bill and manage the facility, it's under your operational control."
+                </div>
+            </div>
+
+            <!-- Knowledge Check 1 -->
+            <div class="bg-primary/5 border border-primary/20 rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-black text-primary text-xs uppercase tracking-tighter mb-2">Knowledge Check</h3>
+                    <p class="font-bold text-sm leading-tight text-[#111814] dark:text-white">Your company leaks
+                        refrigerant from an AC unit in a building you rent and manage. Is this Scope 1?</p>
+                </div>
+                <details class="group mt-4">
+                    <summary
+                        class="list-none flex items-center gap-2 text-xs font-bold text-primary cursor-pointer hover:underline">
+                        <span class="material-symbols-outlined text-[16px]">visibility</span>
+                        Reveal Answer
+                    </summary>
+                    <div
+                        class="mt-3 p-3 bg-white dark:bg-[#1a2c24] rounded-lg border border-primary/20 text-xs leading-relaxed animate-in fade-in slide-in-from-top-1">
+                        <strong>Yes!</strong> Since you have operational control over the facility, direct fugitive
+                        emissions (leaks) are categorized as Scope 1.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 2: Mastering the Scopes -->
+    <section class="space-y-6">
+        <div class="flex items-center gap-4">
+            <div
+                class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-black font-black text-xl shadow-lg">
+                02</div>
+            <div>
+                <h2 class="text-2xl font-bold">Mastering the Scopes</h2>
+                <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Deep dive into emission categorization.</p>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <!-- Scope 1, 2, 3 Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Scope 1 -->
+                <div
+                    class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:border-primary transition-colors group">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">factory</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Scope 1 (Direct)</h3>
+                    <p class="text-xs text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Emissions from sources that the company owns or controls directly.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-[#f0f4f2] dark:border-[#2a4035]">
+                        <p class="text-[10px] font-bold text-primary uppercase">Example</p>
+                        <p class="text-[11px] italic">Burning natural gas in an on-site boiler.</p>
+                    </div>
+                </div>
+
+                <!-- Scope 2 -->
+                <div
+                    class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:border-blue-500 transition-colors group">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">bolt</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Scope 2 (Energy)</h3>
+                    <p class="text-xs text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Emissions from the generation of purchased electricity, heat, or steam.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-[#f0f4f2] dark:border-[#2a4035]">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase">Example</p>
+                        <p class="text-[11px] italic">Electricity consumed by your office computers.</p>
+                    </div>
+                </div>
+
+                <!-- Scope 3 -->
+                <div
+                    class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:border-orange-500 transition-colors group">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">hub</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">Scope 3 (Value Chain)</h3>
+                    <p class="text-xs text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        All indirect emissions (not included in scope 2) that occur in the company's value chain.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-[#f0f4f2] dark:border-[#2a4035]">
+                        <p class="text-[10px] font-bold text-orange-500 uppercase">Example</p>
+                        <p class="text-[11px] italic">Emissions from a flight for a business trip.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 3: Data Quality -->
+    <section class="space-y-6">
+        <div class="flex items-center gap-4">
+            <div
+                class="w-12 h-12 rounded-2xl bg-[#0ca85a] flex items-center justify-center text-white font-black text-xl shadow-lg">
+                03</div>
+            <div>
+                <h2 class="text-2xl font-bold">Data Quality & Verification</h2>
+                <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Ensuring audit-ready records.</p>
+            </div>
+        </div>
+
+        <div
+            class="bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-3xl overflow-hidden shadow-sm">
+            <div class="p-8 border-b border-[#f0f4f2] dark:border-[#2a4035] space-y-4">
+                <h3 class="text-xl font-bold">The Golden Rule: Evidence</h3>
+                <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                    A carbon entry without evidence is just a guess. To be audit-ready, every submission in GreenLedger
+                    should be backed by a document (Utility bill, Fuel receipt, Travel itinerary).
+                </p>
+            </div>
+            <div class="p-8 bg-gradient-to-r from-[#111814] to-[#1c2e26] text-white">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">verified_user</span>
+                            <h4 class="font-bold">Blockchain Notarization</h4>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Once your data is validated by your admin, GreenLedger generates a cryptographic proof. This
+                            "fingerprint" is stored on the ledger, making it impossible to change your data later
+                            without being detected. This is what makes your reporting <strong>trustworthy</strong>.
+                        </p>
+                    </div>
+                    <!-- Knowledge Check 2 -->
+                    <div class="w-full md:w-72 p-5 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm">
+                        <p class="text-[11px] font-bold text-primary uppercase mb-2">Knowledge Check</p>
+                        <p class="text-xs font-medium mb-4">Why is evidence encrypted before being stored?</p>
+                        <details class="group">
+                            <summary
+                                class="list-none text-[10px] font-black text-slate-400 cursor-pointer hover:text-white flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">help_center</span> VIEW EXPLANATION
+                            </summary>
+                            <p class="mt-2 text-[10px] text-slate-400 leading-snug">
+                                To protect sensitive business information. Only authorized auditors and your org admins
+                                can decrypt and view the original evidence files.
+                            </p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certification CTA -->
     <div
-        class="bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e5e7eb] dark:border-[#2a4035] shadow-sm p-8 text-center">
-        <span class="material-symbols-outlined text-green-500 text-6xl mb-4">menu_book</span>
-        <h2 class="text-2xl font-bold text-[#111814] dark:text-white mb-2">GHG Protocol Guide</h2>
-        <p class="text-[#618975] dark:text-[#8baaa0]">Learn about the GHG Protocol and emission scopes</p>
+        class="p-10 rounded-3xl bg-primary flex flex-col items-center text-center space-y-4 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-black/5 rounded-full blur-3xl"></div>
+
+        <span class="material-symbols-outlined text-black" style="font-size: 48px;">workspace_premium</span>
+        <h3 class="text-3xl font-black text-black">Ready for the audit?</h3>
+        <p class="text-black/80 max-w-lg font-medium">
+            You've mastered the protocol concepts. Now apply them by ensuring your next emission entry has perfect scope
+            categorization and clear evidence.
+        </p>
+        <div class="flex gap-4 mt-4">
+            <a href="{{ url_for('dashboard_worker.new_emission') }}"
+                class="px-8 py-3 bg-black text-primary font-black rounded-xl hover:scale-105 transition-transform">
+                Start My Entry
+            </a>
+            <a href="{{ url_for('dashboard_worker.calculation_help') }}"
+                class="px-8 py-3 bg-white text-black font-black rounded-xl hover:scale-105 transition-transform">
+                Go to Math Training
+            </a>
+        </div>
     </div>
 </div>
+
+<style>
+    @keyframes slide-down {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-in {
+        animation: slide-down 0.3s ease-out forwards;
+    }
+</style>
 {% endblock %}

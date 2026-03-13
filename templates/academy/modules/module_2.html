@@ -1,0 +1,1054 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0%
+            Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-6 py-12 space-y-16">
+
+    <!-- Header Section -->
+    <div class="space-y-8">
+        <!-- Breadcrumbs -->
+        <nav
+            class="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#618975] dark:text-[#8baaa0]">
+            <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="text-primary">Module 02</span>
+        </nav>
+
+        <div class="relative">
+            <div class="absolute -left-4 top-0 w-1 h-full bg-primary rounded-full"></div>
+            <h1 class="text-6xl font-black text-[#111814] dark:text-white leading-[1.1] tracking-tighter">
+                Carbon Accounting <br><span class="text-primary italic">Methodology</span>
+            </h1>
+            <p class="text-xl text-[#4a5a52] dark:text-[#c1d3c8] max-w-2xl mt-6 leading-relaxed font-medium">
+                Master the rigorous logic that transforms raw operational data into audit-ready carbon footprints.
+            </p>
+        </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 text-[#111814] dark:text-white">
+
+        <!-- Main Learning Content -->
+        <div class="lg:col-span-2 space-y-24">
+
+            <!-- Section 1: The Strategic imperative -->
+            <section id="carbon-basics" class="space-y-10">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">01 — The Strategic
+                        Imperative</h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Carbon accounting isn't just a compliance task—it's a strategic tool for navigating the modern
+                        economy. Organizations today face a choice: adapt to the low-carbon transition or risk
+                        obsolescence.
+                    </p>
+                </div>
+
+                <!-- Interactive Flip Cards: Risk vs Opportunity -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Risk Card -->
+                    <div class="group h-[300px] [perspective:1000px]">
+                        <div
+                            class="relative h-full w-full rounded-[2.5rem] transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] cursor-pointer shadow-xl">
+                            <!-- Front -->
+                            <div
+                                class="absolute inset-0 h-full w-full rounded-[2.5rem] bg-[#111814] p-8 [backface-visibility:hidden] flex flex-col justify-between overflow-hidden">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full -mr-16 -mt-16">
+                                </div>
+                                <div class="space-y-4 relative z-10">
+                                    <span class="material-symbols-outlined text-red-400 text-4xl">warning</span>
+                                    <h3 class="text-3xl font-black text-white italic">The Risks</h3>
+                                    <p class="text-sm text-white/60 font-medium text-black dark:text-white">What happens
+                                        if we do nothing?</p>
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 text-primary font-black text-[10px] uppercase tracking-widest relative z-10">
+                                    <span>Hover to reveal</span>
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                </div>
+                            </div>
+                            <!-- Back -->
+                            <div
+                                class="absolute inset-0 h-full w-full rounded-[2.5rem] bg-red-500/10 border-2 border-red-500/20 p-8 text-[#111814] dark:text-white [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col justify-center gap-6 overflow-hidden">
+                                <ul class="space-y-4 font-bold text-sm">
+                                    <li class="flex gap-3 items-start"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0"></span> Carbon
+                                        Taxes & Legal Penalties</li>
+                                    <li class="flex gap-3 items-start"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0"></span> Stranded
+                                        Assets & High Energy Costs</li>
+                                    <li class="flex gap-3 items-start"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0"></span> Investor
+                                        Divestment & Stakeholder Pressure</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opportunity Card -->
+                    <div class="group h-[300px] [perspective:1000px]">
+                        <div
+                            class="relative h-full w-full rounded-[2.5rem] transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] cursor-pointer shadow-xl">
+                            <!-- Front -->
+                            <div
+                                class="absolute inset-0 h-full w-full rounded-[2.5rem] bg-primary p-8 [backface-visibility:hidden] flex flex-col justify-between overflow-hidden">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full -mr-16 -mt-16">
+                                </div>
+                                <div class="space-y-4 relative z-10">
+                                    <span class="material-symbols-outlined text-[#111814] text-4xl">rocket_launch</span>
+                                    <h3 class="text-3xl font-black text-[#111814] italic">The Gains</h3>
+                                    <p class="text-sm text-[#111814]/60 font-medium">Why we should lead the way.</p>
+                                </div>
+                                <div
+                                    class="flex items-center gap-2 text-[#111814] font-black text-[10px] uppercase tracking-widest relative z-10">
+                                    <span>Hover to explore</span>
+                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                </div>
+                            </div>
+                            <!-- Back -->
+                            <div
+                                class="absolute inset-0 h-full w-full rounded-[2.5rem] bg-primary/10 border-2 border-primary/20 p-8 text-[#111814] dark:text-white [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col justify-center gap-6 overflow-hidden">
+                                <ul class="space-y-4 font-bold text-sm">
+                                    <li class="flex gap-3 items-start"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0"></span>
+                                        Operational Efficiency & Cost Savings</li>
+                                    <li class="flex gap-3 items-start"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0"></span> New
+                                        "Green" Markets & Premium Pricing</li>
+                                    <li class="flex gap-3 items-start"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-primary mt-2 shrink-0"></span> Access to
+                                        Low-Cost Sustainable Finance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Knowledge Check -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4">
+                    <div class="flex items-center gap-2 text-primary">
+                        <span class="material-symbols-outlined text-lg">psychology</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest">Mastery Check</p>
+                    </div>
+                    <p class="text-lg font-bold">Why is "Wait and See" a dangerous strategy in carbon accounting?</p>
+                    <details class="group">
+                        <summary
+                            class="list-none cursor-pointer flex items-center gap-2 text-sm font-black text-primary/80 hover:text-primary transition-colors">
+                            <span
+                                class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+                            Reveal Deep Insight
+                        </summary>
+                        <div
+                            class="mt-4 p-6 rounded-2xl bg-white dark:bg-[#23352c] text-sm leading-relaxed text-[#4a5a52] dark:text-[#c1d3c8] border border-[#f0f4f2] dark:border-[#2a4035]">
+                            Waiting leads to reactive compliance, which is always more expensive than proactive
+                            integration. Market leaders are already locking in green supply chains, making it harder for
+                            laggards to compete as carbon pricing becomes ubiquitous.
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Section 2: Carbon Accounting Principles (TACCR) -->
+            <section id="accounting-principles" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">02 — The TACCR Framework
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        To ensure carbon data is as reliable as financial data, the GHG Protocol mandates five core
+                        principles. These are collectively known as the **TACCR** framework.
+                    </p>
+                </div>
+
+                <!-- TACCR Matching Challenge -->
+                <div class="p-8 rounded-[3rem] bg-[#111814] text-white space-y-8 relative overflow-hidden shadow-2xl">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl">
+                    </div>
+
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                        <div class="space-y-2">
+                            <span
+                                class="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/30">Interactive
+                                Challenge</span>
+                            <h3 class="text-2xl font-black italic">The Principle Match-up</h3>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-primary/60">Your Score</p>
+                            <p id="taccr-score" class="text-3xl font-black text-primary">0/5</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
+                        <!-- Principle Definitions (Draggable-style clickable) -->
+                        <div class="space-y-3">
+                            <p class="text-xs font-black uppercase tracking-widest text-white/40 mb-4">Click a term then
+                                its definition</p>
+                            <div id="terms-list" class="flex flex-wrap gap-2">
+                                <button onclick="selectTerm(this, 'Relevance')"
+                                    class="taccr-term px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold hover:bg-white/10 transition-all">Relevance</button>
+                                <button onclick="selectTerm(this, 'Completeness')"
+                                    class="taccr-term px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold hover:bg-white/10 transition-all">Completeness</button>
+                                <button onclick="selectTerm(this, 'Consistency')"
+                                    class="taccr-term px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold hover:bg-white/10 transition-all">Consistency</button>
+                                <button onclick="selectTerm(this, 'Transparency')"
+                                    class="taccr-term px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold hover:bg-white/10 transition-all">Transparency</button>
+                                <button onclick="selectTerm(this, 'Accuracy')"
+                                    class="taccr-term px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm font-bold hover:bg-white/10 transition-all">Accuracy</button>
+                            </div>
+                        </div>
+
+                        <!-- Definitions -->
+                        <div class="space-y-3">
+                            <div onclick="checkMatch(this, 'Completeness')"
+                                class="taccr-def p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 cursor-pointer transition-all group">
+                                <p class="text-xs text-white/70 group-hover:text-white transition-colors">"Accounting
+                                    for all emission sources and activities within the chosen boundaries."</p>
+                            </div>
+                            <div onclick="checkMatch(this, 'Relevance')"
+                                class="taccr-def p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 cursor-pointer transition-all group">
+                                <p class="text-xs text-white/70 group-hover:text-white transition-colors">"Ensuring the
+                                    GHG inventory appropriately reflects the emissions of the company."</p>
+                            </div>
+                            <div onclick="checkMatch(this, 'Consistency')"
+                                class="taccr-def p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 cursor-pointer transition-all group">
+                                <p class="text-xs text-white/70 group-hover:text-white transition-colors">"Applying
+                                    matching methodologies to allow for meaningful comparisons over time."</p>
+                            </div>
+                            <div onclick="checkMatch(this, 'Transparency')"
+                                class="taccr-def p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 cursor-pointer transition-all group">
+                                <p class="text-xs text-white/70 group-hover:text-white transition-colors">"Disclosing
+                                    all relevant assumptions and calculation methodologies used."</p>
+                            </div>
+                            <div onclick="checkMatch(this, 'Accuracy')"
+                                class="taccr-def p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 cursor-pointer transition-all group">
+                                <p class="text-xs text-white/70 group-hover:text-white transition-colors">"Reducing bias
+                                    and uncertainties as far as is practical."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Challenge Status -->
+                    <div id="taccr-feedback"
+                        class="h-12 flex items-center justify-center rounded-2xl bg-white/5 text-xs font-black italic tracking-widest text-primary/40 uppercase">
+                        Select a term to begin
+                    </div>
+
+                    <script>
+                        let selectedTerm = null;
+                        let matchedCount = 0;
+
+                        function selectTerm(btn, term) {
+                            document.querySelectorAll('.taccr-term').forEach(b => b.classList.remove('bg-primary', 'text-black', 'border-primary'));
+                            btn.classList.add('bg-primary', 'text-black', 'border-primary');
+                            selectedTerm = term;
+                            document.getElementById('taccr-feedback').innerText = `Select the definition for ${term}`;
+                        }
+
+                        function checkMatch(div, term) {
+                            if (!selectedTerm) return;
+
+                            if (selectedTerm === term) {
+                                matchedCount++;
+                                document.getElementById('taccr-score').innerText = `${matchedCount}/5`;
+                                div.classList.add('bg-primary/20', 'border-primary', 'pointer-events-none');
+                                div.innerHTML = `<p class="text-xs text-primary font-black">✓ CORRECT: ${selectedTerm}</p>`;
+
+                                // Disable term button
+                                const termBtn = Array.from(document.querySelectorAll('.taccr-term')).find(b => b.innerText === selectedTerm);
+                                termBtn.classList.add('opacity-30', 'pointer-events-none');
+                                termBtn.classList.remove('bg-primary', 'text-black', 'border-primary');
+
+                                selectedTerm = null;
+                                if (matchedCount === 5) {
+                                    document.getElementById('taccr-feedback').innerText = "Framework Mastered! TACCR Principles Unified.";
+                                    document.getElementById('taccr-feedback').classList.add('text-primary');
+                                } else {
+                                    document.getElementById('taccr-feedback').innerText = "Match Confirmed! Select next term.";
+                                }
+                            } else {
+                                div.classList.add('bg-red-500/20', 'border-red-500/50');
+                                setTimeout(() => div.classList.remove('bg-red-500/20', 'border-red-500/50'), 500);
+                                document.getElementById('taccr-feedback').innerText = "Incorrect pairing. Try again.";
+                            }
+                        }
+                    </script>
+                </div>
+            </section>
+
+            <!-- Section 3: Mastering the Scopes (1, 2, 3) -->
+            <section id="emission-scopes" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">03 — Mastering the Scopes
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Emissions are categorized into three "Scopes" based on who owns the source and where the heat is
+                        released. Understanding this boundary logic is the most critical skill for a carbon accountant.
+                    </p>
+                </div>
+
+                <!-- Scope Mapping Tool -->
+                <div class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Scope 1 Card -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 group hover:border-primary/50 transition-all">
+                            <h3 class="text-2xl font-black text-primary italic">Scope 1</h3>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Direct Emissions
+                            </p>
+                            <p class="text-xs font-bold leading-relaxed text-[#4a5a52] dark:text-[#c1d3c8]">Sources you
+                                **own or control**. Boilers, furnaces, and company-owned vehicles.</p>
+                        </div>
+                        <!-- Scope 2 Card -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 group hover:border-primary/50 transition-all">
+                            <h3 class="text-2xl font-black text-primary italic">Scope 2</h3>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Energy Indirect
+                            </p>
+                            <p class="text-xs font-bold leading-relaxed text-[#4a5a52] dark:text-[#c1d3c8]">Emissions
+                                from **purchased electricity**, steam, heating, or cooling.</p>
+                        </div>
+                        <!-- Scope 3 Card -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-[#111814] border border-white/10 space-y-4 group hover:border-primary/50 transition-all shadow-xl">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-2xl font-black text-primary italic">Scope 3</h3>
+                                <span
+                                    class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[8px] font-black uppercase tracking-widest border border-primary/30">The
+                                    Heavyweight</span>
+                            </div>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-white/40">Value Chain
+                                Indirect</p>
+                            <p class="text-xs font-bold leading-relaxed text-white/60">Everything else in your
+                                **upstream and downstream** value chain.</p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Scope Categorizer -->
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-6">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">category</span>
+                            <h3 class="text-xl font-black italic">The Scope Sorter</h3>
+                        </div>
+
+                        <div
+                            class="bg-white dark:bg-[#23352c] p-6 rounded-2xl space-y-6 border border-[#f0f4f2] dark:border-[#2a4035]">
+                            <p id="scope-scenario" class="text-lg font-bold text-center italic text-primary">"Burning
+                                natural gas in a building owned by the company."</p>
+
+                            <div class="grid grid-cols-3 gap-3">
+                                <button onclick="checkScopeMatch(1)"
+                                    class="p-4 rounded-xl bg-[#f6f8f7] dark:bg-[#1a2c24] text-sm font-black hover:bg-primary hover:text-black transition-all border border-[#f0f4f2] dark:border-[#2a4035]">Scope
+                                    1</button>
+                                <button onclick="checkScopeMatch(2)"
+                                    class="p-4 rounded-xl bg-[#f6f8f7] dark:bg-[#1a2c24] text-sm font-black hover:bg-primary hover:text-black transition-all border border-[#f0f4f2] dark:border-[#2a4035]">Scope
+                                    2</button>
+                                <button onclick="checkScopeMatch(3)"
+                                    class="p-4 rounded-xl bg-[#f6f8f7] dark:bg-[#1a2c24] text-sm font-black hover:bg-primary hover:text-black transition-all border border-[#f0f4f2] dark:border-[#2a4035]">Scope
+                                    3</button>
+                            </div>
+
+                            <p id="scope-feedback"
+                                class="text-xs text-center font-bold text-[#618975] uppercase tracking-widest h-4"></p>
+                        </div>
+                    </div>
+
+                    <script>
+                        const scopeScenarios = [
+                            { text: "Burning natural gas in a company-owned boiler", correct: 1 },
+                            { text: "Electricity used to light up the office", correct: 2 },
+                            { text: "Employee flying for a business meet in London", correct: 3 },
+                            { text: "Fuel consumed by a sub-contracted delivery truck", correct: 3 },
+                            { text: "Leakage of refrigerant from on-site AC units", correct: 1 }
+                        ];
+                        let currentScopeIdx = 0;
+
+                        function checkScopeMatch(selected) {
+                            const feedback = document.getElementById('scope-feedback');
+                            if (selected === scopeScenarios[currentScopeIdx].correct) {
+                                feedback.innerText = "✓ CORRECT! WELL ANALYZED.";
+                                feedback.classList.add('text-primary');
+                                feedback.classList.remove('text-red-400');
+
+                                setTimeout(() => {
+                                    currentScopeIdx = (currentScopeIdx + 1) % scopeScenarios.length;
+                                    document.getElementById('scope-scenario').innerText = `"${scopeScenarios[currentScopeIdx].text}"`;
+                                    feedback.innerText = "";
+                                }, 1500);
+                            } else {
+                                feedback.innerText = "✘ INCORRECT. RE-EVALUATE THE BOUNDARY.";
+                                feedback.classList.add('text-red-400');
+                                feedback.classList.remove('text-primary');
+                            }
+                        }
+                    </script>
+                </div>
+            </section>
+
+            <!-- Section 4: Data Quality Hierarchy -->
+            <section id="data-collection" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">04 — The Data Hierarchy
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Not all data is created equal. Audit-ready carbon accounting relies on moving from "Best
+                        Estimates" to "Primary Activity Data."
+                    </p>
+                </div>
+
+                <!-- Interactive Data Pyramid -->
+                <div class="relative py-12 flex flex-col items-center">
+                    <!-- Pyramid Levels -->
+                    <div class="w-full max-w-lg space-y-2">
+                        <!-- Level 1: Primary Data (Top) -->
+                        <div onclick="showLevelInfo(1)"
+                            class="mx-auto w-[40%] aspect-[4/1] bg-primary rounded-t-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform shadow-lg group relative">
+                            <span class="text-[10px] font-black uppercase text-[#111814]">Level 1: Primary</span>
+                            <div class="absolute -right-4 top-1/2 w-8 h-[2px] bg-primary opacity-20"></div>
+                        </div>
+                        <!-- Level 2: Activity-Based -->
+                        <div onclick="showLevelInfo(2)"
+                            class="mx-auto w-[70%] aspect-[6/1] bg-primary/80 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform shadow-lg group">
+                            <span class="text-[10px] font-black uppercase text-[#111814]">Level 2: Activity</span>
+                        </div>
+                        <!-- Level 3: Spend-Based (Bottom) -->
+                        <div onclick="showLevelInfo(3)"
+                            class="mx-auto w-[100%] aspect-[8/1] bg-primary/40 rounded-b-[2rem] flex items-center justify-center cursor-pointer hover:scale-105 transition-transform shadow-lg group">
+                            <span class="text-[10px] font-black uppercase text-[#111814]">Level 3: Spend-Based</span>
+                        </div>
+                    </div>
+
+                    <!-- Level Info Display -->
+                    <div id="pyramid-info"
+                        class="mt-12 p-8 rounded-[2.5rem] bg-[#111814] text-white w-full max-w-xl transition-all duration-300 opacity-0 transform translate-y-4">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span id="level-icon" class="material-symbols-outlined text-primary text-3xl">star</span>
+                            <h4 id="level-title" class="text-xl font-black italic">Select a Level</h4>
+                        </div>
+                        <p id="level-desc" class="text-xs text-white/60 leading-relaxed font-medium">Click on the
+                            pyramid segments to explore data quality levels.</p>
+                        <div class="mt-6 pt-6 border-t border-white/10 grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-[8px] font-black uppercase text-primary/60 mb-2">Audit Risk</p>
+                                <p id="level-risk" class="text-[10px] font-bold">---</p>
+                            </div>
+                            <div>
+                                <p class="text-[8px] font-black uppercase text-primary/60 mb-2">Reliability</p>
+                                <p id="level-reliability" class="text-[10px] font-bold">---</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    const levels = {
+                        1: {
+                            title: "Primary Direct Data",
+                            icon: "verified",
+                            desc: "Direct metrics provided by suppliers or metered on-site. Examples: Supplier-specific emission factors, actual meter readings from specific facilities.",
+                            risk: "EXTREMELY LOW",
+                            reliability: "GOLD STANDARD"
+                        },
+                        2: {
+                            title: "Secondary Activity Data",
+                            icon: "analytics",
+                            desc: "Physical units of activity multiplied by average regional factors. Examples: Liters of fuel used, kWh from utility bills using grid-average factors.",
+                            risk: "LOW TO MEDIUM",
+                            reliability: "RELIABLE"
+                        },
+                        3: {
+                            title: "Hybrid Spend-Based Data",
+                            icon: "payments",
+                            desc: "Estimating emissions based on financial spend (e.g., $10,000 spent on steel). Used when physical activity data is unavailable.",
+                            risk: "HIGH (BASED ON PRICE FLUX)",
+                            reliability: "ESTIMATED"
+                        }
+                    };
+
+                    function showLevelInfo(lv) {
+                        const infoBox = document.getElementById('pyramid-info');
+                        const data = levels[lv];
+
+                        document.getElementById('level-title').innerText = data.title;
+                        document.getElementById('level-icon').innerText = data.icon;
+                        document.getElementById('level-desc').innerText = data.desc;
+                        document.getElementById('level-risk').innerText = data.risk;
+                        document.getElementById('level-reliability').innerText = data.reliability;
+
+                        infoBox.classList.remove('opacity-0', 'translate-y-4');
+                        infoBox.classList.add('opacity-100', 'translate-y-0');
+                    }
+                </script>
+
+                <!-- Knowledge Check -->
+                <div class="p-8 rounded-[2rem] bg-primary/10 border border-primary/20 space-y-4">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-primary">Strategic Insight</p>
+                    <p class="text-lg font-bold">Why is Spend-Based data considered a "Transition Tool"?</p>
+                    <p class="text-sm text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed">
+                        Spend-based data allows companies to quickly map their "hotspots," but because market prices
+                        fluctuate, it cannot provide the granular accuracy needed for reduction tracking. Use it to
+                        start, but transition to activity-based data to lead.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 5: The Emission Factor Lab -->
+            <section id="emission-factors" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">05 — The Emission Factor
+                        Lab</h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        An Emission Factor (EF) is the "exchange rate" for carbon. It converts a physical activity (like
+                        liters of diesel) into CO2-equivalent.
+                    </p>
+                </div>
+
+                <!-- Interactive EF Library -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div
+                            class="p-6 rounded-3xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4">
+                            <h3 class="text-xl font-black italic">Select an Activity</h3>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="selectEF('diesel')"
+                                    class="ef-btn p-3 rounded-xl bg-white dark:bg-[#23352c] text-[10px] font-black uppercase text-left border border-transparent hover:border-primary transition-all">Diesel
+                                    (Litre)</button>
+                                <button onclick="selectEF('electricity')"
+                                    class="ef-btn p-3 rounded-xl bg-white dark:bg-[#23352c] text-[10px] font-black uppercase text-left border border-transparent hover:border-primary transition-all">Electricity
+                                    (kWh)</button>
+                                <button onclick="selectEF('natural-gas')"
+                                    class="ef-btn p-3 rounded-xl bg-white dark:bg-[#23352c] text-[10px] font-black uppercase text-left border border-transparent hover:border-primary transition-all">Natural
+                                    Gas (m³)</button>
+                                <button onclick="selectEF('flight')"
+                                    class="ef-btn p-3 rounded-xl bg-white dark:bg-[#23352c] text-[10px] font-black uppercase text-left border border-transparent hover:border-primary transition-all">Air
+                                    Travel (km)</button>
+                            </div>
+                        </div>
+
+                        <div id="ef-details"
+                            class="p-8 rounded-[2rem] bg-[#111814] text-white opacity-0 transform translate-y-4 transition-all duration-300">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 id="ef-title" class="text-2xl font-black italic text-primary">Diesel Fuel</h4>
+                                <span class="material-symbols-outlined text-white/20">database</span>
+                            </div>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-[8px] font-black uppercase text-white/40 mb-1">Standard Coefficient
+                                    </p>
+                                    <p id="ef-value" class="text-4xl font-black">2.68 <span
+                                            class="text-sm font-normal text-white/40">kgCO2e / unit</span></p>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                    <p class="text-[8px] font-black uppercase text-primary/60 mb-2">Primary Sources</p>
+                                    <ul id="ef-sources" class="text-[10px] space-y-2 font-bold opacity-80">
+                                        <li>• DEFRA (UK Government)</li>
+                                        <li>• IPCC Guidelines</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Context -->
+                    <div
+                        class="p-10 rounded-[3rem] bg-primary flex flex-col justify-between items-start text-[#111814] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full -mr-32 -mt-32"></div>
+                        <div class="space-y-4 relative z-10">
+                            <span class="material-symbols-outlined text-5xl">biotech</span>
+                            <h3 class="text-3xl font-black leading-tight italic">Why Factors<br>Change?</h3>
+                        </div>
+                        <p class="text-sm font-bold opacity-70 leading-relaxed mt-12 relative z-10">
+                            Emission factors for electricity change yearly based on the "Grid Mix" (how much wind vs
+                            coal). Factors for fuel change based on refining intensity. <br><br>Always use the most
+                            recent, geo-specific factor for audit-ready results.
+                        </p>
+                    </div>
+                </div>
+
+                <script>
+                    const efData = {
+                        'diesel': { title: 'Diesel (Litre)', value: '2.68', sources: ['DEFRA 2024', 'IPCC Standard'] },
+                        'electricity': { title: 'Electricity (kWh)', value: '0.23', sources: ['IEA Global Average', 'EPA eGRID (Local)'] },
+                        'natural-gas': { title: 'Natural Gas (m³)', value: '2.02', sources: ['GHG Protocol Tool', 'EIA Data'] },
+                        'flight': { title: 'Air Travel (km)', value: '0.15', sources: ['ICAO Carbon Calculator', 'DEFRA Air-Travel Factors'] }
+                    };
+
+                    function selectEF(key) {
+                        const data = efData[key];
+                        const box = document.getElementById('ef-details');
+
+                        document.getElementById('ef-title').innerText = data.title;
+                        document.getElementById('ef-value').innerHTML = `${data.value} <span class="text-sm font-normal text-white/40">kgCO2e / unit</span>`;
+
+                        const sourceList = document.getElementById('ef-sources');
+                        sourceList.innerHTML = data.sources.map(s => `<li>• ${s}</li>`).join('');
+
+                        box.classList.remove('opacity-0', 'translate-y-4');
+                        box.classList.add('opacity-100', 'translate-y-0');
+
+                        document.querySelectorAll('.ef-btn').forEach(b => b.classList.remove('border-primary', 'bg-primary/10'));
+                        if (event) {
+                            event.currentTarget.classList.add('border-primary', 'bg-primary/10');
+                        }
+                    }
+                </script>
+            </section>
+            <!-- Section 6: The Calculation Lab -->
+            <section id="calculations" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">06 — The Calculation Lab
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Calculation is where data meets science. By multiplying activity data by the correct emission
+                        factor, we arrive at the Carbon Footprint.
+                    </p>
+                </div>
+
+                <!-- Interactive Calculation Simulator -->
+                <div
+                    class="p-8 rounded-[3rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-8 shadow-xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-primary">
+                            <span class="material-symbols-outlined">calculate</span>
+                            <h3 class="text-xl font-black italic">Stationary Combustion Lab</h3>
+                        </div>
+                        <span
+                            class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[8px] font-black uppercase tracking-widest border border-primary/30">Module
+                            2 Simulator</span>
+                    </div>
+
+                    <div
+                        class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center border-y border-[#f0f4f2] dark:border-[#2a4035] py-8">
+                        <div class="space-y-6">
+                            <div>
+                                <label
+                                    class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-2 block">Diesel
+                                    Consumed (Litres)</label>
+                                <input type="number" id="calc-diesel" value="1000" oninput="runLabCalc()"
+                                    class="w-full bg-white dark:bg-[#23352c] border border-[#f0f4f2] dark:border-[#2a4035] rounded-xl px-4 py-3 text-lg font-bold focus:ring-2 focus:ring-primary outline-none transition-all">
+                            </div>
+                            <div>
+                                <label
+                                    class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-2 block">Emission
+                                    Factor (Fixed)</label>
+                                <div
+                                    class="px-4 py-3 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-xl border border-[#f0f4f2] dark:border-[#2a4035] flex justify-between items-center">
+                                    <span class="text-sm font-bold opacity-60 italic">Standard Diesel EF</span>
+                                    <span class="text-lg font-black text-primary">2.68 <span
+                                            class="text-[10px]">kgCO2e/L</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col items-center justify-center p-8 rounded-[2rem] bg-[#111814] text-white relative overflow-hidden group">
+                            <div
+                                class="absolute inset-x-0 bottom-0 h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                            </div>
+                            <p class="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2">Total
+                                Footprint</p>
+                            <div class="flex items-baseline gap-2">
+                                <span id="lab-result" class="text-5xl font-black text-primary">2,680</span>
+                                <span class="text-sm font-bold opacity-40">kgCO2e</span>
+                            </div>
+                            <div class="mt-4 flex items-center gap-2 text-[10px] font-bold text-white/40 italic">
+                                <span class="material-symbols-outlined text-[14px]">info</span>
+                                <span>Rounded to whole KG</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-6 rounded-2xl bg-white dark:bg-[#23352c] text-sm leading-relaxed text-[#4a5a52] dark:text-[#c1d3c8] border border-[#f0f4f2] dark:border-[#2a4035] italic">
+                        <strong>Formula:</strong> 1,000 Litres × 2.68 Emission Factor = 2,680 kgCO2e. <br>
+                        In Module 3, you will learn how to handle complex multiple-unit calculations and GWP
+                        conversions.
+                    </div>
+                </div>
+
+                <script>
+                    function runLabCalc() {
+                        const diesel = parseFloat(document.getElementById('calc-diesel').value) || 0;
+                        const ef = 2.68;
+                        const result = Math.round(diesel * ef);
+                        document.getElementById('lab-result').innerText = result.toLocaleString();
+                    }
+                </script>
+            </section>
+
+            <!-- Section 7: The Sectoral Matrix -->
+            <section id="global-emissions" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">07 — The Sectoral
+                        Matrix
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Where do global emissions come from? Understanding the "Heavy Hitters" helps organizations
+                        contextualize their own footprint.
+                    </p>
+                </div>
+
+                <!-- Interactive Sector Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Energy -->
+                    <div
+                        class="group p-8 rounded-[2.5rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] transition-all hover:bg-[#111814] hover:text-white">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="material-symbols-outlined text-4xl text-primary">bolt</span>
+                            <span class="text-xs font-black opacity-40 group-hover:opacity-100 italic">~73% of
+                                Global
+                                Total</span>
+                        </div>
+                        <h4 class="text-xl font-black italic mb-2">Energy & Heat</h4>
+                        <p class="text-xs leading-relaxed opacity-60 group-hover:opacity-80">The backbone of modern
+                            industry. Includes electricity generation, heating, and fugitive emissions from fuel
+                            production.</p>
+                        <div
+                            class="mt-6 pt-6 border-t border-black/5 dark:border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <p class="text-[8px] font-black uppercase text-primary mb-2">Key Scopes</p>
+                            <span class="px-2 py-1 rounded-md bg-primary/20 text-primary text-[10px] font-bold">Scope
+                                1
+                                & 2</span>
+                        </div>
+                    </div>
+
+                    <!-- Transport -->
+                    <div
+                        class="group p-8 rounded-[2.5rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] transition-all hover:bg-[#111814] hover:text-white">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="material-symbols-outlined text-4xl text-primary">local_shipping</span>
+                            <span class="text-xs font-black opacity-40 group-hover:opacity-100 italic">~16% of
+                                Global
+                                Total</span>
+                        </div>
+                        <h4 class="text-xl font-black italic mb-2">Transportation</h4>
+                        <p class="text-xs leading-relaxed opacity-60 group-hover:opacity-80">Movement of goods and
+                            people. Road transport accounts for the largest share, followed by aviation and
+                            shipping.
+                        </p>
+                        <div
+                            class="mt-6 pt-6 border-t border-black/5 dark:border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <p class="text-[8px] font-black uppercase text-primary mb-2">Key Scopes</p>
+                            <span class="px-2 py-1 rounded-md bg-primary/20 text-primary text-[10px] font-bold">Scope
+                                1
+                                & 3</span>
+                        </div>
+                    </div>
+
+                    <!-- Agriculture -->
+                    <div
+                        class="group p-8 rounded-[2.5rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] transition-all hover:bg-[#111814] hover:text-white">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="material-symbols-outlined text-4xl text-primary">eco</span>
+                            <span class="text-xs font-black opacity-40 group-hover:opacity-100 italic">~18% (inc.
+                                Land
+                                Use)</span>
+                        </div>
+                        <h4 class="text-xl font-black italic mb-2">Agriculture & Land</h4>
+                        <p class="text-xs leading-relaxed opacity-60 group-hover:opacity-80">Methane from livestock,
+                            nitrous oxide from fertilizers, and CO2 from deforestation and soil disturbance.</p>
+                        <div
+                            class="mt-6 pt-6 border-t border-black/5 dark:border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <p class="text-[8px] font-black uppercase text-primary mb-2">Key Scopes</p>
+                            <span class="px-2 py-1 rounded-md bg-primary/20 text-primary text-[10px] font-bold">Scope
+                                3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="p-8 rounded-[2rem] bg-primary/10 border border-primary/20 flex flex-col md:flex-row items-center gap-8">
+                    <div
+                        class="h-32 w-32 rounded-full border-4 border-primary border-t-transparent animate-spin-slow flex-shrink-0 flex items-center justify-center text-primary font-black">
+                        2050</div>
+                    <div>
+                        <h4 class="text-xl font-black italic mb-2 text-primary">The Net Zero Target</h4>
+                        <p class="text-sm text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed">To limit warming to
+                            1.5°C,
+                            global emissions must reach "Net Zero" by 2050. This means reducing emissions as much as
+                            possible and removing any remaining carbon from the atmosphere.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: The Carbon Navigator -->
+            <section id="carbon-cycle" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">08 — The Carbon
+                        Navigator
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Where does the carbon go? Explore the natural reservoirs that balance or amplify human
+                        emissions.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div
+                            class="p-8 rounded-[2rem] bg-white dark:bg-[#23352c] border border-[#f0f4f2] dark:border-[#2a4035]">
+                            <h4 class="text-xl font-black mb-4 italic text-black dark:text-white">The Big Sinks</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                                    <p class="text-sm font-bold opacity-70 italic">Oceans (Dissolved CO2)</p>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                    <p class="text-sm font-bold opacity-70 italic">Forests & Soil (Biomass)</p>
+                                </div>
+                                <div class="flex items-center gap-4 text-red-500">
+                                    <span class="material-symbols-outlined text-sm">warning</span>
+                                    <p class="text-xs font-black uppercase">Both are reaching capacity...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-[#111814] text-white space-y-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-primary">Master Tip</p>
+                            <p class="text-xs leading-relaxed opacity-70 italic">Accounting focus: While we measure
+                                emissions, Carbon Offset projects often focus on protecting these natural sinks.</p>
+                        </div>
+                    </div>
+                    <div
+                        class="p-10 rounded-[3rem] bg-primary flex flex-col justify-center items-center text-center text-black">
+                        <span class="material-symbols-outlined text-7xl mb-4">public</span>
+                        <h3 class="text-2xl font-black italic">The Feedback Loop</h3>
+                        <p class="text-sm font-bold opacity-60 mt-4 leading-relaxed">When sinks fail, warming
+                            accelerates. This is why immediate emission accuracy is the first step to survival.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 9: Strategic Value -->
+            <section id="carbon-accounting" class="space-y-12">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black tracking-tight text-black dark:text-white">09 — Strategic Value
+                    </h2>
+                    <p class="text-lg text-[#4a5a52] dark:text-[#c1d3c8] leading-relaxed max-w-2xl">
+                        Carbon accounting isn't just a spreadsheet exercise—it's the core of the Modern Green
+                        Narrative.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div
+                        class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">gavel</span>
+                        <h4 class="text-xl font-black italic text-black dark:text-white">Compliance</h4>
+                        <p class="text-xs leading-relaxed opacity-70">Avoid massive fines from CSRD, SEC, and
+                            national
+                            regulations. Audit-ready data is your legal shield.</p>
+                    </div>
+                    <div
+                        class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4">
+                        <span class="material-symbols-outlined text-primary text-3xl">trending_up</span>
+                        <h4 class="text-xl font-black italic text-black dark:text-white">Opportunity</h4>
+                        <p class="text-xs leading-relaxed opacity-70">Access cheaper green finance and win contracts
+                            with sustainability-conscious enterprises.</p>
+                    </div>
+                </div>
+            </section>
+
+            </section>
+
+            <!-- Section 10: Mastery Check -->
+            <section id="summary" class="space-y-12">
+                <div class="p-12 rounded-[3.5rem] bg-[#111814] text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -mr-32 -mt-32">
+                    </div>
+                    <div class="relative z-10 space-y-8">
+                        <div class="space-y-2">
+                            <span
+                                class="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/30">Final
+                                Milestone</span>
+                            <h2 class="text-5xl font-black italic leading-tight">Mastery Check</h2>
+                        </div>
+
+                        <div id="quiz-container" class="space-y-8">
+                            <div class="space-y-4">
+                                <p class="text-xl font-bold italic opacity-80">Which Data Level provides the highest
+                                    reliability for an audit?</p>
+                                <div class="grid grid-cols-1 gap-3">
+                                    <button onclick="checkMastery(this, false)"
+                                        class="mastery-opt p-5 rounded-2xl bg-white/5 border border-white/10 text-left font-bold hover:bg-white/10 transition-all">Level
+                                        3: Spend-Based</button>
+                                    <button onclick="checkMastery(this, true)"
+                                        class="mastery-opt p-5 rounded-2xl bg-white/5 border border-white/10 text-left font-bold hover:bg-white/10 transition-all">Level
+                                        1: Primary Activity Data</button>
+                                    <button onclick="checkMastery(this, false)"
+                                        class="mastery-opt p-5 rounded-2xl bg-white/5 border border-white/10 text-left font-bold hover:bg-white/10 transition-all">Level
+                                        2: Standard Estimations</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="mastery-feedback"
+                            class="hidden p-6 rounded-2xl bg-primary text-black font-black italic text-center animate-bounce">
+                            ACHIEVEMENT UNLOCKED: Carbon Architect!
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <script>
+                    // Initialize tracker for Module 2
+                    
+
+                    function checkMastery(btn, isCorrect) {
+                        document.querySelectorAll('.mastery-opt').forEach(b => b.classList.add('opacity-50'));
+                        if (isCorrect) {
+                            btn.classList.replace('bg-white/5', 'bg-primary');
+                            btn.classList.replace('border-white/10', 'border-primary');
+                            btn.classList.add('text-black');
+
+                            // Mark module as completed in the tracker
+                            window.tracker.markModuleCompleted(100);
+                        } else {
+                            btn.innerHTML += ' ❌';
+                        }
+                    }
+
+                    // Pre-mark viewed sections from backend
+                    
+
+                    if ("{{ progress.is_completed }}" === "True") {
+                        document.getElementById('mastery-feedback').classList.remove('hidden');
+                    }
+                </script>
+            </section>
+
+        </div>
+
+
+
+        <!-- Sidebar -->
+        <aside class="space-y-8">
+            <div class="sticky top-8 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined text-primary text-sm">list_alt</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold">
+                        <li><a href="#carbon-basics"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — The Imperative</a></li>
+                        <li><a href="#accounting-principles"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — TACCR Framework</a></li>
+                        <li><a href="#emission-scopes"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — Mastering Scopes</a>
+                        </li>
+                        <li><a href="#data-collection"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Data Quality</a></li>
+                        <li><a href="#emission-factors"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — EF Lab</a></li>
+                        <li><a href="#calculations"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — Calculation Lab</a></li>
+                        <li><a href="#global-emissions"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 07 — Sectoral Matrix</a></li>
+                        <li><a href="#carbon-cycle"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 08 — Carbon Navigator</a>
+                        </li>
+                        <li><a href="#carbon-accounting"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 09 — Strategic Value</a></li>
+                        <li><a href="#summary"
+                                class="flex items-center gap-2 hover:text-primary transition-colors"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 10 — Mastery Check</a></li>
+                    </ul>
+                </div>
+
+                <!-- Key Takeaway Card -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#111814] text-white space-y-4 shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110">
+                    </div>
+                    <h3 class="text-xl font-black italic text-primary relative z-10">Academy Insight</h3>
+                    <p class="text-xs font-bold leading-relaxed relative z-10 text-white/80">
+                        Carbon accounting is the language of sustainable business. Master the logic to lead the
+                        transition.
+                    </p>
+                    <div class="pt-2 relative z-10">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-primary/60">Module 02 / Phase
+                            01</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035]">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=1) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors">
+                <span class="material-symbols-outlined">west</span> 01 — Fundamentals
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=3) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors">
+                03 — Corporate Footprint
+                <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 900;
+        font-size: 1.5rem;
+        color: #111814;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+            window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,572 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0% Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 07: Databases</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="relative p-12 rounded-[3rem] bg-[#111814] text-white overflow-hidden shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Database Mastery
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
+                Navigating the <span class="text-primary italic">Factors</span>
+            </h1>
+            <p class="text-lg text-slate-400 leading-relaxed font-medium">
+                Without accurate Emission Factors (EFs), activity data is useless. Learn how to source, evaluate, and
+                select the right multipliers for your carbon ledger.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: Ecosystem -->
+            <section id="ecosystem" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        The Global Ecosystem
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        There is no single "God Database" for carbon. It is a fragmented ecosystem of national agencies,
+                        scientific bodies, and commercial enterprises.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                        <!-- Public Base Empreinte -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white border border-primary/20 shadow-xl relative overflow-hidden group">
+                            <span
+                                class="material-symbols-outlined absolute -right-6 -bottom-6 text-9xl opacity-10 group-hover:scale-110 transition-transform duration-500">public</span>
+                            <div class="relative z-10 space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="px-2 py-1 bg-white/10 rounded text-[10px] font-black uppercase tracking-widest text-primary">France
+                                        / EU</span>
+                                </div>
+                                <h3 class="text-2xl font-black">Base Empreinte®</h3>
+                                <p class="text-sm text-slate-300">Managed by ADEME. The absolute gold standard for
+                                    French activities, highly granular for European electricity grids and basic
+                                    materials.</p>
+                                <ul class="text-xs text-slate-400 font-bold space-y-1">
+                                    <li>• Free / Open Source</li>
+                                    <li>• Integrated directly into GreenLedger</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Public DEFRA -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white border border-[#2a4035] shadow-xl relative overflow-hidden group">
+                            <span
+                                class="material-symbols-outlined absolute -right-6 -bottom-6 text-9xl opacity-10 group-hover:scale-110 transition-transform duration-500">local_shipping</span>
+                            <div class="relative z-10 space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="px-2 py-1 bg-white/10 rounded text-[10px] font-black uppercase tracking-widest text-blue-400">UK
+                                        / Global</span>
+                                </div>
+                                <h3 class="text-2xl font-black">DEFRA</h3>
+                                <p class="text-sm text-slate-300">Managed by the UK Government. Widely considered the
+                                    best free database globally for transport, logistics, and hotel stays.</p>
+                                <ul class="text-xs text-slate-400 font-bold space-y-1">
+                                    <li>• Free / Open Source</li>
+                                    <li>• Integrated directly into GreenLedger</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Public vs Commercial -->
+            <section id="public-vs-commercial" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        Public vs. Commercial
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        While public databases cover 90% of a standard corporate footprint, complex manufacturing often
+                        requires commercial Life Cycle Assessment (LCA) databases.
+                    </p>
+
+                    <div
+                        class="flex flex-col md:flex-row gap-0 rounded-[2rem] overflow-hidden shadow-xl border border-[#f0f4f2] dark:border-[#2a4035]">
+                        <div class="flex-1 bg-white dark:bg-[#1a2c24] p-8 space-y-6">
+                            <h3 class="font-black text-xl text-[#111814] dark:text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">lock_open</span> Public Databases
+                            </h3>
+                            <ul class="space-y-4 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                                <li class="flex items-start gap-3"><span class="text-primary mt-0.5">✓</span> Free to
+                                    access and transparent rules.</li>
+                                <li class="flex items-start gap-3"><span class="text-primary mt-0.5">✓</span> Best for:
+                                    Energy, Transport, Waste, basic materials (steel, concrete).</li>
+                                <li class="flex items-start gap-3"><span class="text-red-500 mt-0.5">✕</span> Weakness:
+                                    Very limited for specific complex products (e.g., "iPhone 14 Pro Motherboard").</li>
+                            </ul>
+                            <div
+                                class="text-xs font-black uppercase tracking-widest text-[#111814] dark:text-white opacity-50">
+                                Examples: EPA (US), ADEME (FR)</div>
+                        </div>
+                        <div
+                            class="flex-1 bg-[#111814] p-8 space-y-6 text-white border-t md:border-t-0 md:border-l border-white/10">
+                            <h3 class="font-black text-xl flex items-center gap-2">
+                                <span class="material-symbols-outlined text-indigo-400">lock</span> Commercial Databases
+                            </h3>
+                            <ul class="space-y-4 text-sm font-bold text-slate-300">
+                                <li class="flex items-start gap-3"><span class="text-indigo-400 mt-0.5">✓</span>
+                                    Massive, granular academic datasets (10,000+ factors).</li>
+                                <li class="flex items-start gap-3"><span class="text-indigo-400 mt-0.5">✓</span> Best
+                                    for: Specific chemicals, electronics, complex agriculture.</li>
+                                <li class="flex items-start gap-3"><span class="text-red-500 mt-0.5">✕</span> Weakness:
+                                    Expensive licenses ($5k+), often "black box" methodologies.</li>
+                            </ul>
+                            <div class="text-xs font-black uppercase tracking-widest text-slate-500">Examples:
+                                Ecoinvent, Agri-Footprint</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Hierarchy -->
+            <section id="selection-hierarchy" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        The Selection Hierarchy
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        If you search "Electricity" you will find 500 different factors. How do you choose? Auditors
+                        look for adherence to the following hierarchy.
+                    </p>
+
+                    <div class="relative space-y-4 pl-8 border-l-2 border-primary/30">
+                        <div class="relative">
+                            <div
+                                class="absolute -left-[45px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-[0_0_10px_rgba(19,236,128,0.5)]">
+                                <div class="w-2 h-2 rounded-full bg-black"></div>
+                            </div>
+                            <div
+                                class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:border-primary transition-colors cursor-crosshair">
+                                <h4 class="font-black text-[#111814] dark:text-white text-lg">1. Specificity
+                                    (Technology)</h4>
+                                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">A factor for "Apple Macbook
+                                    Pro 14" is better than "Laptop Computer".</p>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <div
+                                class="absolute -left-[45px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#f6f8f7] dark:bg-[#23352c] border-2 border-primary/50 flex items-center justify-center">
+                            </div>
+                            <div
+                                class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:border-primary transition-colors cursor-crosshair">
+                                <h4 class="font-black text-[#111814] dark:text-white text-lg">2. Geography</h4>
+                                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">If no exact product match
+                                    exists, match the region. "Server in Germany" is better than "Server Global
+                                    Average".</p>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <div
+                                class="absolute -left-[45px] top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#f6f8f7] dark:bg-[#23352c] border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center">
+                            </div>
+                            <div
+                                class="p-6 rounded-2xl bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:border-gray-400 transition-colors cursor-crosshair">
+                                <h4 class="font-black text-[#111814] dark:text-white text-lg">3. Recency (Time)</h4>
+                                <p class="text-sm text-[#618975] dark:text-[#8baaa0] mt-1">If you must choose between
+                                    two similar proxy factors, pick the one published most recently (technology becomes
+                                    more efficient over time).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: The Unit Matcher Game -->
+            <section id="unit-problem" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        Unit Matcher Lab
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        The #1 cause of accounting errors is mismatched units (e.g. multiplying Liters of fuel by a
+                        factor meant for Kilograms). <strong>Match the Activity Data to the correct Factor
+                            Unit.</strong>
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#0d1310] border border-[#f0f4f2] dark:border-[#2a4035] shadow-inner">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                            <!-- Question Column -->
+                            <div class="space-y-4" id="unit-questions">
+                                <div class="p-4 rounded-xl bg-white dark:bg-[#1a2c24] font-black text-[#111814] dark:text-white border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm cursor-pointer hover:border-primary transition-all flex items-center justify-between"
+                                    onclick="selectQ(this, 'kWh')">
+                                    <span>Purchased Electricity</span>
+                                    <span class="material-symbols-outlined text-gray-400">bolt</span>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white dark:bg-[#1a2c24] font-black text-[#111814] dark:text-white border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm cursor-pointer hover:border-primary transition-all flex items-center justify-between"
+                                    onclick="selectQ(this, 'passenger-km')">
+                                    <span>Employee Flight</span>
+                                    <span class="material-symbols-outlined text-gray-400">flight</span>
+                                </div>
+                                <div class="p-4 rounded-xl bg-white dark:bg-[#1a2c24] font-black text-[#111814] dark:text-white border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm cursor-pointer hover:border-primary transition-all flex items-center justify-between"
+                                    onclick="selectQ(this, 'tonne.km')">
+                                    <span>Ocean Freight</span>
+                                    <span class="material-symbols-outlined text-gray-400">directions_boat</span>
+                                </div>
+                            </div>
+
+                            <!-- Answer Column -->
+                            <div class="space-y-4" id="unit-answers">
+                                <div class="p-4 rounded-xl bg-white dark:bg-[#1a2c24] font-mono font-bold text-sm text-[#618975] border-2 border-dashed border-[#e2e8e4] dark:border-[#2a4035] cursor-pointer hover:bg-[#e2e8e4] dark:hover:bg-[#23352c] transition-colors text-center"
+                                    onclick="selectA(this, 'tonne.km')">
+                                    kgCO₂e / tonne.km
+                                </div>
+                                <div class="p-4 rounded-xl bg-white dark:bg-[#1a2c24] font-mono font-bold text-sm text-[#618975] border-2 border-dashed border-[#e2e8e4] dark:border-[#2a4035] cursor-pointer hover:bg-[#e2e8e4] dark:hover:bg-[#23352c] transition-colors text-center"
+                                    onclick="selectA(this, 'kWh')">
+                                    kgCO₂e / kWh
+                                </div>
+                                <div class="p-4 rounded-xl bg-white dark:bg-[#1a2c24] font-mono font-bold text-sm text-[#618975] border-2 border-dashed border-[#e2e8e4] dark:border-[#2a4035] cursor-pointer hover:bg-[#e2e8e4] dark:hover:bg-[#23352c] transition-colors text-center"
+                                    onclick="selectA(this, 'passenger-km')">
+                                    kgCO₂e / passenger-km
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="unit-feedback" class="mt-6 text-center font-black animate-pulse h-6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: DQR -->
+            <section id="dqr" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">05</span>
+                        Data Quality Rating (DQR)
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        You can evaluate the reliability of your footprint using a DQR matrix (score 1-5, where 1 is
+                        perfect). It evaluates both the <strong>Activity Data</strong> and the <strong>Emission
+                            Factor</strong>.
+                    </p>
+
+                    <div class="overflow-x-auto rounded-2xl border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm">
+                        <table class="w-full text-left text-sm">
+                            <thead
+                                class="bg-[#f6f8f7] dark:bg-[#0d1310] text-[#111814] dark:text-white font-black uppercase tracking-widest text-[10px]">
+                                <tr>
+                                    <th class="p-4">Score</th>
+                                    <th class="p-4">Activity Data Quality</th>
+                                    <th class="p-4">Emission Factor Match</th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                class="bg-white dark:bg-[#1a2c24] text-[#618975] dark:text-[#8baaa0] font-bold divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                                <tr>
+                                    <td class="p-4 text-[#111814] dark:text-white"><span
+                                            class="px-2 py-1 rounded bg-green-100 text-green-700">1 - Excellent</span>
+                                    </td>
+                                    <td class="p-4">Metered physical data (exact kWh read from a smart meter).</td>
+                                    <td class="p-4">Exact technology, exact geography, less than 2 years old.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 text-[#111814] dark:text-white"><span
+                                            class="px-2 py-1 rounded bg-yellow-100 text-yellow-700">3 - Fair</span></td>
+                                    <td class="p-4">Extrapolated data (estimated based on square footage).</td>
+                                    <td class="p-4">Similar technology, regional proxy, less than 5 years old.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 text-[#111814] dark:text-white"><span
+                                            class="px-2 py-1 rounded bg-red-100 text-red-700">5 - Poor</span></td>
+                                    <td class="p-4">Spend-based estimations ($).</td>
+                                    <td class="p-4">Global average factor, older than 10 years.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">06</span>
+                        Mastery Check
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl space-y-8 relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32">
+                        </div>
+                        <div class="relative z-10 space-y-4">
+                            <div
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest">
+                                Final Assessment
+                            </div>
+                            <h3 class="text-3xl font-black">When selecting an Emission Factor from a database, what is
+                                the most important criteria according to the hierarchy?</h3>
+                        </div>
+
+                        <div class="space-y-3 relative z-10 font-bold text-sm">
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                A. Whether the database is free or commercial.
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                B. The Geographic location of the factor.
+                            </button>
+                            <button onclick="checkFinalMastery(this, true)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                C. Technological Specificity (matching the exact product/process).
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                D. How recently the factor was published.
+                            </button>
+                        </div>
+
+                        <button id="next-module-btn"
+                            class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6">
+                            Proceed to Module 08
+                        </button>
+                        <div id="mastery-feedback"
+                            class="hidden p-6 rounded-2xl bg-primary text-black font-black italic text-center animate-bounce relative z-10">
+                            ACHIEVEMENT UNLOCKED: DB Architect!
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">list_alt</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#ecosystem"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Ecosystem</a></li>
+                        <li><a href="#public-vs-commercial"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Public vs Com</a></li>
+                        <li><a href="#selection-hierarchy"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — Hierarchy</a></li>
+                        <li><a href="#unit-problem"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Unit Game</a></li>
+                        <li><a href="#dqr"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — DQR</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — Mastery Check</a></li>
+                    </ul>
+                </div>
+
+                <!-- Key Takeaway Card -->
+                <div
+                    class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white space-y-4 shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-125 duration-500">
+                    </div>
+                    <h3 class="text-xl font-black italic text-primary relative z-10 drop-shadow-md">Academy Insight</h3>
+                    <p class="text-xs font-bold leading-relaxed relative z-10 text-slate-300">
+                        In GreenLedger, you don't need to choose between ADEME and DEFRA. Our unified search engine
+                        queries them simultaneously.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=6) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 06 — Scope 3
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=8) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                08 — Data Collection <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- Section 4: Unit Matcher Game ---
+    let activeQ = null;
+    let matchesMade = 0;
+
+    function selectQ(el, targetId) {
+        if (el.classList.contains('opacity-20')) return; // already solved
+
+        // Deselect all
+        document.querySelectorAll('#unit-questions > div').forEach(d => {
+            if (!d.classList.contains('opacity-20')) d.classList.replace('border-primary', 'border-[#f0f4f2]');
+        });
+
+        // Select this
+        el.classList.replace('border-[#f0f4f2]', 'border-primary');
+        activeQ = { el: el, target: targetId };
+    }
+
+    function selectA(el, ansId) {
+        if (!activeQ) {
+            document.getElementById('unit-feedback').innerText = "Select an Activity Data first!";
+            document.getElementById('unit-feedback').classList.replace('text-primary', 'text-yellow-500');
+            return;
+        }
+
+        if (el.classList.contains('opacity-20')) return; // already used
+
+        if (activeQ.target === ansId) {
+            // Correct
+            document.getElementById('unit-feedback').innerText = "✅ Match successful!";
+            document.getElementById('unit-feedback').classList.replace('text-red-500', 'text-primary');
+            document.getElementById('unit-feedback').classList.replace('text-yellow-500', 'text-primary');
+
+            // UI Update
+            activeQ.el.classList.add('opacity-20', 'bg-green-50');
+            activeQ.el.classList.replace('border-primary', 'border-[#f0f4f2]');
+            el.classList.add('opacity-20', 'bg-green-50');
+
+            activeQ = null;
+            matchesMade++;
+
+            if (matchesMade === 3) {
+                document.getElementById('unit-feedback').innerText = "🎉 All units matched perfectly!";
+            }
+        } else {
+            // Incorrect
+            document.getElementById('unit-feedback').innerText = "❌ Mismatch! Units are incompatible.";
+            document.getElementById('unit-feedback').classList.replace('text-primary', 'text-red-500');
+            document.getElementById('unit-feedback').classList.replace('text-yellow-500', 'text-red-500');
+            activeQ.el.classList.replace('border-primary', 'border-[#f0f4f2]');
+            activeQ = null;
+        }
+    }
+
+
+    // --- Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:bg-white/10');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('text-black');
+
+            // Mark module as completed in the tracker
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=8) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('border-red-500');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is C. Technological Specificity.");
+            }, 500);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=8) }}";
+    }
+    });
+
+</script>
+
+{% endblock %}

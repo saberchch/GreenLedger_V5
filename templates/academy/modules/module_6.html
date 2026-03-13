@@ -1,0 +1,653 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0% Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 06: Scope 3</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="relative p-12 rounded-[3rem] bg-[#111814] text-white overflow-hidden shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Scope 3 Complexity
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
+                The Value Chain <span class="text-primary italic">Iceberg</span>
+            </h1>
+            <p class="text-lg text-slate-400 leading-relaxed font-medium">
+                Navigate the 15 categories of indirect emissions. For most companies, this represents 80–90% of their
+                total climate impact.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: The Iceberg Effect -->
+            <section id="iceberg-effect" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        The Iceberg Effect
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        Scope 1 and 2 are highly visible (your fleets, your electricity bills). Scope 3 is everything
+                        else. It includes emissions across your entire supply chain, both upstream and downstream.
+                    </p>
+
+                    <div
+                        class="relative mt-8 rounded-[3rem] overflow-hidden bg-gradient-to-b from-[#e3effd] to-[#1a3c5a] dark:from-[#0f1f33] dark:to-[#050b14] h-[400px] flex flex-col items-center shadow-xl border border-white/10">
+                        <!-- Water line -->
+                        <div
+                            class="absolute top-[25%] w-full h-[1px] bg-white/30 shadow-[0_0_10px_rgba(255,255,255,0.5)] z-20">
+                        </div>
+                        <div
+                            class="absolute top-[25%] left-4 text-[10px] font-black uppercase tracking-widest text-white/50 z-20 bg-[#1a3c5a] dark:bg-[#0f1f33] px-2 py-1 rounded-full">
+                            Visible Perimeter</div>
+
+                        <!-- Scope 1 & 2 (Top) -->
+                        <div class="relative z-10 h-[25%] w-full flex items-end justify-center pb-4">
+                            <div
+                                class="bg-white/90 backdrop-blur-md rounded-t-[2rem] w-48 h-[80%] flex items-center justify-center flex-col shadow-2xl relative overflow-hidden group">
+                                <span class="font-black text-xs uppercase text-slate-500">Scope 1 & 2</span>
+                                <span class="text-3xl font-black text-[#111814]">~15%</span>
+                            </div>
+                        </div>
+
+                        <!-- Scope 3 (Bottom) -->
+                        <div class="relative z-10 h-[75%] w-full flex justify-center pt-4">
+                            <div
+                                class="bg-white/10 backdrop-blur-md border border-white/20 rounded-b-[4rem] w-80 h-[90%] flex items-center justify-center flex-col text-white group cursor-pointer hover:bg-white/20 transition-colors">
+                                <span class="font-black text-sm uppercase tracking-widest text-primary/80">Scope 3
+                                    Emissions</span>
+                                <span class="text-6xl font-black">~85%</span>
+                                <p
+                                    class="text-xs text-center px-8 mt-4 text-white/70 font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Purchased goods, transport, waste, product use, end-of-life...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Upstream vs Downstream -->
+            <section id="upstream-downstream" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        Upstream vs. Downstream
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Scope 3 is divided into 15 distinct categories, broadly split into two directions relative to
+                        your organization's operations.
+                    </p>
+
+                    <!-- Interactive Toggle -->
+                    <div class="bg-[#111814] rounded-[2rem] p-2 flex gap-2 relative shadow-xl">
+                        <div id="dir-active-bg"
+                            class="absolute top-2 left-2 bottom-2 w-[calc(50%-12px)] bg-primary rounded-xl transition-all duration-300">
+                        </div>
+                        <button onclick="switchDirection('upstream')"
+                            class="dir-btn flex-1 py-4 text-center font-black z-10 transition-colors text-black"
+                            id="btn-upstream">
+                            UPSTREAM (Categories 1-8)
+                        </button>
+                        <button onclick="switchDirection('downstream')"
+                            class="dir-btn flex-1 py-4 text-center font-black z-10 transition-colors text-white"
+                            id="btn-downstream">
+                            DOWNSTREAM (Categories 9-15)
+                        </button>
+                    </div>
+
+                    <div id="dir-content-upstream"
+                        class="dir-content block p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm animate-fade-in">
+                        <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">login</span> Cradle to Gate
+                        </h3>
+                        <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed mb-4">Emissions related to
+                            purchased goods and services, and the journey of everything coming <em>into</em> your
+                            company.</p>
+                        <ul class="space-y-3 text-sm font-bold text-[#111814] dark:text-white">
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">1</span>
+                                Purchased Goods & Services</li>
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">2</span>
+                                Capital Goods (e.g., servers, machinery)</li>
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">4</span>
+                                Upstream Transportation</li>
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">6</span>
+                                Business Travel</li>
+                        </ul>
+                    </div>
+
+                    <div id="dir-content-downstream"
+                        class="dir-content hidden p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm animate-fade-in">
+                        <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-orange-500">logout</span> Gate to Grave
+                        </h3>
+                        <p class="text-sm text-[#618975] dark:text-[#8baaa0] leading-relaxed mb-4">Emissions related to
+                            the distribution, use, and end-of-life of the products/services you <em>sell</em>.</p>
+                        <ul class="space-y-3 text-sm font-bold text-[#111814] dark:text-white">
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">9</span>
+                                Downstream Transportation</li>
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">11</span>
+                                Use of Sold Products (e.g., electricity used by your app/server)</li>
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">12</span>
+                                End-of-Life Treatment</li>
+                            <li class="flex items-center gap-3"><span
+                                    class="w-6 h-6 rounded bg-[#f6f8f7] dark:bg-[#0d1310] flex items-center justify-center text-[10px] text-[#618975]">15</span>
+                                Investments (Financed emissions)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: The Big Categories -->
+            <section id="the-categories" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        The Heavy Hitters (SaaS & Services)
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed">
+                        Not all 15 categories are relevant to every company. For technology and service-based companies,
+                        the footprint is usually dominated by three main areas:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                        <div
+                            class="p-6 rounded-[2rem] bg-[#111814] text-white shadow-xl hover:-translate-y-2 transition-transform cursor-pointer">
+                            <span class="material-symbols-outlined text-4xl text-primary mb-4 block">dns</span>
+                            <h3 class="font-black text-xl mb-2">Category 1 & 2</h3>
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-4">Purchased
+                                Goods & Capital</p>
+                            <p class="text-sm text-slate-300">Cloud servers, SaaS subscriptions, laptops purchased for
+                                employees, marketing spend, consulting services.</p>
+                        </div>
+                        <div
+                            class="p-6 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:-translate-y-2 transition-transform cursor-pointer">
+                            <span
+                                class="material-symbols-outlined text-4xl text-[#618975] mb-4 block">flight_takeoff</span>
+                            <h3 class="font-black text-[#111814] dark:text-white text-xl mb-2">Category 6</h3>
+                            <p class="text-[10px] font-black uppercase text-[#618975] tracking-widest mb-4">Business
+                                Travel</p>
+                            <p class="text-sm text-[#618975] dark:text-[#8baaa0]">Employee flights, hotels, trains, and
+                                rental cars. Highly variable but easy to calculate with financial data.</p>
+                        </div>
+                        <div
+                            class="p-6 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm hover:-translate-y-2 transition-transform cursor-pointer">
+                            <span
+                                class="material-symbols-outlined text-4xl text-orange-500 mb-4 block">smartphone</span>
+                            <h3 class="font-black text-[#111814] dark:text-white text-xl mb-2">Category 11</h3>
+                            <p class="text-[10px] font-black uppercase text-[#618975] tracking-widest mb-4">Use of Sold
+                                Products</p>
+                            <p class="text-sm text-[#618975] dark:text-[#8baaa0]">The electricity consumed by your
+                                clients when they run your software on their phones or servers.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Data Hierarchy (Spend vs Average vs Supplier) -->
+            <section id="data-hierarchy" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        The Data Quality Maturation
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Calculating Scope 3 is notoriously difficult because you don't own the data. Companies typically
+                        follow a maturation path from low-effort/low-accuracy to high-effort/high-accuracy.
+                    </p>
+
+                    <div class="space-y-4">
+                        <!-- Step 1 -->
+                        <div class="flex gap-6 group">
+                            <div class="flex flex-col items-center">
+                                <span
+                                    class="w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-500 font-black group-hover:bg-gray-100 dark:group-hover:bg-gray-800 transition-colors">1</span>
+                                <div class="h-full w-0.5 bg-gray-200 dark:bg-gray-800 my-2"></div>
+                            </div>
+                            <div class="pb-8 flex-1">
+                                <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2">Spend-Based Method
+                                    <span class="px-2 py-0.5 rounded text-[10px] bg-red-100 text-red-600 ml-2">LOW
+                                        ACCURACY</span></h3>
+                                <div
+                                    class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm">
+                                    <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Multiplying financial
+                                        spend by environmentally-extended input-output (EEIO) factors.</p>
+                                    <div
+                                        class="flex items-center gap-2 text-xs font-bold font-mono bg-white dark:bg-[#0d1310] p-3 rounded-xl border border-[#e2e8e4] dark:border-[#2a4035]">
+                                        <span class="text-blue-500">$500,000 on Laptops</span> <span
+                                            class="text-gray-400">×</span> <span class="text-purple-500">0.4
+                                            kgCO2e/$</span> <span class="text-gray-400">=</span> <span
+                                            class="text-red-500">200 tCO₂e</span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 mt-2 italic">Problem: If you buy premium $3000
+                                        laptops, your emissions look 3x higher than buying $1000 laptops, even if the
+                                        carbon footprint is identical.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex gap-6 group">
+                            <div class="flex flex-col items-center">
+                                <span
+                                    class="w-12 h-12 rounded-full border-2 border-primary/50 text-primary flex items-center justify-center font-black group-hover:bg-primary/10 transition-colors">2</span>
+                                <div class="h-full w-0.5 bg-gray-200 dark:bg-gray-800 my-2"></div>
+                            </div>
+                            <div class="pb-8 flex-1">
+                                <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2">Average-Data Method
+                                    <span
+                                        class="px-2 py-0.5 rounded text-[10px] bg-yellow-100 text-yellow-600 ml-2">MEDIUM
+                                        ACCURACY</span></h3>
+                                <div
+                                    class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-sm">
+                                    <p class="text-sm text-[#618975] dark:text-[#8baaa0] mb-4">Replacing financial data
+                                        with physical metrics (mass, volume, units) and using industry-average emission
+                                        factors.</p>
+                                    <div
+                                        class="flex items-center gap-2 text-xs font-bold font-mono bg-white dark:bg-[#0d1310] p-3 rounded-xl border border-[#e2e8e4] dark:border-[#2a4035]">
+                                        <span class="text-blue-500">200 Laptops</span> <span
+                                            class="text-gray-400">×</span> <span class="text-purple-500">350
+                                            kgCO2e/unit</span> <span class="text-gray-400">=</span> <span
+                                            class="text-yellow-500">70 tCO₂e</span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 mt-2 italic">Problem: Still relies on industry
+                                        averages, meaning you don't get credit if you choose a greener supplier.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex gap-6 group">
+                            <div class="flex flex-col items-center">
+                                <span
+                                    class="w-12 h-12 rounded-full bg-primary text-black flex items-center justify-center font-black shadow-[0_0_15px_rgba(19,236,128,0.4)]">3</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-black text-[#111814] dark:text-white mb-2">Supplier-Specific
+                                    Method <span
+                                        class="px-2 py-0.5 rounded text-[10px] bg-green-100 text-green-700 ml-2">GOLD
+                                        STANDARD</span></h3>
+                                <div
+                                    class="p-6 rounded-2xl bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white shadow-xl relative overflow-hidden group-hover:scale-[1.02] transition-transform">
+                                    <div
+                                        class="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full -mr-16 -mt-16 blur-xl">
+                                    </div>
+                                    <p class="text-sm text-slate-300 mb-4 relative z-10">Collecting primary data
+                                        directly from the supplier based on their product life cycle assessments (LCAs).
+                                    </p>
+                                    <div
+                                        class="flex items-center gap-2 text-xs font-black font-mono bg-black/50 p-3 rounded-xl border border-white/20 relative z-10">
+                                        <span class="text-white">Supplier LCA Data</span> <span
+                                            class="text-gray-400">=</span> <span class="text-primary text-lg">45
+                                            tCO₂e</span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mt-2 italic relative z-10">Benefit: You actually
+                                        capture the emissions reductions when you switch to low-carbon suppliers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Calculation Lab -->
+            <section id="calculation-lab" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">05</span>
+                        Calculation Lab: The Spend Trap
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-xl space-y-8">
+                        <div class="space-y-2">
+                            <h3 class="font-black text-[#111814] dark:text-white text-xl">Category 6: Business Travel
+                            </h3>
+                            <p class="text-sm font-bold text-[#618975] dark:text-[#8baaa0]">See how inflation
+                                artificially inflates your carbon footprint when using the spend-based method.</p>
+                        </div>
+
+                        <div class="bg-[#f6f8f7] dark:bg-[#0d1310] p-6 rounded-2xl space-y-6">
+
+                            <!-- Base Year -->
+                            <div class="space-y-4 pb-6 border-b border-gray-200 dark:border-gray-800">
+                                <h4 class="font-black text-xs uppercase tracking-widest text-slate-500">Year 1 (Base
+                                    Year)</h4>
+                                <div class="flex flex-col md:flex-row gap-4 items-center">
+                                    <div class="flex-1 w-full space-y-2">
+                                        <label class="text-[10px] font-black uppercase text-[#618975]">Flights Spend
+                                            ($)</label>
+                                        <input type="number" id="calc-spend-y1" value="100000"
+                                            class="w-full bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-xl text-[#111814] dark:text-white font-bold p-3"
+                                            readonly>
+                                    </div>
+                                    <div class="text-gray-400 pt-6">×</div>
+                                    <div class="flex-1 w-full space-y-2">
+                                        <label class="text-[10px] font-black uppercase text-[#618975]">EEIO Factor
+                                            (kg/$)</label>
+                                        <input type="number" id="calc-eeio" value="1.25"
+                                            class="w-full bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-xl text-gray-500 font-bold p-3"
+                                            readonly>
+                                    </div>
+                                    <div class="text-gray-400 pt-6">=</div>
+                                    <div class="flex-1 w-full">
+                                        <div
+                                            class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-black p-3 rounded-xl text-center mt-6">
+                                            125 tCO₂e
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-gray-500 text-center">Your team flew exactly 100 times this
+                                    year ($1,000 per flight).</p>
+                            </div>
+
+                            <!-- Year 2 -->
+                            <div class="space-y-4">
+                                <h4 class="font-black text-xs uppercase tracking-widest text-primary">Year 2 (Inflation
+                                    hits)</h4>
+                                <div class="flex flex-col md:flex-row gap-4 items-center">
+                                    <div class="flex-1 w-full space-y-2">
+                                        <label class="text-[10px] font-black uppercase text-[#618975]">Flights Spend
+                                            ($)</label>
+                                        <!-- Editable Input -->
+                                        <input type="number" id="calc-spend-y2" value="150000"
+                                            class="w-full bg-white dark:bg-[#1a2c24] border border-primary/50 focus:ring-2 focus:ring-primary rounded-xl text-[#111814] dark:text-white font-black p-3 transition-colors shadow-sm">
+                                    </div>
+                                    <div class="text-gray-400 pt-6">×</div>
+                                    <div class="flex-1 w-full space-y-2">
+                                        <label class="text-[10px] font-black uppercase text-[#618975]">EEIO Factor
+                                            (kg/$)</label>
+                                        <input type="number" value="1.25"
+                                            class="w-full bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-xl text-gray-500 font-bold p-3"
+                                            readonly>
+                                    </div>
+                                    <div class="text-gray-400 pt-6">=</div>
+                                    <div class="flex-1 w-full">
+                                        <div id="calc-res-y2"
+                                            class="bg-primary/10 border border-primary/30 text-primary font-black p-3 rounded-xl text-center mt-6 shadow-[0_0_15px_rgba(19,236,128,0.15)] transition-all">
+                                            187.5 tCO₂e
+                                        </div>
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-[11px] text-orange-500 font-bold text-center bg-orange-100 dark:bg-orange-900/20 py-2 rounded-lg mt-2">
+                                    Your team <strong>still flew exactly 100 times</strong>, but flight prices increased
+                                    to $1,500. Under spend-based accounting, your emissions appear to have spiked by
+                                    50%!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">06</span>
+                        Mastery Check
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl space-y-8 relative overflow-hidden">
+                        <div
+                            class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -mr-32 -mt-32">
+                        </div>
+                        <div class="relative z-10 space-y-4">
+                            <div
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest">
+                                Final Assessment
+                            </div>
+                            <h3 class="text-3xl font-black">Which calculation method is considered the "Gold Standard"
+                                for reducing Scope 3 emissions?</h3>
+                        </div>
+
+                        <div class="space-y-3 relative z-10 font-bold text-sm">
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                A. The Spend-Based Method
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                B. The Location-Based Method
+                            </button>
+                            <button onclick="checkFinalMastery(this, false)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                C. The Average-Data Method
+                            </button>
+                            <button onclick="checkFinalMastery(this, true)"
+                                class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                                D. The Supplier-Specific Method (Primary Data)
+                            </button>
+                        </div>
+
+                        <button id="next-module-btn"
+                            class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6">
+                            Proceed to Module 07
+                        </button>
+                        <div id="mastery-feedback"
+                            class="hidden p-6 rounded-2xl bg-primary text-black font-black italic text-center animate-bounce relative z-10">
+                            ACHIEVEMENT UNLOCKED: Supply Chain Navigator!
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">list_alt</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#iceberg-effect"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Iceberg Effect</a></li>
+                        <li><a href="#upstream-downstream"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Directions</a></li>
+                        <li><a href="#the-categories"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — SaaS Heavy Hitters</a>
+                        </li>
+                        <li><a href="#data-hierarchy"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Data Hierarchy</a></li>
+                        <li><a href="#calculation-lab"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — The Spend Trap</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — Mastery Check</a></li>
+                    </ul>
+                </div>
+
+                <!-- Key Takeaway Card -->
+                <div
+                    class="p-8 rounded-[2rem] bg-gradient-to-br from-[#1a2c24] to-[#111814] text-white space-y-4 shadow-xl relative overflow-hidden group">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-125 duration-500">
+                    </div>
+                    <h3 class="text-xl font-black italic text-primary relative z-10 drop-shadow-md">Academy Insight</h3>
+                    <p class="text-xs font-bold leading-relaxed relative z-10 text-slate-300">
+                        You cannot reduce what you calculate via averages. To show real Scope 3 reductions, you must
+                        transition to physical and supplier-specific data.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=5) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 05 — Scope 2
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=7) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                07 — Databases <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- Section 2: Upstream Downstream Toggle ---
+    function switchDirection(dir) {
+        // UI Tabs
+        document.getElementById('btn-upstream').classList.replace('text-black', 'text-gray-500');
+        document.getElementById('btn-upstream').classList.replace('text-white', 'text-gray-500');
+        document.getElementById('btn-downstream').classList.replace('text-black', 'text-gray-500');
+        document.getElementById('btn-downstream').classList.replace('text-white', 'text-gray-500');
+
+        const activeBg = document.getElementById('dir-active-bg');
+
+        if (dir === 'upstream') {
+            document.getElementById('btn-upstream').classList.replace('text-gray-500', 'text-black');
+            activeBg.style.left = '0.5rem';
+            document.getElementById('dir-content-upstream').classList.remove('hidden');
+            document.getElementById('dir-content-downstream').classList.add('hidden');
+        } else {
+            document.getElementById('btn-downstream').classList.replace('text-gray-500', 'text-white');
+            activeBg.style.left = 'calc(50% + 4px)';
+            document.getElementById('dir-content-upstream').classList.add('hidden');
+            document.getElementById('dir-content-downstream').classList.remove('hidden');
+        }
+    }
+
+    // --- Section 5: The Spend Trap Lab ---
+    const spendY2 = document.getElementById('calc-spend-y2');
+    const resY2 = document.getElementById('calc-res-y2');
+
+    spendY2.addEventListener('input', () => {
+        let val = parseFloat(spendY2.value) || 0;
+        let result = (val * 1.25) / 1000;
+        resY2.innerText = result.toFixed(1) + ' tCO₂e';
+
+        // Add minimal animation
+        resY2.classList.remove('scale-105');
+        void resY2.offsetWidth; // trigger reflow
+        resY2.classList.add('scale-105');
+        setTimeout(() => resY2.classList.remove('scale-105'), 200);
+    });
+
+    // --- Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:bg-white/10');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('text-black');
+
+            // Mark module as completed in the tracker
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=7) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.add('border-red-500');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is D. The Supplier-Specific Method (Primary Data).");
+            }, 500);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=7) }}";
+    }
+    });
+
+</script>
+
+{% endblock %}

@@ -58,6 +58,10 @@ def create_app(config_name='default'):
     from app.settings import bp as settings_bp
     app.register_blueprint(settings_bp)
 
+    # Academy
+    from app.academy.routes import bp as academy_bp
+    app.register_blueprint(academy_bp)
+
     # Documents
     from app.blueprints.documents import bp as documents_bp
     app.register_blueprint(documents_bp)

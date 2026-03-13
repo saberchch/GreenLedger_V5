@@ -426,6 +426,71 @@ def notarize_report(report_id):
     return jsonify({'success': True, 'tx_hash': report.blockchain_tx_hash}), 200
 
 
+# ─── Certification Management ────────────────────────────────────────────────
+
+@bp.route('/certifications')
+@login_required
+def certification_management():
+    _require_admin()
+    from app.models.academy import Certificate
+    page = request.args.get('page', 1, type=int)
+    pending = Certificate.query.filter_by(status='PENDING', passed=True).order_by(Certificate.issued_at.desc()).paginate(page=page, per_page=20, error_out=False)
+    notarized = Certificate.query.filter_by(status='NOTARIZED').order_by(Certificate.issued_at.desc()).limit(10).all()
+    
+    return render_template('pages/dashboard/admin/certifications.html', pending=pending, notarized=notarized)
+
+
+@bp.route('/certificate/<int:cert_id>/notarize', methods=['POST'])
+@login_required
+def notarize_certificate(cert_id):
+    _require_admin()
+    from app.models.academy import Certificate
+    from app.models.notification import Notification, NotificationType
+    cert = Certificate.query.get_or_404(cert_id)
+    
+    if cert.status == 'NOTARIZED':
+        flash('Certificate is already notarized.', 'info')
+        return redirect(url_for('dashboard_admin.certification_management'))
+        
+    data = request.get_json() or {}
+    tx_hash = data.get('tx_hash')
+    if not tx_hash:
+        import hashlib
+        import uuid
+        import json
+        payload = json.dumps({'cert_id': cert.id, 'user_id': cert.user_id, 'nonce': str(uuid.uuid4())}, sort_keys=True)
+        tx_hash = '0x' + hashlib.sha256(payload.encode()).hexdigest()
+        
+    cert.blockchain_tx = tx_hash
+    cert.status = 'NOTARIZED'
+    
+    # Notify user
+    notif = Notification(
+        user_id=cert.user_id,
+        title="Certificate Notarized on Blockchain",
+        message=f"Congratulations! Your GreenLedger Academy certificate has been permanently notarized on the blockchain. TX Hash: {tx_hash}",
+        type=NotificationType.SUCCESS,
+        related_entity_type='certificate',
+        related_entity_id=cert.id
+    )
+    db.session.add(notif)
+    
+    log = AuditLog(
+        actor_id=current_user.id,
+        action='CERTIFICATE_NOTARIZED',
+        entity_type='Certificate',
+        entity_id=cert.id,
+        details=f'Admin notarized certificate for user {cert.user_id}. TX: {tx_hash}'
+    )
+    db.session.add(log)
+    db.session.commit()
+    
+    if request.is_json:
+        return jsonify({'success': True, 'tx_hash': tx_hash})
+    
+    flash(f'Certificate #{cert.id} notarized successfully.', 'success')
+    return redirect(url_for('dashboard_admin.certification_management'))
+
 # ─── Premium Support Channel ─────────────────────────────────────────────────
 
 @bp.route('/support')

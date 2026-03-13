@@ -1,0 +1,44 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block dashboard_content %}
+<div class="min-h-screen bg-[#fcfdfc] dark:bg-[#0d1310] relative">
+    {% block academy_progress %}{% endblock %}
+
+    {% block academy_content %}{% endblock %}
+</div>
+
+<style>
+    /* Academy Focus Mode Styles */
+    .academy-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #f0f4f2;
+    }
+
+    .academy-card:hover {
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        transform: translateY(-4px);
+        border-color: #0ca85a;
+    }
+
+    .module-step {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+    .module-step::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: #f0f4f2;
+    }
+
+    .module-step-active::before {
+        background-color: #0ca85a;
+    }
+</style>
+
+<script src="{{ url_for('static', filename='js/academy_tracker.js') }}"></script>
+{% endblock %}

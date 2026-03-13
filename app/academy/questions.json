@@ -1,0 +1,842 @@
+[
+    {
+        "id": 1,
+        "category": "Scope 1",
+        "difficulty": "easy",
+        "question": "Which of the following emissions sources is classified as Scope 1 under the GHG Protocol?",
+        "options": [
+            "Electricity purchased from the grid",
+            "Fuel combustion in company-owned boilers",
+            "Employee commuting",
+            "Purchased goods production"
+        ],
+        "correct_index": 1,
+        "explanation": "Scope 1 emissions are direct emissions from sources owned or controlled by the company, such as boilers, furnaces, and company vehicles."
+    },
+    {
+        "id": 2,
+        "category": "Scope 2",
+        "difficulty": "easy",
+        "question": "Scope 2 emissions refer to which type of emissions?",
+        "options": [
+            "Direct emissions from fuel use",
+            "Indirect emissions from purchased electricity",
+            "Supply chain emissions",
+            "Transportation emissions"
+        ],
+        "correct_index": 1,
+        "explanation": "Scope 2 emissions are indirect emissions from the generation of purchased electricity, steam, heating, or cooling consumed by the company."
+    },
+    {
+        "id": 3,
+        "category": "Scope 3",
+        "difficulty": "easy",
+        "question": "Which of the following is an example of Scope 3 upstream emissions?",
+        "options": [
+            "Fuel burned in company trucks",
+            "Electricity purchased from the grid",
+            "Employee business travel",
+            "Onsite natural gas combustion"
+        ],
+        "correct_index": 2,
+        "explanation": "Business travel is a Scope 3 upstream category because it occurs in the value chain but outside the company\u2019s direct operations."
+    },
+    {
+        "id": 4,
+        "category": "Carbon Accounting",
+        "difficulty": "easy",
+        "question": "What does CO2e stand for?",
+        "options": [
+            "Carbon emission equivalent",
+            "Carbon dioxide equivalent",
+            "Carbon offset equivalent",
+            "Carbon output estimation"
+        ],
+        "correct_index": 1,
+        "explanation": "CO2e expresses the warming impact of different greenhouse gases in terms of the equivalent amount of CO2."
+    },
+    {
+        "id": 5,
+        "category": "GHG Protocol",
+        "difficulty": "medium",
+        "question": "How many Scope 3 categories exist in the GHG Protocol Corporate Value Chain Standard?",
+        "options": [
+            "10",
+            "12",
+            "15",
+            "18"
+        ],
+        "correct_index": 2,
+        "explanation": "The GHG Protocol defines 15 categories of Scope 3 emissions across upstream and downstream activities."
+    },
+    {
+        "id": 6,
+        "category": "Data Methodology",
+        "difficulty": "medium",
+        "question": "Which data type generally provides the most accurate Scope 3 emissions calculation?",
+        "options": [
+            "Spend-based data",
+            "Average industry data",
+            "Supplier-specific primary data",
+            "National emissions averages"
+        ],
+        "correct_index": 2,
+        "explanation": "Supplier-specific primary data is the most accurate because it reflects real emissions from suppliers rather than estimates."
+    },
+    {
+        "id": 7,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "What is the primary difference between Location-Based and Market-Based Scope 2 accounting?",
+        "options": [
+            "Location-based uses grid averages, market-based uses contractual instruments",
+            "Location-based uses renewable energy only",
+            "Market-based includes Scope 3 emissions",
+            "Market-based excludes electricity purchases"
+        ],
+        "correct_index": 0,
+        "explanation": "Location-based uses grid emission factors, while market-based reflects contractual energy purchases such as RECs or PPAs."
+    },
+    {
+        "id": 8,
+        "category": "Scope 1",
+        "difficulty": "medium",
+        "question": "Which greenhouse gas has the highest Global Warming Potential among the following?",
+        "options": [
+            "Methane",
+            "Nitrous Oxide",
+            "Sulfur Hexafluoride",
+            "Carbon Dioxide"
+        ],
+        "correct_index": 2,
+        "explanation": "Sulfur hexafluoride (SF6) has an extremely high GWP, thousands of times stronger than CO2."
+    },
+    {
+        "id": 9,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which Scope 3 category includes emissions generated when customers use a company's products?",
+        "options": [
+            "Purchased goods",
+            "Use of sold products",
+            "Employee commuting",
+            "Fuel- and energy-related activities"
+        ],
+        "correct_index": 1,
+        "explanation": "Use of sold products includes emissions generated when customers operate products sold by the company."
+    },
+    {
+        "id": 10,
+        "category": "Carbon Accounting",
+        "difficulty": "easy",
+        "question": "What is the main goal of carbon accounting?",
+        "options": [
+            "Track greenhouse gas emissions",
+            "Eliminate fossil fuels immediately",
+            "Measure air quality",
+            "Calculate company profits"
+        ],
+        "correct_index": 0,
+        "explanation": "Carbon accounting quantifies emissions so organizations can manage and reduce them."
+    },
+    {
+        "id": 11,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Employee commuting emissions fall under which category?",
+        "options": [
+            "Scope 1",
+            "Scope 2",
+            "Scope 3 upstream",
+            "Scope 3 downstream"
+        ],
+        "correct_index": 2,
+        "explanation": "Employee commuting occurs outside company operations but is part of the upstream value chain."
+    },
+    {
+        "id": 12,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "What is meant by organizational boundary in carbon accounting?",
+        "options": [
+            "The geographic location of emissions",
+            "The operations included in a company\u2019s emissions inventory",
+            "The physical size of company facilities",
+            "The national emissions cap"
+        ],
+        "correct_index": 1,
+        "explanation": "Organizational boundaries define which entities and operations are included in the emissions inventory."
+    },
+    {
+        "id": 13,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "Which instrument allows companies to claim renewable electricity in market-based Scope 2 reporting?",
+        "options": [
+            "Carbon offsets",
+            "Energy Attribute Certificates",
+            "Emission permits",
+            "Carbon taxes"
+        ],
+        "correct_index": 1,
+        "explanation": "Energy Attribute Certificates (EACs), such as RECs or Guarantees of Origin, represent renewable electricity generation."
+    },
+    {
+        "id": 14,
+        "category": "Scope 1",
+        "difficulty": "medium",
+        "question": "Which emission source would typically fall under Scope 1 for a transportation company?",
+        "options": [
+            "Purchased electricity for offices",
+            "Diesel burned in company trucks",
+            "Employee commuting",
+            "Production of purchased tires"
+        ],
+        "correct_index": 1,
+        "explanation": "Fuel burned in company-owned vehicles is a direct emission source."
+    },
+    {
+        "id": 15,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which Scope 3 category includes emissions from purchased materials?",
+        "options": [
+            "Purchased goods and services",
+            "Use of sold products",
+            "Employee commuting",
+            "Waste generated in operations"
+        ],
+        "correct_index": 0,
+        "explanation": "Purchased goods and services represent upstream supply chain emissions."
+    },
+    {
+        "id": 16,
+        "category": "Carbon Accounting",
+        "difficulty": "hard",
+        "question": "A company consumes 10,000 MWh of electricity with a grid emission factor of 0.45 tCO2/MWh. What are the location-based emissions?",
+        "options": [
+            "4,500 tCO2",
+            "5,000 tCO2",
+            "2,250 tCO2",
+            "450 tCO2"
+        ],
+        "correct_index": 0,
+        "explanation": "10,000 \u00d7 0.45 = 4,500 tons CO2."
+    },
+    {
+        "id": 17,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "Which emission type is included in Scope 2?",
+        "options": [
+            "Purchased electricity",
+            "Fuel burned in company boilers",
+            "Customer product use",
+            "Supplier transportation"
+        ],
+        "correct_index": 0,
+        "explanation": "Scope 2 includes emissions from purchased electricity, steam, heating, or cooling."
+    },
+    {
+        "id": 18,
+        "category": "Scope 3",
+        "difficulty": "hard",
+        "question": "Which of the following is a downstream Scope 3 category?",
+        "options": [
+            "Purchased goods and services",
+            "Capital goods",
+            "End-of-life treatment of sold products",
+            "Employee commuting"
+        ],
+        "correct_index": 2,
+        "explanation": "End-of-life treatment of sold products occurs after the customer uses the product."
+    },
+    {
+        "id": 19,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Why are Scope 3 emissions often the largest portion of corporate footprints?",
+        "options": [
+            "They include emissions across the entire value chain",
+            "They only measure electricity use",
+            "They only include transportation",
+            "They exclude purchased materials"
+        ],
+        "correct_index": 0,
+        "explanation": "Scope 3 includes all upstream and downstream emissions in the value chain."
+    },
+    {
+        "id": 20,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Which framework is most widely used globally for corporate carbon accounting?",
+        "options": [
+            "GHG Protocol",
+            "Paris Agreement",
+            "Kyoto Protocol",
+            "UN SDGs"
+        ],
+        "correct_index": 0,
+        "explanation": "The GHG Protocol Corporate Standard is the most widely used framework."
+    },
+    {
+        "id": 21,
+        "category": "Scope 1",
+        "difficulty": "easy",
+        "question": "Which activity would typically generate Scope 1 emissions?",
+        "options": [
+            "Electricity purchased from the grid",
+            "Fuel burned in company-owned generators",
+            "Production of purchased steel",
+            "Customer transportation"
+        ],
+        "correct_index": 1,
+        "explanation": "Scope 1 emissions come from direct sources owned or controlled by the company such as generators, boilers, and company vehicles."
+    },
+    {
+        "id": 22,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "Which energy sources are included in Scope 2 accounting?",
+        "options": [
+            "Purchased electricity, steam, heating, and cooling",
+            "Diesel burned in company vehicles",
+            "Fuel used by suppliers",
+            "Employee commuting fuel"
+        ],
+        "correct_index": 0,
+        "explanation": "Scope 2 includes indirect emissions from purchased electricity, steam, heating, or cooling consumed by the company."
+    },
+    {
+        "id": 23,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which Scope 3 category includes emissions from third-party waste treatment?",
+        "options": [
+            "Waste generated in operations",
+            "Use of sold products",
+            "Purchased goods and services",
+            "Employee commuting"
+        ],
+        "correct_index": 0,
+        "explanation": "Waste generated in operations includes emissions from waste disposal or treatment handled by external providers."
+    },
+    {
+        "id": 24,
+        "category": "Carbon Accounting",
+        "difficulty": "easy",
+        "question": "What unit is commonly used to report greenhouse gas emissions?",
+        "options": [
+            "kWh",
+            "CO2e",
+            "ppm",
+            "BTU"
+        ],
+        "correct_index": 1,
+        "explanation": "CO2e (carbon dioxide equivalent) standardizes the warming effect of different greenhouse gases into a common unit."
+    },
+    {
+        "id": 25,
+        "category": "GHG Protocol",
+        "difficulty": "medium",
+        "question": "What does the equity share approach allocate emissions based on?",
+        "options": [
+            "The physical location of emissions",
+            "The share of economic ownership in an operation",
+            "The number of employees in a facility",
+            "The operational control of a company"
+        ],
+        "correct_index": 1,
+        "explanation": "The equity share approach assigns emissions according to a company\u2019s percentage ownership of an operation."
+    },
+    {
+        "id": 26,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "What is a Power Purchase Agreement (PPA)?",
+        "options": [
+            "A government carbon tax program",
+            "A contract to purchase electricity directly from a power producer",
+            "A carbon offset mechanism",
+            "A reporting framework for emissions"
+        ],
+        "correct_index": 1,
+        "explanation": "A PPA is a long-term contract between an electricity generator and a buyer to supply renewable power."
+    },
+    {
+        "id": 27,
+        "category": "Scope 3",
+        "difficulty": "hard",
+        "question": "A company sells laptops that consume electricity during their lifetime. Which category should these emissions be reported under?",
+        "options": [
+            "Scope 1",
+            "Scope 2",
+            "Scope 3 \u2013 Use of Sold Products",
+            "Scope 3 \u2013 Purchased Goods"
+        ],
+        "correct_index": 2,
+        "explanation": "Electricity consumed during the lifetime use of products falls under the Scope 3 category 'Use of Sold Products'."
+    },
+    {
+        "id": 28,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "What is the purpose of emission factors?",
+        "options": [
+            "To convert activity data into emissions estimates",
+            "To track financial performance",
+            "To regulate industrial pollution",
+            "To calculate renewable energy production"
+        ],
+        "correct_index": 0,
+        "explanation": "Emission factors translate activity data (e.g., fuel use) into greenhouse gas emissions."
+    },
+    {
+        "id": 29,
+        "category": "Data Methodology",
+        "difficulty": "medium",
+        "question": "Which data approach combines supplier data and industry averages?",
+        "options": [
+            "Spend-based method",
+            "Hybrid method",
+            "Location-based method",
+            "Direct measurement method"
+        ],
+        "correct_index": 1,
+        "explanation": "The hybrid method combines supplier-specific data with secondary industry data to improve accuracy."
+    },
+    {
+        "id": 30,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which of the following is an upstream Scope 3 category?",
+        "options": [
+            "Use of sold products",
+            "Business travel",
+            "End-of-life treatment",
+            "Customer transportation"
+        ],
+        "correct_index": 1,
+        "explanation": "Business travel is part of upstream Scope 3 emissions because it occurs before product delivery."
+    },
+    {
+        "id": 31,
+        "category": "Carbon Accounting",
+        "difficulty": "easy",
+        "question": "Which greenhouse gas is produced primarily through fossil fuel combustion?",
+        "options": [
+            "Methane",
+            "Carbon dioxide",
+            "Nitrous oxide",
+            "Hydrofluorocarbons"
+        ],
+        "correct_index": 1,
+        "explanation": "Carbon dioxide is the primary greenhouse gas emitted through fossil fuel combustion."
+    },
+    {
+        "id": 32,
+        "category": "Scope 1",
+        "difficulty": "medium",
+        "question": "Which emission source would most likely fall under Scope 1 for a chemical manufacturer?",
+        "options": [
+            "Purchased electricity",
+            "Chemical reactions in industrial processes",
+            "Transportation by suppliers",
+            "Use of products by customers"
+        ],
+        "correct_index": 1,
+        "explanation": "Process emissions from chemical reactions inside company facilities are direct Scope 1 emissions."
+    },
+    {
+        "id": 33,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "What determines the emission factor used in the Location-Based Scope 2 method?",
+        "options": [
+            "The average emission intensity of the local grid",
+            "The company's electricity contract",
+            "The amount of renewable certificates purchased",
+            "The emissions from suppliers"
+        ],
+        "correct_index": 0,
+        "explanation": "Location-based accounting uses the average emissions intensity of the electricity grid where the facility operates."
+    },
+    {
+        "id": 34,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Which gas is commonly associated with agricultural emissions?",
+        "options": [
+            "Nitrous oxide",
+            "Carbon monoxide",
+            "Sulfur hexafluoride",
+            "Ozone"
+        ],
+        "correct_index": 0,
+        "explanation": "Nitrous oxide emissions often come from fertilizer use and soil management in agriculture."
+    },
+    {
+        "id": 35,
+        "category": "Scope 3",
+        "difficulty": "hard",
+        "question": "Which Scope 3 category includes emissions related to leased assets operated by a company but owned by another entity?",
+        "options": [
+            "Upstream leased assets",
+            "Use of sold products",
+            "Purchased goods",
+            "Capital goods"
+        ],
+        "correct_index": 0,
+        "explanation": "Upstream leased assets include emissions from assets leased by the company but not owned by it."
+    },
+    {
+        "id": 36,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "What does 'activity data' represent in carbon accounting?",
+        "options": [
+            "The financial revenue of a company",
+            "The quantity of energy or material consumed",
+            "The number of emissions regulations",
+            "The temperature change in the atmosphere"
+        ],
+        "correct_index": 1,
+        "explanation": "Activity data measures the amount of fuel, electricity, or material used that leads to emissions."
+    },
+    {
+        "id": 37,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "Which instrument ensures renewable electricity claims are not double counted?",
+        "options": [
+            "Carbon offsets",
+            "Energy Attribute Certificates",
+            "Emission permits",
+            "Fuel contracts"
+        ],
+        "correct_index": 1,
+        "explanation": "Energy Attribute Certificates track renewable electricity generation and ensure exclusive environmental claims."
+    },
+    {
+        "id": 38,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which category includes emissions from transporting purchased materials to a company?",
+        "options": [
+            "Upstream transportation and distribution",
+            "Employee commuting",
+            "Use of sold products",
+            "Downstream transportation"
+        ],
+        "correct_index": 0,
+        "explanation": "Upstream transportation includes logistics related to incoming goods and materials."
+    },
+    {
+        "id": 39,
+        "category": "Carbon Accounting",
+        "difficulty": "hard",
+        "question": "A company burns 1,000 liters of diesel with an emission factor of 2.68 kg CO2 per liter. What are the total emissions?",
+        "options": [
+            "2,680 kg CO2",
+            "1,680 kg CO2",
+            "3,680 kg CO2",
+            "680 kg CO2"
+        ],
+        "correct_index": 0,
+        "explanation": "1,000 \u00d7 2.68 = 2,680 kg CO2."
+    },
+    {
+        "id": 40,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Why is transparency important in corporate carbon reporting?",
+        "options": [
+            "To ensure consistent and credible emissions disclosure",
+            "To reduce financial costs",
+            "To eliminate all emissions immediately",
+            "To simplify tax reporting"
+        ],
+        "correct_index": 0,
+        "explanation": "Transparent reporting improves credibility, comparability, and accountability in climate disclosures."
+    },
+    {
+        "id": 41,
+        "category": "Scope 1",
+        "difficulty": "medium",
+        "question": "Which of the following emissions sources is typically included in Scope 1 for manufacturing companies?",
+        "options": [
+            "Purchased electricity",
+            "Combustion of natural gas in onsite boilers",
+            "Employee commuting",
+            "Transport of goods by third-party logistics providers"
+        ],
+        "correct_index": 1,
+        "explanation": "Natural gas burned in onsite boilers is a direct emission source owned and controlled by the company, making it Scope 1."
+    },
+    {
+        "id": 42,
+        "category": "Scope 2",
+        "difficulty": "medium",
+        "question": "What is the primary purpose of the market-based Scope 2 method?",
+        "options": [
+            "To measure global electricity consumption",
+            "To reflect the emissions from contractual energy purchases",
+            "To calculate direct fuel emissions",
+            "To estimate supplier emissions"
+        ],
+        "correct_index": 1,
+        "explanation": "The market-based method reflects emissions associated with electricity that companies purchase through contracts such as renewable energy certificates or PPAs."
+    },
+    {
+        "id": 43,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which Scope 3 category covers emissions from company-financed investments?",
+        "options": [
+            "Purchased goods and services",
+            "Investments",
+            "Business travel",
+            "Capital goods"
+        ],
+        "correct_index": 1,
+        "explanation": "The investments category includes emissions from financial investments such as equity holdings, project finance, or managed assets."
+    },
+    {
+        "id": 44,
+        "category": "Carbon Accounting",
+        "difficulty": "easy",
+        "question": "Which greenhouse gas has a Global Warming Potential roughly 28\u201334 times higher than CO2 over 100 years?",
+        "options": [
+            "Methane",
+            "Nitrous oxide",
+            "Ozone",
+            "Carbon monoxide"
+        ],
+        "correct_index": 0,
+        "explanation": "Methane has a significantly higher warming potential than CO2 over a 100-year period."
+    },
+    {
+        "id": 45,
+        "category": "GHG Protocol",
+        "difficulty": "medium",
+        "question": "Which principle ensures emissions reporting is unbiased and accurate?",
+        "options": [
+            "Transparency",
+            "Accuracy",
+            "Consistency",
+            "Relevance"
+        ],
+        "correct_index": 1,
+        "explanation": "Accuracy ensures emissions estimates are systematically neither over nor under actual emissions."
+    },
+    {
+        "id": 46,
+        "category": "Data Methodology",
+        "difficulty": "medium",
+        "question": "What is the spend-based method primarily used for?",
+        "options": [
+            "Calculating emissions based on financial expenditure",
+            "Direct measurement of emissions",
+            "Calculating Scope 1 emissions only",
+            "Calculating emissions from electricity generation"
+        ],
+        "correct_index": 0,
+        "explanation": "The spend-based method estimates emissions using the monetary value of purchased goods multiplied by industry emission factors."
+    },
+    {
+        "id": 47,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which Scope 3 category accounts for emissions from the production of long-term assets purchased by a company?",
+        "options": [
+            "Capital goods",
+            "Purchased services",
+            "Business travel",
+            "Fuel-related activities"
+        ],
+        "correct_index": 0,
+        "explanation": "Capital goods include emissions associated with producing long-term assets such as machinery or buildings."
+    },
+    {
+        "id": 48,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "What is the main objective of establishing a baseline year in carbon accounting?",
+        "options": [
+            "To compare emissions reductions over time",
+            "To estimate global warming potential",
+            "To determine fuel efficiency",
+            "To calculate carbon taxes"
+        ],
+        "correct_index": 0,
+        "explanation": "A baseline year provides a reference point to measure emissions reductions and track progress."
+    },
+    {
+        "id": 49,
+        "category": "Scope 2",
+        "difficulty": "hard",
+        "question": "A facility consumes 5,000 MWh of electricity with a grid emission factor of 0.4 tCO2/MWh. What are the location-based emissions?",
+        "options": [
+            "1,500 tCO2",
+            "2,000 tCO2",
+            "3,000 tCO2",
+            "500 tCO2"
+        ],
+        "correct_index": 1,
+        "explanation": "5,000 \u00d7 0.4 = 2,000 tCO2."
+    },
+    {
+        "id": 50,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which Scope 3 category includes emissions related to the distribution of products after they leave the company\u2019s control?",
+        "options": [
+            "Upstream transportation",
+            "Downstream transportation and distribution",
+            "Employee commuting",
+            "Purchased goods and services"
+        ],
+        "correct_index": 1,
+        "explanation": "Downstream transportation and distribution includes emissions from shipping products to customers."
+    },
+    {
+        "id": 51,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "What does Global Warming Potential (GWP) measure?",
+        "options": [
+            "The energy efficiency of fuels",
+            "The relative heat trapped by a greenhouse gas compared to CO2",
+            "The carbon content of fossil fuels",
+            "The rate of carbon sequestration"
+        ],
+        "correct_index": 1,
+        "explanation": "GWP measures how much heat a greenhouse gas traps in the atmosphere compared to carbon dioxide."
+    },
+    {
+        "id": 52,
+        "category": "Scope 1",
+        "difficulty": "medium",
+        "question": "Refrigerant leaks from air conditioning systems are classified as:",
+        "options": [
+            "Scope 1 emissions",
+            "Scope 2 emissions",
+            "Scope 3 upstream emissions",
+            "Scope 3 downstream emissions"
+        ],
+        "correct_index": 0,
+        "explanation": "Fugitive emissions from refrigerant leaks are direct emissions and therefore fall under Scope 1."
+    },
+    {
+        "id": 53,
+        "category": "GHG Protocol",
+        "difficulty": "medium",
+        "question": "Which reporting principle ensures that emissions inventories include all relevant emission sources?",
+        "options": [
+            "Completeness",
+            "Consistency",
+            "Accuracy",
+            "Transparency"
+        ],
+        "correct_index": 0,
+        "explanation": "Completeness ensures that all significant emissions sources are included in the inventory."
+    },
+    {
+        "id": 54,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Which sector is the largest contributor to global greenhouse gas emissions?",
+        "options": [
+            "Energy production",
+            "Agriculture",
+            "Transportation",
+            "Waste management"
+        ],
+        "correct_index": 0,
+        "explanation": "Energy production, including electricity and heat generation from fossil fuels, is the largest source globally."
+    },
+    {
+        "id": 55,
+        "category": "Scope 3",
+        "difficulty": "hard",
+        "question": "Which Scope 3 category includes emissions from the treatment of products after customers dispose of them?",
+        "options": [
+            "Use of sold products",
+            "End-of-life treatment of sold products",
+            "Capital goods",
+            "Investments"
+        ],
+        "correct_index": 1,
+        "explanation": "End-of-life treatment accounts for emissions generated when products are disposed of, recycled, or treated after use."
+    },
+    {
+        "id": 56,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Which unit is commonly used to report large-scale emissions in national or corporate inventories?",
+        "options": [
+            "kg CO2e",
+            "tCO2e",
+            "ppm",
+            "BTU"
+        ],
+        "correct_index": 1,
+        "explanation": "Tonnes of CO2 equivalent (tCO2e) are commonly used for reporting large emissions quantities."
+    },
+    {
+        "id": 57,
+        "category": "Data Methodology",
+        "difficulty": "medium",
+        "question": "Which method directly measures emissions using sensors or monitoring systems?",
+        "options": [
+            "Direct measurement",
+            "Spend-based calculation",
+            "Hybrid method",
+            "Industry average method"
+        ],
+        "correct_index": 0,
+        "explanation": "Direct measurement uses physical monitoring equipment to measure emissions at the source."
+    },
+    {
+        "id": 58,
+        "category": "Scope 3",
+        "difficulty": "medium",
+        "question": "Which category includes emissions from employees traveling to and from work?",
+        "options": [
+            "Business travel",
+            "Employee commuting",
+            "Purchased transportation",
+            "Fuel-related activities"
+        ],
+        "correct_index": 1,
+        "explanation": "Employee commuting covers emissions generated by employees traveling between home and the workplace."
+    },
+    {
+        "id": 59,
+        "category": "Carbon Accounting",
+        "difficulty": "hard",
+        "question": "A company uses 20,000 kWh of electricity with an emission factor of 0.5 kg CO2/kWh. What are the emissions?",
+        "options": [
+            "5,000 kg CO2",
+            "10,000 kg CO2",
+            "20,000 kg CO2",
+            "15,000 kg CO2"
+        ],
+        "correct_index": 1,
+        "explanation": "20,000 \u00d7 0.5 = 10,000 kg CO2."
+    },
+    {
+        "id": 60,
+        "category": "Carbon Accounting",
+        "difficulty": "medium",
+        "question": "Why are emission factors periodically updated in carbon accounting databases?",
+        "options": [
+            "To reflect technological and energy mix changes",
+            "To increase company taxes",
+            "To reduce reporting requirements",
+            "To standardize financial reporting"
+        ],
+        "correct_index": 0,
+        "explanation": "Emission factors change as energy systems evolve and technologies improve, requiring periodic updates."
+    }
+]

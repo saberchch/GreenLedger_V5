@@ -1,0 +1,163 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title %}Certification Management - GreenLedger{% endblock %}
+
+{% block dashboard_content %}
+<div class="max-w-7xl mx-auto space-y-8">
+
+    <header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div class="space-y-1">
+            <h1 class="text-3xl font-black text-[#111814] dark:text-white tracking-tight">Certification Requests</h1>
+            <p class="text-[#618975] dark:text-[#8baaa0]">Manage pending Academy graduates and notarize credentials on
+                the blockchain.</p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Queue -->
+        <div class="lg:col-span-2 space-y-6">
+            <div
+                class="bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-3xl overflow-hidden shadow-sm">
+                <div
+                    class="p-6 border-b border-[#f0f4f2] dark:border-[#2a4035] flex justify-between items-center bg-[#fcfdfd] dark:bg-[#15231c]">
+                    <h2 class="text-lg font-black text-[#111814] dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-amber-500">pending_actions</span>
+                        Pending Notarizations
+                        <span class="ml-2 px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold">{{
+                            pending.total }}</span>
+                    </h2>
+                </div>
+
+                <div class="divide-y divide-[#f0f4f2] dark:divide-[#2a4035]">
+                    {% for cert in pending.items %}
+                    <div class="p-6 hover:bg-gray-50 dark:hover:bg-[#23352c] transition-colors"
+                        id="cert-row-{{ cert.id }}">
+                        <div class="flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-black">
+                                    {{ cert.user.first_name[0] }}{{ cert.user.last_name[0] }}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-[#111814] dark:text-white">{{ cert.user.first_name }} {{
+                                        cert.user.last_name }}</h3>
+                                    <p class="text-sm text-[#618975] dark:text-[#8baaa0]">{{ cert.user.email }}</p>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span
+                                            class="px-2 py-0.5 text-[10px] uppercase tracking-widest font-bold rounded-md bg-green-100 text-green-700">Passed:
+                                            {{ "%.1f"|format(cert.score) }}%</span>
+                                        <span class="text-xs text-gray-500">{{ cert.issued_at.strftime('%Y-%m-%d %H:%M')
+                                            }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <a href="{{ url_for('academy.certification_pdf', cert_id=cert.id) }}" target="_blank"
+                                    class="p-2 text-gray-400 hover:text-amber-500 transition-colors" title="View PDF">
+                                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                                </a>
+                                <button onclick="notarizeCert({{ cert.id }})"
+                                    class="px-5 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-[#111814] text-xs font-black uppercase tracking-widest rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">link</span> Notarize
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="p-12 text-center text-[#618975] dark:text-[#8baaa0]">
+                        <span class="material-symbols-outlined text-4xl mb-2 opacity-50">done_all</span>
+                        <p class="font-medium">All caught up! No pending certifications.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            {% if pending.pages > 1 %}
+            <div class="flex justify-center gap-2">
+                {% for p in pending.iter_pages() %}
+                {% if p %}
+                <a href="{{ url_for('dashboard_admin.certification_management', page=p) }}"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm {% if p == pending.page %}bg-primary text-[#111814]{% else %}bg-white dark:bg-[#1a2c24] text-[#618975] dark:text-[#8baaa0] hover:bg-gray-50 dark:hover:bg-[#23352c]{% endif %} transition-colors shadow-sm">
+                    {{ p }}
+                </a>
+                {% else %}
+                <span class="w-10 h-10 flex items-center justify-center text-gray-400">...</span>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar Activity -->
+        <div class="space-y-6">
+            <div
+                class="bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-3xl p-6 shadow-sm">
+                <h3
+                    class="text-sm font-black uppercase tracking-widest text-[#111814] dark:text-white mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-green-500">verified</span>
+                    Recently Notarized
+                </h3>
+
+                <div class="space-y-4">
+                    {% for cert in notarized %}
+                    <div
+                        class="p-4 rounded-2xl bg-gray-50 dark:bg-[#111814] border border-gray-100 dark:border-[#2a4035]">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-sm text-[#111814] dark:text-white">{{ cert.user.first_name }} {{
+                                cert.user.last_name }}</h4>
+                            <span class="text-xs text-gray-500">{{ cert.issued_at.strftime('%m/%d/%Y') }}</span>
+                        </div>
+                        <div
+                            class="text-[10px] font-mono text-green-600 dark:text-green-400 break-all bg-green-50 dark:bg-green-900/10 p-2 rounded border border-green-100 dark:border-green-900/30">
+                            {{ cert.blockchain_tx }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-sm text-gray-500 italic">No certificates notarized yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function notarizeCert(certId) {
+        if (!confirm("Are you sure you want to write this certificate to the blockchain? This action is immutable.")) return;
+
+        // Simulate Blockchain delay
+        const row = document.getElementById(`cert-row-${certId}`);
+        const btn = row.querySelector('button');
+        btn.disabled = true;
+        btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Processing...`;
+
+        fetch(`/dashboard/admin/certificate/${certId}/notarize`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({}) // Let backend generate hash natively
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    row.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    alert(data.error || "Failed to notarize.");
+                    btn.disabled = false;
+                    btn.innerHTML = `<span class="material-symbols-outlined text-sm">link</span> Notarize`;
+                }
+            })
+            .catch(err => {
+                alert("Network error.");
+            });
+    }
+</script>
+{% endblock %}

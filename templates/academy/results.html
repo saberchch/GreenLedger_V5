@@ -1,0 +1,137 @@
+{% extends "academy/base.html" %}
+
+{% block academy_content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+    <!-- Header -->
+    <header class="text-center space-y-4">
+        <h1 class="text-5xl font-black tracking-tight text-[#111814] dark:text-white">
+            Exam Results
+        </h1>
+        <p class="text-xl text-[#618975] dark:text-[#8baaa0]">
+            Attempt Analysis
+        </p>
+    </header>
+
+    <!-- Result Card -->
+    <div
+        class="p-8 md:p-12 rounded-[3.5rem] bg-white dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-2xl relative overflow-hidden transition-all">
+
+        <div class="flex flex-col items-center text-center space-y-8 relative z-10">
+            <!-- Icon / Status -->
+            <div class="flex flex-col items-center gap-4">
+                {% if certificate.passed %}
+                <div
+                    class="w-32 h-32 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 shadow-[0_0_50px_rgba(34,197,94,0.2)]">
+                    <span class="material-symbols-outlined text-7xl">verified</span>
+                </div>
+                <h2 class="text-4xl font-black text-green-600 dark:text-green-400">PASSED</h2>
+                {% else %}
+                <div
+                    class="w-32 h-32 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 shadow-[0_0_50px_rgba(239,68,68,0.2)]">
+                    <span class="material-symbols-outlined text-7xl">cancel</span>
+                </div>
+                <h2 class="text-4xl font-black text-red-600 dark:text-red-400">KEEP PUSHING</h2>
+                {% endif %}
+            </div>
+
+            <!-- Score Visualizer -->
+            <div class="w-full max-w-sm space-y-3">
+                <div class="flex justify-between items-end px-2">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-[#618975]">Your Performance</p>
+                    <p class="text-3xl font-black text-[#111814] dark:text-white">{{ "%.1f"|format(certificate.score)
+                        }}%</p>
+                </div>
+                <div
+                    class="h-4 w-full bg-[#f6f8f7] dark:bg-[#0a1410] rounded-full overflow-hidden border border-[#e2e8e4] dark:border-white/5">
+                    <div class="h-full {% if certificate.passed %}bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)]{% else %}bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)]{% endif %} transition-all duration-1000"
+                        style="width: {{ certificate.score }}%"></div>
+                </div>
+                <p
+                    class="text-[10px] text-center font-bold {% if certificate.passed %}text-green-600{% else %}text-red-500{% endif %}">
+                    Passing threshold is 70%
+                </p>
+            </div>
+
+            <!-- Detailed Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                <div
+                    class="p-6 rounded-3xl bg-[#f6f8f7] dark:bg-[#111814] border border-[#e2e8e4] dark:border-[#2a4035] text-left">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-4">Blockchain Record
+                    </p>
+                    {% if certificate.passed %}
+                    <div class="space-y-3">
+                        <div
+                            class="p-3 bg-white dark:bg-[#1a2c24] rounded-xl border border-[#e2e8e4] dark:border-[#2a4035] font-mono text-[10px] break-all">
+                            <span class="block font-black text-green-500 mb-1">CRYPTO HASH</span>
+                            {{ certificate.crypto_hash }}
+                        </div>
+                        <p class="text-[9px] text-[#618975] leading-relaxed">This record is pending notarization by an
+                            Admin for permanent storage on the blockchain.</p>
+                    </div>
+                    {% else %}
+                    <p class="text-sm font-bold text-[#618975] dark:text-[#8baaa0]">Blockchain records are only
+                        generated for passing scores.</p>
+                    {% endif %}
+                </div>
+
+                <div
+                    class="p-6 rounded-3xl bg-[#f6f8f7] dark:bg-[#111814] border border-[#e2e8e4] dark:border-[#2a4035] text-left flex flex-col justify-between">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-2">Attempts
+                            Tracking</p>
+                        <p class="text-xs font-bold text-[#111814] dark:text-white">You have used <span
+                                class="text-red-500">{{ max_attempts - attempts_remaining }}</span> of <span
+                                class="text-primary">{{ max_attempts }}</span> attempts.</p>
+                    </div>
+
+                    <div class="flex gap-2 mt-4">
+                        {% for i in range(max_attempts) %}
+                        <div
+                            class="w-full h-1.5 rounded-full {% if i < (max_attempts - attempts_remaining) %}bg-red-500{% else %}bg-green-500/20{% endif %}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 w-full pt-4">
+                {% if certificate.passed %}
+                <a href="{{ url_for('academy.certification_pdf', cert_id=certificate.id) }}" target="_blank"
+                    class="flex-1 py-4 bg-green-600 text-white font-black uppercase tracking-widest rounded-2xl hover:bg-green-700 shadow-xl shadow-green-600/30 transition-all flex items-center justify-center gap-2 group">
+                    <span
+                        class="material-symbols-outlined transition-transform group-hover:-translate-y-1">download</span>
+                    Download PDF
+                </a>
+                {% elif attempts_remaining > 0 %}
+                <a href="{{ url_for('academy.certification_exam') }}"
+                    class="flex-1 py-4 bg-amber-500 text-black font-black uppercase tracking-widest rounded-2xl hover:bg-amber-400 shadow-xl shadow-amber-500/30 transition-all flex items-center justify-center gap-2 group">
+                    <span class="material-symbols-outlined transition-transform group-hover:rotate-180">refresh</span>
+                    Retake Exam
+                </a>
+                {% else %}
+                <div
+                    class="flex-1 py-4 bg-gray-200 dark:bg-[#111814] text-gray-400 font-black uppercase tracking-widest rounded-2xl border border-gray-300 dark:border-red-900/30 flex items-center justify-center gap-2 cursor-not-allowed">
+                    <span class="material-symbols-outlined">lock</span>
+                    Locked (Max Attempts)
+                </div>
+                {% endif %}
+
+                <a href="{{ url_for('academy.index') }}"
+                    class="flex-1 py-4 bg-white dark:bg-[#111814] text-[#111814] dark:text-white border-2 border-[#e2e8e4] dark:border-[#2a4035] font-black uppercase tracking-widest rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">home</span>
+                    Back to Academy
+                </a>
+            </div>
+        </div>
+
+        <!-- Decorative backgrounds -->
+        <div
+            class="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/5 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2">
+        </div>
+    </div>
+</div>
+{% endblock %}

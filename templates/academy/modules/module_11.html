@@ -1,0 +1,761 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0% Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 11: Reduction</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="relative p-12 rounded-[3rem] bg-[#111814] text-white overflow-hidden shadow-2xl">
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-green-500/10 rounded-full blur-3xl"></div>
+
+        <!-- Animated Background Grid -->
+        <div class="absolute inset-0 opacity-10"
+            style="background-image: radial-gradient(#13ec80 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-primary text-xs font-black uppercase tracking-widest">
+                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Decarbonization Action
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight">
+                Reduction <span class="text-primary italic">Strategies</span>
+            </h1>
+            <p class="text-lg text-slate-400 leading-relaxed font-medium">
+                Accounting is just the diagnosis; reduction is the cure. Learn how to prioritize decarbonization
+                projects based on cost efficiency and maximum impact.
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: The Ultimate Goal -->
+            <section id="the-ultimate-goal" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        The Ultimate Goal
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        The ultimate purpose of calculating a baseline is to tear it down. We move from the math of
+                        carbon accounting to the strategy of carbon abatement.
+                    </p>
+
+                    <div
+                        class="mt-8 flex flex-col md:flex-row items-center gap-6 p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035]">
+                        <div
+                            class="flex-1 text-center bg-white dark:bg-[#111814] p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800">
+                            <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">straighten</span>
+                            <h3 class="font-black text-gray-800 dark:text-gray-200">1. Measure</h3>
+                            <p class="text-xs text-gray-500 mt-2">Establish the baseline.</p>
+                        </div>
+
+                        <span
+                            class="material-symbols-outlined text-primary text-3xl font-black hidden md:block animate-pulse">arrow_forward</span>
+                        <span
+                            class="material-symbols-outlined text-primary text-3xl font-black block md:hidden animate-pulse">arrow_downward</span>
+
+                        <div
+                            class="flex-1 text-center bg-primary/10 p-6 rounded-2xl border-2 border-primary shadow-[0_0_15px_rgba(19,236,128,0.2)]">
+                            <span class="material-symbols-outlined text-4xl text-primary mb-2">trending_down</span>
+                            <h3 class="font-black text-primary">2. Reduce</h3>
+                            <p class="text-xs text-green-700 dark:text-green-400 mt-2">Drive the numbers to zero.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: The Mitigation Hierarchy -->
+            <section id="mitigation-hierarchy" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        The Mitigation Hierarchy
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        You cannot simply buy your way out of emissions. Genuine decarbonization follows a strict order
+                        of operations known as the Mitigation Hierarchy.
+                    </p>
+
+                    <div
+                        class="relative p-8 rounded-[2rem] bg-gradient-to-br from-gray-50 to-white dark:from-[#1a2c24] dark:to-[#111814] border border-gray-200 dark:border-[#2a4035] shadow-lg overflow-hidden">
+
+                        <!-- Background Pyramid Shape -->
+                        <div class="absolute inset-0 opacity-5 pointer-events-none flex justify-center items-center">
+                            <svg viewBox="0 0 100 100" class="w-full h-full text-current" fill="currentColor">
+                                <polygon points="50,10 90,90 10,90" />
+                            </svg>
+                        </div>
+
+                        <div class="relative z-10 max-w-2xl mx-auto space-y-4">
+                            <!-- Avoid -->
+                            <div
+                                class="group relative bg-green-500/10 border-2 border-green-500 p-4 rounded-xl text-center cursor-pointer hover:bg-green-500/20 transition-all hover:scale-105 transform origin-bottom w-full">
+                                <h3
+                                    class="font-black text-green-700 dark:text-green-400 text-xl tracking-wider uppercase">
+                                    1. Avoid</h3>
+                                <p
+                                    class="text-xs font-bold text-green-800 dark:text-green-300 mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute inset-x-0 bottom-[-20px]">
+                                    e.g., Replace business flights with virtual meetings.</p>
+                            </div>
+
+                            <!-- Reduce -->
+                            <div
+                                class="group relative bg-lime-500/10 border-2 border-lime-500 p-4 rounded-xl text-center cursor-pointer hover:bg-lime-500/20 transition-all hover:scale-105 transform origin-bottom w-11/12 mx-auto">
+                                <h3
+                                    class="font-black text-lime-700 dark:text-lime-400 text-lg tracking-wider uppercase">
+                                    2. Reduce</h3>
+                                <p
+                                    class="text-xs font-bold text-lime-800 dark:text-lime-300 mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute inset-x-0 bottom-[-20px]">
+                                    e.g., Optimize freight routes to use less fuel per delivery.</p>
+                            </div>
+
+                            <!-- Replace -->
+                            <div
+                                class="group relative bg-yellow-500/10 border-2 border-yellow-500 p-4 rounded-xl text-center cursor-pointer hover:bg-yellow-500/20 transition-all hover:scale-105 transform origin-bottom w-5/6 mx-auto mt-4">
+                                <h3
+                                    class="font-black text-yellow-700 dark:text-yellow-400 text-base tracking-wider uppercase">
+                                    3. Replace</h3>
+                                <p
+                                    class="text-xs font-bold text-yellow-800 dark:text-yellow-300 mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute inset-x-0 bottom-[-20px] bg-yellow-100 dark:bg-yellow-900/50 p-1 rounded z-20 shadow-md">
+                                    e.g., Switch from diesel trucks to electric vehicles.</p>
+                            </div>
+
+                            <!-- Offset -->
+                            <div
+                                class="group relative bg-red-500/10 border-2 border-red-500 p-4 rounded-xl text-center cursor-pointer hover:bg-red-500/20 transition-all hover:scale-105 transform origin-bottom w-3/4 mx-auto mt-4 border-dashed">
+                                <div
+                                    class="absolute -left-4 -top-4 bg-red-500 text-white text-[10px] font-black px-2 py-1 rounded shadow-lg transform -rotate-12">
+                                    LAST RESORT</div>
+                                <h3 class="font-black text-red-700 dark:text-red-400 text-sm tracking-wider uppercase">
+                                    4. Offset & Neutralize</h3>
+                                <p class="text-[10px] font-bold text-red-800 dark:text-red-300 mt-1">For residual
+                                    emissions only (buying carbon credits).</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: The MACC Curve -->
+            <section id="macc-curve" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        The MACC Curve
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        The <strong>Marginal Abatement Cost Curve (MACC)</strong> is the Rosetta Stone for
+                        sustainability directors. It plots projects based on their Cost per Ton of CO₂ saved against the
+                        Total Volume they can reduce.
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-white dark:bg-[#111814] border border-[#f0f4f2] dark:border-[#2a4035] shadow-lg">
+
+                        <!-- Pseudo-Chart Visualization -->
+                        <div
+                            class="relative h-64 border-b-2 border-l-2 border-gray-300 dark:border-gray-700 flex items-end pl-2 pb-2 mt-8 ml-8">
+
+                            <!-- Y-Axis Label -->
+                            <div class="absolute -left-12 top-0 bottom-0 flex items-center">
+                                <span
+                                    class="transform -rotate-90 text-[10px] font-black tracking-widest text-gray-400 uppercase whitespace-nowrap">Cost
+                                    ($ / tCO₂e)</span>
+                            </div>
+
+                            <!-- X-Axis Label -->
+                            <div class="absolute -bottom-10 left-0 right-0 text-center">
+                                <span class="text-[10px] font-black tracking-widest text-gray-400 uppercase">Abatement
+                                    Potential (tCO₂e)</span>
+                            </div>
+
+                            <!-- Zero Line -->
+                            <div
+                                class="absolute top-[50%] left-0 right-0 h-[1px] border-t border-dashed border-gray-400 dark:border-gray-600">
+                                <span class="absolute -left-6 -top-2 text-[10px] text-gray-500 font-mono">$0</span>
+                            </div>
+
+                            <!-- MACC Blocks -->
+                            <div class="flex items-end h-full gap-1 pl-4 pb-[50%] relative z-10 w-full">
+
+                                <!-- Negative Cost (Below $0 line, meaning they save money) -->
+                                <div class="w-[15%] h-[30%] bg-primary hover:bg-primary/80 transition-colors relative cursor-crosshair group flex flex-col justify-end border border-primary/20"
+                                    style="margin-bottom: -30%;">
+                                    <div
+                                        class="absolute -top-12 opacity-0 group-hover:opacity-100 bg-black text-primary text-[10px] p-2 rounded whitespace-nowrap z-20 pointer-events-none transition-opacity">
+                                        <strong>LED Retrofit</strong><br>Saves $15/tCO₂<br>High Potential
+                                    </div>
+                                </div>
+
+                                <div class="w-[10%] h-[15%] bg-green-400 hover:bg-green-300 transition-colors relative cursor-crosshair group flex flex-col justify-end border border-green-500/20"
+                                    style="margin-bottom: -15%;">
+                                    <div
+                                        class="absolute -top-12 opacity-0 group-hover:opacity-100 bg-black text-green-400 text-[10px] p-2 rounded whitespace-nowrap z-20 pointer-events-none transition-opacity">
+                                        <strong>HVAC Tuning</strong><br>Saves $5/tCO₂<br>Medium Potential
+                                    </div>
+                                </div>
+
+                                <!-- Zero / Low Cost -->
+                                <div
+                                    class="w-[20%] h-[10%] bg-yellow-400 hover:bg-yellow-300 transition-colors relative cursor-crosshair group flex flex-col justify-end border border-yellow-500/20 pb-[0%]">
+                                    <div
+                                        class="absolute -top-12 opacity-0 group-hover:opacity-100 bg-black text-yellow-400 text-[10px] p-2 rounded whitespace-nowrap z-20 pointer-events-none transition-opacity">
+                                        <strong>PPA (Renewables)</strong><br>Costs $2/tCO₂<br>Massive Potential
+                                    </div>
+                                </div>
+
+                                <!-- High Cost (Above $0 line) -->
+                                <div
+                                    class="w-[30%] h-[60%] bg-red-400 hover:bg-red-300 transition-colors relative cursor-crosshair group flex flex-col justify-end border border-red-500/20">
+                                    <div
+                                        class="absolute -top-12 opacity-0 group-hover:opacity-100 bg-black text-red-400 text-[10px] p-2 rounded whitespace-nowrap z-20 pointer-events-none transition-opacity">
+                                        <strong>Fleet EV Transition</strong><br>Costs $85/tCO₂<br>High Potential
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="w-[10%] h-[90%] bg-red-600 hover:bg-red-500 transition-colors relative cursor-crosshair group flex flex-col justify-end border border-red-700/20">
+                                    <div
+                                        class="absolute -left-12 -top-12 opacity-0 group-hover:opacity-100 bg-black text-red-500 text-[10px] p-2 rounded whitespace-nowrap z-20 pointer-events-none transition-opacity">
+                                        <strong>Carbon Capture Tech</strong><br>Costs $200/tCO₂<br>Low Potential
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-center text-gray-500 mt-12 italic">Hover over the blocks to inspect
+                            specific projects. Width = Carbon Saved, Height = Cost.</p>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Low-Hanging Fruit -->
+            <section id="low-hanging-fruit" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        The Low-Hanging Fruit
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Always start on the left side of the MACC Curve. These are "Negative Cost" projects—they have a
+                        positive ROI, meaning they reduce carbon AND increase company profits over time.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                        <div
+                            class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-primary/30 shadow-sm space-y-3 hover:-translate-y-1 transition-transform">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
+                                <span class="material-symbols-outlined">lightbulb</span>
+                            </div>
+                            <h3 class="font-black text-[#111814] dark:text-white">LED Retrofitting</h3>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Replacing old halogen bulbs with LEDs
+                                across all facilities. Payback period is usually under 2 years.</p>
+                            <div class="pt-4 mt-auto border-t border-gray-200 dark:border-gray-700">
+                                <span
+                                    class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black px-2 py-1 rounded">ROI:
+                                    +35%</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-primary/30 shadow-sm space-y-3 hover:-translate-y-1 transition-transform">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
+                                <span class="material-symbols-outlined">hvac</span>
+                            </div>
+                            <h3 class="font-black text-[#111814] dark:text-white">HVAC Optimization</h3>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Installing smart sensors to turn off
+                                heating/cooling in empty rooms. Drastically cuts Scope 2.</p>
+                            <div class="pt-4 mt-auto border-t border-gray-200 dark:border-gray-700">
+                                <span
+                                    class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black px-2 py-1 rounded">ROI:
+                                    +20%</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="p-6 rounded-2xl bg-[#f6f8f7] dark:bg-[#1a2c24] border border-primary/30 shadow-sm space-y-3 hover:-translate-y-1 transition-transform">
+                            <div
+                                class="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
+                                <span class="material-symbols-outlined">directions_car</span>
+                            </div>
+                            <h3 class="font-black text-[#111814] dark:text-white">Virtual Meetings</h3>
+                            <p class="text-xs text-[#618975] dark:text-[#8baaa0]">Enforcing a policy to substitute 30%
+                                of domestic business travel with Teams/Zoom calls. Zero capital cost.</p>
+                            <div class="pt-4 mt-auto border-t border-gray-200 dark:border-gray-700">
+                                <span
+                                    class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black px-2 py-1 rounded">ROI:
+                                    +100%</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Strategic Supplier Engagement -->
+            <section id="supplier-engagement" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">05</span>
+                        Strategic Supplier Engagement
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        For most companies, 80%+ of emissions sit in Scope 3 (Purchased Goods). You cannot reduce these
+                        directly; you must leverage your purchasing power to pressure suppliers.
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[2rem] bg-[#111814] border border-[#2a4035] text-white flex flex-col md:flex-row gap-8 items-center relative overflow-hidden">
+
+                        <div class="w-full md:w-1/2 space-y-6 z-10">
+                            <div class="flex items-center gap-4 bg-gray-800/50 p-4 rounded-xl border border-gray-700">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 font-black">
+                                    1</div>
+                                <p class="text-sm">Insert carbon requirements into RFP (Request for Proposal) contracts.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-4 bg-gray-800/50 p-4 rounded-xl border border-gray-700">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 font-black">
+                                    2</div>
+                                <p class="text-sm">Mandate that Tier 1 suppliers provide life-cycle assessments (LCAs)
+                                    for their parts.</p>
+                            </div>
+                            <div
+                                class="flex items-center gap-4 bg-primary/20 p-4 rounded-xl border border-primary/50 shadow-[0_0_15px_rgba(19,236,128,0.1)]">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-primary text-black flex items-center justify-center font-black">
+                                    3</div>
+                                <p class="text-sm text-primary font-bold">Shift procurement spend toward lower-carbon
+                                    alternatives if current suppliers fail to adapt.</p>
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-1/2 flex justify-center z-10">
+                            <div
+                                class="w-48 h-48 border-[16px] border-[#2a4035] rounded-full flex items-center justify-center relative shadow-2xl">
+                                <div
+                                    class="absolute inset-[-4px] border-[4px] border-t-primary border-r-primary border-b-transparent border-l-transparent rounded-full transform rotate-45">
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-3xl font-black text-white">80%</span>
+                                    <span class="text-[10px] text-gray-400 uppercase tracking-widest font-black">Scope 3
+                                        Mass</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: Strategy Lab -->
+            <section id="strategy-lab" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">06</span>
+                        Investment Lab (MACC Game)
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        You are the Sustainability Manager. You have a budget of <strong
+                            class="text-red-500">$100,000</strong>. Select the combination of projects that reduces the
+                        MAXIMUM amount of carbon without overspending.
+                    </p>
+
+                    <div
+                        class="bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] rounded-[2rem] p-8 shadow-inner">
+
+                        <!-- Dashboard UI -->
+                        <div
+                            class="flex items-center justify-between bg-white dark:bg-[#111814] p-4 rounded-2xl mb-8 border border-gray-200 dark:border-[#2a4035] shadow-sm">
+                            <div class="text-center">
+                                <p class="text-[10px] font-black uppercase text-gray-500">Budget Remaining</p>
+                                <p class="text-2xl font-black text-[#111814] dark:text-white" id="lab-budget">$100,000
+                                </p>
+                            </div>
+                            <div class="text-center px-8 border-l border-r border-gray-200 dark:border-gray-800">
+                                <p class="text-[10px] font-black uppercase text-gray-500">Target Reduction</p>
+                                <p class="text-2xl font-black text-gray-400 hidden md:block">8,000 tCO₂e</p>
+                                <p class="text-xl font-black text-gray-400 block md:hidden">8k tCO₂e</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-[10px] font-black uppercase text-primary">Carbon Reduced</p>
+                                <p class="text-2xl font-black text-primary" id="lab-reduced">0 <span
+                                        class="text-sm">tCO₂e</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Project List -->
+                        <div class="space-y-4">
+
+                            <!-- Project 1 -->
+                            <button onclick="toggleProject(this, 15000, 3000)"
+                                class="lab-project w-full flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 dark:border-[#2a4035] bg-white dark:bg-[#111814] hover:border-primary transition-all text-left">
+                                <div>
+                                    <h4 class="font-bold text-[#111814] dark:text-white">Smart HVAC Sensors</h4>
+                                    <span
+                                        class="text-xs bg-gray-200 dark:bg-[#2a4035] text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-black mt-1 inline-block">Cost:
+                                        $15,000</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-primary block">+ 3,000 tCO₂e</span>
+                                </div>
+                            </button>
+
+                            <!-- Project 2 -->
+                            <button onclick="toggleProject(this, 80000, 3500)"
+                                class="lab-project w-full flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 dark:border-[#2a4035] bg-white dark:bg-[#111814] hover:border-primary transition-all text-left">
+                                <div>
+                                    <h4 class="font-bold text-[#111814] dark:text-white">Solar Panel Installation (HQ)
+                                    </h4>
+                                    <span
+                                        class="text-xs bg-gray-200 dark:bg-[#2a4035] text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-black mt-1 inline-block">Cost:
+                                        $80,000</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-primary block">+ 3,500 tCO₂e</span>
+                                </div>
+                            </button>
+
+                            <!-- Project 3 -->
+                            <button onclick="toggleProject(this, 5000, 2000)"
+                                class="lab-project w-full flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 dark:border-[#2a4035] bg-white dark:bg-[#111814] hover:border-primary transition-all text-left">
+                                <div>
+                                    <h4 class="font-bold text-[#111814] dark:text-white">LED Lighting Upgrade</h4>
+                                    <span
+                                        class="text-xs bg-gray-200 dark:bg-[#2a4035] text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-black mt-1 inline-block">Cost:
+                                        $5,000</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-primary block">+ 2,000 tCO₂e</span>
+                                </div>
+                            </button>
+
+                            <!-- Project 4 -->
+                            <button onclick="toggleProject(this, 60000, 800)"
+                                class="lab-project w-full flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 dark:border-[#2a4035] bg-white dark:bg-[#111814] hover:border-primary transition-all text-left opacity-90">
+                                <div>
+                                    <h4 class="font-bold text-[#111814] dark:text-white">Electric Executive Fleet</h4>
+                                    <span
+                                        class="text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded font-black mt-1 inline-block">Cost:
+                                        $60,000</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-primary block">+ 800 tCO₂e</span>
+                                    <span class="text-[9px] text-gray-500 uppercase">(High Cost, Low Impact)</span>
+                                </div>
+                            </button>
+
+                            <!-- Project 5 -->
+                            <button onclick="toggleProject(this, 75000, 4000)"
+                                class="lab-project w-full flex items-center justify-between p-4 rounded-xl border-2 border-gray-200 dark:border-[#2a4035] bg-white dark:bg-[#111814] hover:border-primary transition-all text-left">
+                                <div>
+                                    <h4 class="font-bold text-[#111814] dark:text-white">Renewable PPA Contract</h4>
+                                    <span
+                                        class="text-xs bg-gray-200 dark:bg-[#2a4035] text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-black mt-1 inline-block">Cost:
+                                        $75,000</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="font-black text-primary block">+ 4,000 tCO₂e</span>
+                                </div>
+                            </button>
+
+                        </div>
+
+                        <div id="lab-warning"
+                            class="hidden mt-6 p-4 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-black text-center rounded-xl border border-red-200 dark:border-red-800 animate-pulse">
+                            BUDGET EXCEEDED! Deselect a project.
+                        </div>
+                        <div id="lab-success"
+                            class="hidden mt-6 p-4 bg-primary/20 text-primary font-black text-center rounded-xl border border-primary/50 shadow-lg animate-bounce">
+                            TARGET REACHED (9,000 tCO₂e) UNDER BUDGET! Excellent strategy! You maximized ROI.
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">07</span>
+                        Mastery Check
+                    </h2>
+
+                    <div class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl relative overflow-hidden">
+
+                        <!-- Tech pattern bg -->
+                        <div class="absolute inset-0 opacity-10"
+                            style="background-image: linear-gradient(0deg, transparent 24%, rgba(19, 236, 128, .5) 25%, rgba(19, 236, 128, .5) 26%, transparent 27%, transparent 74%, rgba(19, 236, 128, .5) 75%, rgba(19, 236, 128, .5) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(19, 236, 128, .5) 25%, rgba(19, 236, 128, .5) 26%, transparent 27%, transparent 74%, rgba(19, 236, 128, .5) 75%, rgba(19, 236, 128, .5) 76%, transparent 77%, transparent); background-size: 50px 50px;">
+                        </div>
+
+                        <div class="relative z-10 space-y-8">
+                            <div class="space-y-4">
+                                <div
+                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest border border-primary/20">
+                                    Final Assessment
+                                </div>
+                                <h3 class="text-3xl font-black">According to the Mitigation Hierarchy and MACC curves,
+                                    which of the following should you prioritize FIRST?</h3>
+                            </div>
+
+                            <div class="space-y-3 font-bold text-sm">
+                                <button onclick="checkFinalMastery(this, false)"
+                                    class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    A. Buying high-quality carbon offsets to reach "Carbon Neutral" immediately.
+                                </button>
+                                <button onclick="checkFinalMastery(this, true)"
+                                    class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    B. Implementing "negative cost" avoidance and reduction measures, like LED
+                                    retrofitting.
+                                </button>
+                                <button onclick="checkFinalMastery(this, false)"
+                                    class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    C. Replacing all corporate gasoline vehicles with expensive Electric Vehicles.
+                                </button>
+                            </div>
+
+                            <button id="next-module-btn"
+                                class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6 shadow-[0_0_15px_rgba(19,236,128,0.3)]">
+                                Proceed to Module 12
+                            </button>
+                            <div id="mastery-feedback"
+                                class="hidden p-6 rounded-2xl bg-primary text-black font-black italic text-center animate-bounce shadow-lg">
+                                ACHIEVEMENT UNLOCKED: Carbon Strategist!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">trending_down</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#the-ultimate-goal"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Target Zero</a></li>
+                        <li><a href="#mitigation-hierarchy"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Mitigation Hierarchy</a>
+                        </li>
+                        <li><a href="#macc-curve"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — The MACC Curve</a></li>
+                        <li><a href="#low-hanging-fruit"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Negative Costs</a></li>
+                        <li><a href="#supplier-engagement"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — Supply Chain Scope 3</a>
+                        </li>
+                        <li><a href="#strategy-lab"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 06 — ROI Action Lab</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 07 — Mastery Check</a></li>
+                    </ul>
+                </div>
+
+                <!-- Terminology Card -->
+                <div
+                    class="p-8 rounded-[2rem] bg-gradient-to-br from-[#111814] to-[#1a2c24] text-white border border-[#2a4035] space-y-4 shadow-xl">
+                    <span class="material-symbols-outlined text-yellow-500">warning</span>
+                    <h3 class="text-lg font-black italic relative z-10 text-white drop-shadow-md">Beware Unplanned EVs
+                    </h3>
+                    <p class="text-xs font-bold leading-relaxed relative z-10 text-gray-400">
+                        A classic pitfall for companies is blowing their sustainability budget on Executive Electric
+                        Vehicles. EV transitions are often high-cost and low-impact compared to simple HVAC
+                        optimizations or data center migrations.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=10) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 10 — Disclosures
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=12) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                12 — Advanced LCA <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- Strategy Lab (MACC Game) Logic ---
+    let currentBudget = 100000;
+    let currentReduced = 0;
+    const targetReduction = 8000;
+
+    window.toggleProject = function (btn, cost, reduction) {
+        const isSelected = btn.classList.contains('border-primary');
+        const budgetDisplay = document.getElementById('lab-budget');
+        const reducedDisplay = document.getElementById('lab-reduced');
+        const warningBox = document.getElementById('lab-warning');
+        const successBox = document.getElementById('lab-success');
+
+        if (isSelected) {
+            // Deselect
+            btn.classList.remove('border-primary', 'bg-primary/5', 'dark:border-primary');
+            btn.classList.add('border-gray-200', 'dark:border-[#2a4035]');
+            currentBudget += cost;
+            currentReduced -= reduction;
+        } else {
+            // Select
+            btn.classList.add('border-primary', 'bg-primary/5', 'dark:border-primary');
+            btn.classList.remove('border-gray-200', 'dark:border-[#2a4035]');
+            currentBudget -= cost;
+            currentReduced += reduction;
+        }
+
+        // Update UI Text
+        budgetDisplay.innerText = "$" + currentBudget.toLocaleString();
+        reducedDisplay.innerHTML = currentReduced.toLocaleString() + ' <span class="text-sm">tCO₂e</span>';
+
+        // Check conditions
+        if (currentBudget < 0) {
+            budgetDisplay.classList.add('text-red-500');
+            budgetDisplay.classList.remove('text-primary', 'text-[#111814]', 'dark:text-white');
+            warningBox.classList.remove('hidden');
+            successBox.classList.add('hidden');
+        } else {
+            budgetDisplay.classList.remove('text-red-500');
+            budgetDisplay.classList.add('text-[#111814]', 'dark:text-white');
+            warningBox.classList.add('hidden');
+
+            // Win condition (Optimal Combo: HVAC + Renewables + LED = $95k, 9000 tco2e)
+            if (currentReduced >= targetReduction) {
+                successBox.classList.remove('hidden');
+            } else {
+                successBox.classList.add('hidden');
+            }
+        }
+    }
+
+
+    // --- Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:border-primary/50');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.add('text-black');
+            btn.classList.replace('opacity-50', 'opacity-100');
+
+            // Mark module as completed in the tracker
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=12) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.replace('border-white/10', 'border-red-500');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is B. Always start with internal 'Avoid' and 'Reduce' projects before resorting to costly replacements or offsets.");
+            }, 500);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=12) }}";
+    }
+    });
+
+</script>
+
+{% endblock %}

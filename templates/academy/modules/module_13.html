@@ -1,0 +1,528 @@
+{% extends "academy/base.html" %}
+
+{% block academy_progress %}
+<!-- Persistent Module Progress Bar -->
+<div
+    class="sticky top-0 z-30 w-full bg-white/95 dark:bg-[#0d1310]/95 backdrop-blur-sm border-b border-[#f0f4f2] dark:border-[#2a4035] px-8 py-1">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex-1 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="academy-progress-bar"
+                class="h-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(19,236,128,0.3)]"
+                style="width: 0%"></div>
+        </div>
+        <span id="academy-progress-text"
+            class="text-[9px] font-black uppercase tracking-widest text-[#618975] whitespace-nowrap">0% Completed</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block academy_content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#618975]">
+        <a href="{{ url_for('academy.index') }}" class="hover:text-primary transition-colors">Academy</a>
+        <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+        <span class="text-[#111814] dark:text-white">Module 13: Carbon Markets</span>
+    </nav>
+
+    <!-- Hero Header -->
+    <header
+        class="relative p-12 rounded-[3rem] bg-[#0d1310] text-[#13ec80] border-2 border-[#13ec80]/30 overflow-hidden shadow-[0_0_50px_rgba(19,236,128,0.1)]">
+        <!-- Grid overlay -->
+        <div class="absolute inset-0 opacity-10"
+            style="background-image: linear-gradient(0deg, transparent 24%, rgba(19, 236, 128, .5) 25%, rgba(19, 236, 128, .5) 26%, transparent 27%, transparent 74%, rgba(19, 236, 128, .5) 75%, rgba(19, 236, 128, .5) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(19, 236, 128, .5) 25%, rgba(19, 236, 128, .5) 26%, transparent 27%, transparent 74%, rgba(19, 236, 128, .5) 75%, rgba(19, 236, 128, .5) 76%, transparent 77%, transparent); background-size: 50px 50px;">
+        </div>
+
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 max-w-3xl space-y-6">
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest">
+                <span class="material-symbols-outlined text-[14px]">candlestick_chart</span>
+                Economics of Emissions
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight text-white drop-shadow-lg">
+                Carbon <span class="text-primary italic">Markets & Pricing</span>
+            </h1>
+            <p class="text-lg text-green-100/70 leading-relaxed font-medium">
+                Emissions are externalities. The world is trying to internalize them by putting a price on carbon.
+                Understand Cap & Trade, Carbon Taxes, and the Voluntary Carbon Market (VCM).
+            </p>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 items-start">
+        <!-- Main Content -->
+        <div class="space-y-24">
+
+            <!-- SECTION 1: Compliance vs Voluntary -->
+            <section id="compliance-vs-voluntary" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">01</span>
+                        Compliance vs. Voluntary Markets
+                    </h2>
+                    <p class="text-lg text-[#618975] dark:text-[#8baaa0] leading-relaxed">
+                        There are two entirely different types of carbon markets in the world. Mixing them up is the
+                        most common mistake made by newcomers to sustainability.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+
+                        <!-- Compliance (ETS) -->
+                        <div
+                            class="relative p-8 rounded-3xl bg-white dark:bg-[#111814] border-2 border-red-500/30 hover:border-red-500 transition-colors shadow-lg group overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <span class="material-symbols-outlined text-9xl text-red-500">gavel</span>
+                            </div>
+                            <div class="relative z-10 space-y-4">
+                                <h3 class="text-2xl font-black text-red-600 dark:text-red-400">Compliance Market</h3>
+                                <div
+                                    class="inline-block px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-[10px] font-black uppercase rounded-full tracking-widest">
+                                    Mandatory / Regulated</div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    Governments force heavily polluting industries (power plants, steel mills, aviation)
+                                    to hold permits for every ton they emit. If they emit too much, they are fined or
+                                    must buy permits from companies that emitted less.
+                                </p>
+                                <ul class="space-y-2 mt-4 text-xs font-bold text-gray-500 dark:text-gray-400">
+                                    <li class="flex items-center gap-2"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Also known as
+                                        <strong>Cap-and-Trade</strong> (ETS).</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Traded items:
+                                        <strong>Allowances</strong> (Permits to pollute).</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Prices are high (e.g.,
+                                        EU ETS ~$60-90/ton).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Voluntary (VCM) -->
+                        <div
+                            class="relative p-8 rounded-3xl bg-white dark:bg-[#111814] border-2 border-primary/30 hover:border-primary transition-colors shadow-lg group overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <span class="material-symbols-outlined text-9xl text-primary">eco</span>
+                            </div>
+                            <div class="relative z-10 space-y-4">
+                                <h3 class="text-2xl font-black text-primary">Voluntary Market</h3>
+                                <div
+                                    class="inline-block px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-[10px] font-black uppercase rounded-full tracking-widest">
+                                    Optional / PR Driven</div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    Companies (like software firms or banks) voluntarily buy carbon credits to offset
+                                    their emissions and claim "Carbon Neutrality" for marketing, ESG ratings, or brand
+                                    reputation. Nobody forces them to do this.
+                                </p>
+                                <ul class="space-y-2 mt-4 text-xs font-bold text-gray-500 dark:text-gray-400">
+                                    <li class="flex items-center gap-2"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-primary"></span> Also known as the
+                                        <strong>VCM</strong>.</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-primary"></span> Traded items:
+                                        <strong>Offsets/Credits</strong> (Projects that remove carbon).</li>
+                                    <li class="flex items-center gap-2"><span
+                                            class="w-1.5 h-1.5 rounded-full bg-primary"></span> Prices vary wildly
+                                        (e.g., $2/ton to $1,000/ton).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: How Cap and Trade Works -->
+            <section id="cap-and-trade" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">02</span>
+                        Cap & Trade Simulator
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Under Cap and Trade, the government sets a total "Cap" on emissions and issues allowances. Over
+                        time, the government lowers the cap, forcing prices up and emissions down.
+                    </p>
+
+                    <div
+                        class="p-8 rounded-[2.5rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] shadow-inner space-y-8">
+
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+
+                            <!-- Factory A -->
+                            <div
+                                class="flex-1 bg-white dark:bg-[#111814] p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm w-full text-center space-y-4">
+                                <h3 class="font-black text-lg">Dirty Factory A</h3>
+                                <p class="text-xs text-gray-500 italic h-8">Emits more than their allowance.</p>
+
+                                <div class="flex justify-center gap-2 mb-4">
+                                    <span
+                                        class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-black text-sm text-gray-400 border border-gray-300 dark:border-gray-600">A</span>
+                                    <span
+                                        class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-black text-sm text-gray-400 border border-gray-300 dark:border-gray-600">A</span>
+                                    <span
+                                        class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-black text-sm text-gray-400 border border-gray-300 dark:border-gray-600">A</span>
+                                </div>
+                                <div class="text-xs font-bold text-gray-400 mb-2 uppercase">Owned Allowances (3)</div>
+
+                                <!-- Emissions -->
+                                <div
+                                    class="relative h-16 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex flex-col justify-end">
+                                    <div class="w-full h-[120%] bg-red-500 opacity-60"></div>
+                                </div>
+                                <div class="text-xs font-bold text-red-500 mt-2 uppercase">Emissions (4 Tons)</div>
+                                <div
+                                    class="mt-4 p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-black rounded-lg">
+                                    Deficit: -1 | Must BUY</div>
+                            </div>
+
+                            <!-- Trade Animation -->
+                            <div class="flex-shrink-0 text-center">
+                                <div
+                                    class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 border-2 border-blue-500 text-blue-500 flex items-center justify-center mx-auto shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                                    <span class="material-symbols-outlined text-3xl">sync_alt</span>
+                                </div>
+                                <p class="text-[10px] uppercase font-black tracking-widest mt-2 text-blue-500">
+                                    Market<br>Trade</p>
+                            </div>
+
+                            <!-- Factory B -->
+                            <div
+                                class="flex-1 bg-white dark:bg-[#111814] p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm w-full text-center space-y-4">
+                                <h3 class="font-black text-lg">Clean Factory B</h3>
+                                <p class="text-xs text-gray-500 italic h-8">Invested in efficiency. Emits less than
+                                    allowed.</p>
+
+                                <div class="flex justify-center gap-2 mb-4">
+                                    <span
+                                        class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-black text-sm text-gray-400 border border-gray-300 dark:border-gray-600">A</span>
+                                    <span
+                                        class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-black text-sm text-gray-400 border border-gray-300 dark:border-gray-600">A</span>
+                                    <span
+                                        class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-800 flex items-center justify-center font-black text-sm text-gray-400 border border-gray-300 dark:border-gray-600">A</span>
+                                </div>
+                                <div class="text-xs font-bold text-gray-400 mb-2 uppercase">Owned Allowances (3)</div>
+
+                                <!-- Emissions -->
+                                <div
+                                    class="relative h-16 bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden flex flex-col justify-end">
+                                    <div class="w-full h-[60%] bg-green-500 opacity-60"></div>
+                                </div>
+                                <div class="text-xs font-bold text-green-500 mt-2 uppercase">Emissions (2 Tons)</div>
+
+                                <div
+                                    class="mt-4 p-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-black rounded-lg">
+                                    Surplus: +1 | Can SELL</div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white/50 dark:bg-[#111814]/50 border-l-4 border-primary rounded-r-xl">
+                            <p class="text-sm font-bold text-gray-700 dark:text-gray-300">
+                                <strong>The Result:</strong> The market rewards Factory B with profit and penalizes
+                                Factory A with costs. Emissions are reduced system-wide at the lowest possible cost to
+                                society.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: The Voluntary Carbon Market (VCM) -->
+            <section id="vcm" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">03</span>
+                        The Voluntary Market (VCM)
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Unlike government allowances, Voluntary Credits are generated by independent projects that avoid
+                        or remove Carbon from the atmosphere. They are verified by registries like Verra or Gold
+                        Standard.
+                    </p>
+
+                    <!-- Credit Types Matrix -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Avoidance -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-[#2a241a] dark:to-[#1a1410] border border-orange-200 dark:border-orange-900 shadow-sm relative overflow-hidden">
+                            <span
+                                class="material-symbols-outlined text-[100px] text-orange-200 dark:text-orange-900/50 absolute -right-6 -bottom-6 transform -rotate-12">block</span>
+                            <div class="relative z-10 space-y-4">
+                                <h3 class="font-black text-2xl text-orange-600 dark:text-orange-400">Carbon Avoidance
+                                </h3>
+                                <div
+                                    class="inline-block px-2 py-1 bg-white/50 dark:bg-black/50 text-[10px] font-black tracking-widest uppercase rounded">
+                                    Low Quality & Low Cost</div>
+                                <p class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                                    Paying someone NOT to emit carbon.
+                                </p>
+                                <ul
+                                    class="list-disc list-inside text-xs font-bold text-orange-700/80 dark:text-orange-300/80 space-y-1">
+                                    <li>Protecting a forest from being cut down (REDD+).</li>
+                                    <li>Building a wind farm instead of a coal plant.</li>
+                                    <li>Distributing clean cookstoves in developing nations.</li>
+                                </ul>
+                                <div class="mt-4 pt-4 border-t border-orange-200 dark:border-orange-800">
+                                    <p class="text-[10px] uppercase font-black text-orange-500">Avg Price: $2 - $15 /
+                                        tCO₂e</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Removal -->
+                        <div
+                            class="p-8 rounded-[2rem] bg-gradient-to-br from-blue-50 to-teal-50 dark:from-[#1a2c3a] dark:to-[#13202a] border border-blue-200 dark:border-blue-900 shadow-sm relative overflow-hidden">
+                            <span
+                                class="material-symbols-outlined text-[100px] text-blue-200 dark:text-blue-900/50 absolute -right-6 -bottom-6">air</span>
+                            <div class="relative z-10 space-y-4">
+                                <h3 class="font-black text-2xl text-blue-600 dark:text-blue-400">Carbon Removal</h3>
+                                <div
+                                    class="inline-block px-2 py-1 bg-white/50 dark:bg-black/50 text-[10px] font-black tracking-widest uppercase rounded">
+                                    High Quality & High Cost</div>
+                                <p class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                                    Actively sucking historic CO₂ out of the atmosphere and storing it permanently.
+                                </p>
+                                <ul
+                                    class="list-disc list-inside text-xs font-bold text-blue-700/80 dark:text-blue-300/80 space-y-1">
+                                    <li>Direct Air Capture (DAC) giant vacuums.</li>
+                                    <li>Biochar (burning biomass without oxygen).</li>
+                                    <li>Enhanced Rock Weathering.</li>
+                                </ul>
+                                <div class="mt-4 pt-4 border-t border-blue-200 dark:border-blue-800">
+                                    <p class="text-[10px] uppercase font-black text-blue-500">Avg Price: $100 - $1,000+
+                                        / tCO₂e</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Carbon Taxes -->
+            <section id="carbon-taxes" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">04</span>
+                        Carbon Taxes (The Alternative)
+                    </h2>
+                    <p class="text-[#618975] dark:text-[#8baaa0] text-lg leading-relaxed mb-6">
+                        Instead of creating a complex trading market for allowances, governments can simply apply a flat
+                        tax per ton of CO₂ emitted.
+                    </p>
+
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div
+                            class="flex-1 bg-[#111814] text-white p-8 rounded-[2rem] border border-[#2a4035] shadow-xl">
+                            <h3 class="font-black text-xl mb-4 text-green-400">Pros of a Tax</h3>
+                            <ul class="space-y-3 font-bold text-sm text-gray-300">
+                                <li class="flex items-start gap-3"><span
+                                        class="material-symbols-outlined text-green-400 text-[18px]">check_circle</span>
+                                    <strong>Price Certainty:</strong> Businesses know exactly what carbon will cost them
+                                    years in advance (unlike volatile trading markets).</li>
+                                <li class="flex items-start gap-3"><span
+                                        class="material-symbols-outlined text-green-400 text-[18px]">check_circle</span>
+                                    <strong>Simplicity:</strong> Easy for to administer through existing tax agencies.
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="flex-1 bg-red-900/10 text-white p-8 rounded-[2rem] border border-red-900/50 shadow-xl">
+                            <h3 class="font-black text-xl mb-4 text-red-400">Cons of a Tax</h3>
+                            <ul class="space-y-3 font-bold text-sm text-gray-300">
+                                <li class="flex items-start gap-3"><span
+                                        class="material-symbols-outlined text-red-400 text-[18px]">cancel</span>
+                                    <strong>Emissions Uncertainty:</strong> You know the price, but you don't guarantee
+                                    an actual reduction in emissions (unlike a hard Cap).</li>
+                                <li class="flex items-start gap-3"><span
+                                        class="material-symbols-outlined text-red-400 text-[18px]">cancel</span>
+                                    <strong>Political Unpopularity:</strong> The word "Tax" is politically toxic in many
+                                    nations.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: Mastery Check -->
+            <section id="mastery-check" class="scroll-mt-32">
+                <div class="space-y-6">
+                    <h2 class="section-title">
+                        <span
+                            class="w-10 h-10 rounded-xl bg-primary text-black flex items-center justify-center text-lg font-black">05</span>
+                        Mastery Check
+                    </h2>
+
+                    <div
+                        class="p-8 rounded-[3rem] bg-[#111814] text-white shadow-2xl relative overflow-hidden text-center">
+                        <div class="relative z-10 mx-auto max-w-2xl space-y-8">
+                            <h3 class="text-3xl font-black">A tech giant wants to claim they are "Carbon Neutral" on
+                                their website. They buy 5,000 offsets representing protected forest land in the Amazon.
+                                Which market did they participate in?</h3>
+
+                            <div class="space-y-3 font-bold text-sm">
+                                <button onclick="checkFinalMastery(this, false)"
+                                    class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-red-500/50 transition-all shadow-sm">
+                                    A. The Compliance (Cap and Trade) Market. They bought Allowances.
+                                </button>
+                                <button onclick="checkFinalMastery(this, true)"
+                                    class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all shadow-sm">
+                                    B. The Voluntary Carbon Market (VCM). They bought Avoidance credits.
+                                </button>
+                                <button onclick="checkFinalMastery(this, false)"
+                                    class="mastery-opt w-full text-left p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/50 transition-all shadow-sm">
+                                    C. The Voluntary Carbon Market (VCM). They bought Removal credits.
+                                </button>
+                            </div>
+
+                            <button id="next-module-btn"
+                                class="hidden w-full p-6 rounded-2xl bg-primary text-black font-black hover:bg-primary/90 transition-colors mt-6 shadow-[0_0_15px_rgba(19,236,128,0.3)]">
+                                Proceed to Module 14
+                            </button>
+                            <div id="mastery-feedback"
+                                class="hidden p-6 rounded-2xl bg-primary text-black font-black italic shadow-lg">
+                                ACHIEVEMENT UNLOCKED: Carbon Economist!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sticky Sidebar Navigation -->
+        <aside class="hidden lg:block space-y-8">
+            <div class="sticky top-24 space-y-8">
+                <!-- Module Navigation -->
+                <div
+                    class="p-8 rounded-[2rem] bg-[#f6f8f7] dark:bg-[#1a2c24] border border-[#f0f4f2] dark:border-[#2a4035] space-y-4 shadow-sm">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-[#e2e8e4] dark:border-[#2a4035]">
+                        <span class="material-symbols-outlined text-primary text-lg">candlestick_chart</span>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[#111814] dark:text-white">
+                            Module Sections</p>
+                    </div>
+                    <ul class="space-y-3 text-sm font-bold text-[#618975] dark:text-[#8baaa0]">
+                        <li><a href="#compliance-vs-voluntary"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 01 — Market Types</a></li>
+                        <li><a href="#cap-and-trade"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 02 — Cap & Trade
+                                Simulator</a></li>
+                        <li><a href="#vcm"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 03 — The VCM (Offsets)</a>
+                        </li>
+                        <li><a href="#carbon-taxes"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 04 — Carbon Taxes</a></li>
+                        <li><a href="#mastery-check"
+                                class="flex items-center gap-3 hover:text-primary transition-colors py-1"><span
+                                    class="w-1.5 h-1.5 rounded-full bg-primary/30"></span> 05 — Mastery Check</a></li>
+                    </ul>
+                </div>
+
+                <!-- Info Card -->
+                <div class="p-8 rounded-[2rem] bg-[#111814] text-white border border-[#2a4035] shadow-xl">
+                    <h3 class="text-sm font-black italic text-gray-400 uppercase tracking-widest mb-2">Scope 2 Leakage
+                    </h3>
+                    <p class="text-xs font-bold leading-relaxed text-gray-300">
+                        When governments implement a strict Compliance Market in one region (e.g., Europe), companies
+                        often offshore their manufacturing to regions without a carbon price (e.g., Asia). This is
+                        called "Carbon Leakage."
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Navigation -->
+    <div
+        class="flex justify-between items-center p-8 bg-[#f6f8f7] dark:bg-[#1a2c24] rounded-[3rem] border border-[#f0f4f2] dark:border-[#2a4035] mt-24">
+        <div class="flex flex-col">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Previous</span>
+            <a href="{{ url_for('academy.module', module_id=12) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                <span class="material-symbols-outlined">west</span> 12 — Advanced LCA
+            </a>
+        </div>
+
+        <div class="flex flex-col items-end">
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#618975] mb-1">Next Module</span>
+            <a href="{{ url_for('academy.module', module_id=14) }}"
+                class="font-black hover:text-primary flex items-center gap-2 transition-colors text-[#111814] dark:text-white">
+                14 — Blockchain <span class="material-symbols-outlined">east</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 900;
+        font-size: 2rem;
+        color: #111814;
+        letter-spacing: -0.025em;
+    }
+
+    .dark .section-title {
+        color: white;
+    }
+</style>
+
+<script>
+    // --- Mastery Tracker ---
+    window.checkFinalMastery = function (btn, isCorrect) {
+        document.querySelectorAll('.mastery-opt').forEach(b => {
+            b.classList.add('opacity-50');
+            b.onclick = null;
+            b.classList.remove('hover:border-primary/50', 'hover:border-red-500/50', 'hover:border-blue-500/50');
+        });
+
+        if (isCorrect) {
+            btn.classList.replace('bg-white/5', 'bg-primary');
+            btn.classList.replace('border-white/10', 'border-primary');
+            btn.classList.add('text-black');
+            btn.classList.replace('opacity-50', 'opacity-100');
+
+            // Mark module as completed
+            if (window.tracker) window.tracker.markModuleCompleted(100);
+
+            document.getElementById('mastery-feedback').classList.remove('hidden');
+            const nextBtn = document.getElementById('next-module-btn');
+            nextBtn.classList.remove('hidden');
+            nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=14) }}";
+        } else {
+            btn.classList.replace('opacity-50', 'opacity-100');
+            btn.classList.replace('border-white/10', 'border-red-500');
+            btn.classList.add('text-white');
+            btn.innerHTML += ' <span class="text-red-500 float-right">❌ Incorrect</span>';
+            setTimeout(() => {
+                alert("Incorrect. The correct answer is B. Optional purchases to claim 'carbon neutrality' using forest protection fall under the Voluntary Carbon Market as Avoidance credits.");
+            }, 500);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const viewedSections = {{ (progress.viewed_sections or '[]') | safe }};
+    window.tracker = new AcademyTracker({{ module_id }}, viewedSections);
+
+    if ("{{ progress.is_completed }}" === "True") {
+        document.getElementById('mastery-feedback').classList.remove('hidden');
+        const nextBtn = document.getElementById('next-module-btn');
+        nextBtn.classList.remove('hidden');
+        nextBtn.onclick = () => window.location.href = "{{ url_for('academy.module', module_id=14) }}";
+    }
+    });
+</script>
+
+{% endblock %}
